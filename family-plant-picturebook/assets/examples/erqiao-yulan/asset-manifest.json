@@ -1,0 +1,20 @@
+{
+  "sample": "erqiao-yulan",
+  "series": "七七的植物世界",
+  "purpose": "Canonical sample pages for family-plant-picturebook style, typography feel, composition density, and mother-child storytelling rhythm.",
+  "ratio": "3:4",
+  "pages": [
+    "final_pages/01-cover.png",
+    "final_pages/02-meet.png",
+    "final_pages/03-name.png",
+    "final_pages/04-why-first-flower.png",
+    "final_pages/05-flower-closeup.png",
+    "final_pages/06-comparison.png",
+    "final_pages/07-ending.png"
+  ],
+  "usageWarnings": [
+    "Use as style reference, not as factual source for other plants.",
+    "Do not copy Erqiao magnolia clothing into every new book.",
+    "Create a new characterOutfitSheet for each book and keep it consistent within that book."
+  ]
+}

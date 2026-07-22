@@ -1,0 +1,4 @@
+interface:
+  display_name: "Family Plant Picturebook"
+  short_description: "Turn plant guides into family picture-book pages."
+  default_prompt: "Use $family-plant-picturebook to turn this plant guide into a 3:4 family picture-book series."
