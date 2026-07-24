@@ -138,6 +138,14 @@ Use this minimal structure:
         "dense floral border may crowd title",
         "cover pose may distort arms if too many foreground elements are requested"
       ],
+      "imagegenPrompt": {
+        "text": "Use case: illustration-story. Create a native portrait 3:4 children's picture-book cover at 1086 by 1448 pixels with the exact title text below integrated into a ribbon banner. Preserve the locked Qiqi and Mom identities and outfit sheet. Show the target plant with only source-supported morphology. Warm 3D rendering, soft natural light, layered depth, refined pastel palette. Avoid pseudo-text, misspelled Chinese, extra limbs, and crowded title space.",
+        "references": [
+          { "path": "assets/characters/qiqi-and-mom-reference.png", "role": "character identity" },
+          { "path": "assets/examples/erqiao-yulan/final_pages/01-cover.png", "role": "composition and style" }
+        ],
+        "avoid": ["pseudo-text", "misspelled Chinese", "extra arms", "crowded title space"]
+      },
       "textBlocks": [
         {
           "id": "series-label",
@@ -172,7 +180,7 @@ For normal imagegen production, do not prescribe pixel coordinates. Each `textBl
 7. `maxLines`: a composition guardrail;
 8. `priority`: `required` or `optional`.
 
-Use `fallbackBox: { "x": 160, "y": 82, "w": 760, "h": 72, "padding": 12 }` only when the optional repair renderer is explicitly requested. It is not part of the normal imagegen contract.
+Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt; update it before every retry and record the retry reason in `step_log.md`.
 
 Inspect each generated page before finalizing the page record. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
 

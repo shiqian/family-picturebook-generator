@@ -14,6 +14,7 @@ async function main() {
   const isFinalPages = folderName === "final_pages";
   const specPath = path.join(path.dirname(abs), "page_specs.json");
   let hasOutfitSheet = false;
+  let hasPromptRecords = false;
   if (fs.existsSync(specPath)) {
     try {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
@@ -21,6 +22,16 @@ async function main() {
         spec.characterOutfitSheet &&
           spec.characterOutfitSheet.qiqi &&
           spec.characterOutfitSheet.mom
+      );
+      hasPromptRecords = Boolean(
+        Array.isArray(spec.pages) &&
+          spec.pages.length > 0 &&
+          spec.pages.every(
+            (page) =>
+              page.imagegenPrompt &&
+              typeof page.imagegenPrompt.text === "string" &&
+              page.imagegenPrompt.text.trim().length > 0
+          )
       );
     } catch {
       hasOutfitSheet = false;
@@ -35,6 +46,7 @@ async function main() {
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
   lines.push(`Character outfit sheet: ${hasOutfitSheet ? "PRESENT" : "MISSING"}`);
+  lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
   lines.push("");
 
   let ok = true;
@@ -62,12 +74,13 @@ async function main() {
   lines.push("- Plant morphology and look-alike comparisons match the source dossier.");
   lines.push("");
   lines.push(`Overall automated ratio check: ${ok ? "PASS" : "FAIL"}`);
-  lines.push(`Overall metadata check: ${hasOutfitSheet ? "PASS" : "FAIL"}`);
+  const metadataOk = hasOutfitSheet && hasPromptRecords;
+  lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 
   const report = path.join(path.dirname(abs), "qa_report.md");
   fs.writeFileSync(report, lines.join("\n"));
   console.log(report);
-  if (!ok || (isFinalPages && !hasOutfitSheet)) process.exit(1);
+  if (!ok || (isFinalPages && !metadataOk)) process.exit(1);
 }
 
 main().catch((error) => {

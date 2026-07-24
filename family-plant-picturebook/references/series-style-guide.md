@@ -75,7 +75,7 @@ Each generated production page must:
 6. avoid hard post-production-looking rectangles;
 7. show plant-specific morphology accurately.
 
-Do not use a text-free base image as the normal production target. The bundled sample pages are final integrated text-and-image references. A text-free base plus local overlay is an optional repair workflow only.
+The bundled sample pages are final integrated text-and-image references. If a page fails, redraw the complete page with imagegen; do not create a text-free base and add text afterward.
 
 For botanical accuracy, describe the exact visible parts in the image prompt: flower orientation, color pattern, leaf shape, fruit form, bark texture, or growth habit as supported by source facts.
 

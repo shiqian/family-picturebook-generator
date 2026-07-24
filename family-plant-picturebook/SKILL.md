@@ -21,7 +21,7 @@ The book folder must contain:
 
 1. `source/` - the source-backed scientific dossier and child-facing guide used for the book;
 2. `story_text.md` - read-aloud page copy and dialogue;
-3. `page_specs.json` - final page text, visual constraints, and semantic text-container intent;
+3. `page_specs.json` - final page text, visual constraints, semantic text-container intent, and prompt records;
 4. `step_log.md` - production actions, retries, and risks;
 5. `final_pages/` - finished 3:4 PNG pages in reading order;
 6. `qa_report.md` - visual and factual QA notes.
@@ -129,6 +129,7 @@ Before any page art is generated, freeze the paired plan for all pages in `page_
 3. the semantic container, placement, alignment, and approximate amount of space needed for each text block;
 4. which sample page or pages it borrows layout density from.
 5. seasonal and ecological background constraints for the scene, including a short whitelist of plausible companion plants and a short blacklist of plants or flowers that must not appear together if their blooming season conflicts.
+6. the complete imagegen prompt record for each page before generation begins.
 
 The paired plan must be complete enough to drive composition before page-image generation starts.
 
@@ -153,15 +154,16 @@ This is the canonical production stage. Do not generate a text-free base page fi
 For each page:
 
 1. use the `imagegen` skill's built-in image-generation path by default;
-2. include the exact page text from `page_specs.json` in the prompt and require verbatim Chinese rendering;
-3. generate a native 3:4 page image with the final text already integrated into speech bubbles, cards, banners, or panels;
-4. keep the page visually close to the sample-book style;
-5. reject weak, flat, schematic, poster-like, misspelled, or pseudo-text pages and regenerate them before moving on;
-6. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
+2. use the page's recorded `imagegenPrompt` from `page_specs.json`; update it before every retry;
+3. include the exact page text from `page_specs.json` in the prompt and require verbatim Chinese rendering;
+4. generate a native 3:4 page image with the final text already integrated into speech bubbles, cards, banners, or panels;
+5. keep the page visually close to the sample-book style;
+6. reject weak, flat, schematic, poster-like, misspelled, or pseudo-text pages and redraw them with a targeted imagegen prompt update;
+7. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
 
 The page image is where composition, character pose, plant layout, and final text are decided together.
 
-`render_picturebook_text.js` is an optional fallback and diagnostic helper for explicitly requested post-processing or controlled repair. It is not the default production path and must not replace `imagegen` for new pages.
+All content repairs use targeted imagegen redraws. Do not create a text-free base image and add text afterward. Only non-content normalization, such as safe resizing to `1086 × 1448 px`, may happen after generation.
 
 ### 5. Accept Each Generated Page
 
@@ -206,7 +208,6 @@ Use these files as needed:
 4. `references/assets-guide.md` - bundled character and sample-book usage;
 5. `assets/characters/qiqi-and-mom-reference.png` - default character identity reference;
 6. `assets/examples/erqiao-yulan/final_pages/` - canonical sample pages for the current series look;
-7. `scripts/render_picturebook_text.js` - optional repair and diagnostic helper, not the default production path;
-8. `scripts/check_picturebook_set.js` - final output QA report;
-9. `scripts/check_png_ratio.js` - PNG ratio gate for final pages;
-10. `scripts/check_skill_assets.js` - verify bundled character and sample-book assets are present and 3:4.
+7. `scripts/check_picturebook_set.js` - final output QA report;
+8. `scripts/check_png_ratio.js` - PNG ratio gate for final pages;
+9. `scripts/check_skill_assets.js` - verify bundled character and sample-book assets are present and 3:4.

@@ -48,7 +48,7 @@ Use semantic placement by default:
 4. reserve enough space for the full text before generation;
 5. if text is too small or incorrect, shorten the copy or regenerate the page with a larger native container.
 
-Exact coordinates are not required for normal imagegen production. An optional `fallbackBox` may be added only when the controlled repair renderer is explicitly requested.
+Exact coordinates are not required for imagegen production. If text is wrong or unreadable, revise the recorded prompt and redraw the whole page with imagegen.
 
 Natural embedded typography means imagegen places the requested text inside native bubbles, signs, labels, or paper panels. Do not use floating text on busy backgrounds unless it is a deliberate cover/title design.
 
@@ -63,6 +63,6 @@ After image generation:
 
 If text is misspelled, unreadable, pseudo-text, or placed unnaturally, regenerate the page with a targeted prompt change. Do not silently accept a near-match or patch over it by default.
 
-## Optional renderer fallback
+## Repair rule
 
-`scripts/render_picturebook_text.js` may be used only when the user explicitly requests controlled post-processing or a repair workflow. It is not the normal page-generation method for this series.
+Do not create a text-free base image or add text with a post-processing renderer. Revise the page's recorded imagegen prompt and redraw the complete page. Only safe non-content resizing is allowed after generation.
