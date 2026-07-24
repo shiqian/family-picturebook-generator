@@ -92,7 +92,7 @@ function renderBoxText(spec, block) {
     throw new Error(`Text overflow in block "${String(block.text).slice(0, 24)}..."`);
   }
 
-  const align = block.align || box.align || "center";
+  const align = block.align || block.alignment || box.align || "center";
   const valign = block.valign || box.valign || "middle";
   const letterSpacing = block.letterSpacing ? ` letter-spacing="${block.letterSpacing}"` : "";
   const maxWidth = Number(box.w) - padding * 2;
@@ -137,10 +137,12 @@ function renderPointText(spec, block) {
 }
 
 function textSvg(spec, page, width, height) {
-  const texts = page.texts || [];
+  const texts = page.textBlocks || page.texts || [];
   const nodes = texts.map((block) => {
+    if (block.fallbackBox) return renderBoxText(spec, { ...block, box: block.fallbackBox });
     if (block.box) return renderBoxText(spec, block);
-    return renderPointText(spec, block);
+    if (block.x !== undefined && block.y !== undefined) return renderPointText(spec, block);
+    throw new Error(`Fallback renderer needs fallbackBox coordinates for text block "${block.id || block.text || "unknown"}"`);
   });
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">\n${nodes.join("\n")}\n</svg>`;
 }

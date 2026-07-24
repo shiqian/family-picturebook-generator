@@ -11,7 +11,7 @@ The series is warm, refined, and story-like:
 3. gentle pastel palette fitted to the plant and season;
 4. botanical features large enough for children to observe;
 5. mother-child interaction as the emotional center;
-6. blank native speech bubbles and panels for later typography.
+6. native speech bubbles, banners, and panels that integrate the generated text naturally.
 
 Avoid generic AI poster layouts. Pages should feel like a continuous picture book, not separate ads.
 
@@ -86,7 +86,7 @@ Treat 3:4 as a delivery constraint, not a prompt preference.
 For every generated production page:
 
 1. inspect dimensions immediately after generation;
-2. reject any 9:16, 4:5, square, or landscape page before typography;
+2. reject any 9:16, 4:5, square, or landscape page before delivery;
 3. deliver the final page at exactly `1086 × 1448 px`; if the generator returns another exact 3:4 size, normalize only after visual inspection confirms that no text, characters, plant details, or safe margins are harmed;
 4. regenerate rejected pages before continuing the book, so clothing and scene continuity can still be corrected together;
 5. never mix aspect ratios or delivery sizes inside one book.

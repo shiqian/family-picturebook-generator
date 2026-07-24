@@ -14,7 +14,7 @@ If the result drifts away from the bundled sample-book visual language, regenera
 Create a project output folder containing:
 
 1. `story_text.md` - read-aloud page copy and dialogue;
-2. `page_specs.json` - final page text, visual constraints, and text box placements;
+2. `page_specs.json` - final page text, visual constraints, and semantic text-container intent;
 3. `final_pages/` - finished 3:4 PNG pages in reading order;
 4. `qa_report.md` - visual and factual QA notes.
 
@@ -67,7 +67,7 @@ Match the bundled sample-book look:
 2. soft natural light and gentle shadow separation;
 3. rounded child proportions and expressive mother-child interaction;
 4. visible botanical structure rendered with volume;
-5. blank native speech bubbles, title banners, and note panels integrated into the page;
+5. native speech bubbles, title banners, and note panels that integrate the generated text;
 6. enough scene density to feel like a complete illustrated page, not an icon sheet.
 
 Recommended prompt phrase for every page image:
@@ -106,7 +106,7 @@ Before any page art is generated, freeze the paired plan for all pages in `page_
 
 1. exact dialogue or caption copy;
 2. how many bubbles, cards, banners, or labels each page needs;
-3. the approximate size and placement of each text container;
+3. the semantic container, placement, alignment, and approximate amount of space needed for each text block;
 4. which sample page or pages it borrows layout density from.
 5. seasonal and ecological background constraints for the scene, including a short whitelist of plausible companion plants and a short blacklist of plants or flowers that must not appear together if their blooming season conflicts.
 
@@ -152,7 +152,7 @@ After a page image is generated:
 3. If the ratio, text, or content fails, regenerate that page before moving to the next one.
 4. If the ratio is correct but the size is not `1086 × 1448 px`, normalize only when safe margins are preserved, then record it in `qa_report.md`.
 
-Keep the text-box and typography details in `references/text-rules.md` and the page plan in `page_specs.json`; do not duplicate those rules in the production loop.
+Keep the text-container and lettering details in `references/text-rules.md` and the page plan in `page_specs.json`; do not duplicate those rules in the production loop.
 
 ### 6. Keep a Step Log
 

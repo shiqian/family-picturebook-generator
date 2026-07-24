@@ -112,14 +112,17 @@ Use this minimal structure:
     "qiqi": "Two braids with small hair ties; exact top, outerwear, pants/skirt, shoes, and accessories locked for this book.",
     "mom": "Round glasses; shoulder-length brown hair; exact top, outerwear, pants/skirt, shoes, and accessories locked for this book."
   },
+  "textStrategy": "imagegen-integrated",
   "typography": {
-    "titleFont": "Kaiti SC, STKaiti, PingFang SC, Hiragino Sans GB, sans-serif",
-    "bodyFont": "Kaiti SC, STKaiti, PingFang SC, Hiragino Sans GB, sans-serif",
-    "captionFont": "Kaiti SC, STKaiti, PingFang SC, Hiragino Sans GB, sans-serif",
-    "titleColor": "#5F5B89",
-    "bodyColor": "#2F2E35",
-    "captionColor": "#4B4A57",
-    "whiteStripColor": "#FFFFFF"
+    "titleTreatment": "warm rounded hand-lettered display style",
+    "dialogueTreatment": "dark, readable, child-friendly lettering",
+    "captionTreatment": "smaller lettering in the same visual family",
+    "palette": {
+      "title": "deep rose or dark brown",
+      "dialogue": "dark black-brown",
+      "caption": "dark black-brown",
+      "onColoredStrip": "white only with strong contrast"
+    }
   },
   "pages": [
     {
@@ -135,15 +138,16 @@ Use this minimal structure:
         "dense floral border may crowd title",
         "cover pose may distort arms if too many foreground elements are requested"
       ],
-      "texts": [
+      "textBlocks": [
         {
+          "id": "series-label",
           "text": "七七的植物世界 No.30",
-          "box": { "x": 160, "y": 82, "w": 760, "h": 72, "padding": 12 },
-          "align": "center",
-          "valign": "middle",
-          "style": "title",
-          "size": 36,
-          "minSize": 28
+          "role": "series-label",
+          "container": "ribbon-banner",
+          "placement": "upper-center",
+          "alignment": "center",
+          "maxLines": 1,
+          "priority": "required"
         }
       ],
       "qaHints": {
@@ -157,15 +161,18 @@ Use this minimal structure:
 }
 ```
 
-Prefer `box` placement over bare `x`/`y` placement. Bare `x`/`y` is still allowed for decorative cover titles or one-line labels, but dialogue and captions should use boxes.
+For normal imagegen production, do not prescribe pixel coordinates. Each `textBlocks` item should identify the exact text plus its semantic layout intent:
 
-Box fields:
+1. `id`: stable page-local identifier;
+2. `text`: exact visible text, copied verbatim into the imagegen prompt;
+3. `role`: `title`, `dialogue`, `caption`, `label`, or `series-label`;
+4. `container`: `ribbon-banner`, `speech-bubble`, `caption-panel`, `notebook-card`, or another clear container;
+5. `placement`: a semantic location such as `upper-center`, `left`, `right`, or `lower-third`;
+6. `alignment`: `left`, `center`, or `right`;
+7. `maxLines`: a composition guardrail;
+8. `priority`: `required` or `optional`.
 
-1. `x`, `y`, `w`, `h`: text-safe area inside the native bubble, panel, sign, or title banner;
-2. `padding`: inner margin from the bubble edge, usually `16-28`;
-3. `align`: `left`, `center`, or `right`;
-4. `valign`: `top`, `middle`, or `bottom`;
-5. `minSize`: smallest acceptable auto-fit font size.
+Use `fallbackBox: { "x": 160, "y": 82, "w": 760, "h": 72, "padding": 12 }` only when the optional repair renderer is explicitly requested. It is not part of the normal imagegen contract.
 
 Inspect each generated page before finalizing the page record. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
 

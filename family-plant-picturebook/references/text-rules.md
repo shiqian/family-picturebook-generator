@@ -19,40 +19,36 @@ Examples:
 2. use `树枝`, not `小枝` for child-facing speech unless the source requires a technical distinction;
 3. use `花心`, not unexplained botanical jargon for children.
 
-## Font Consistency
+## Shared Lettering Direction
 
-One book must use one typography system.
+One book must use one lettering direction. Define this once in `page_specs.json`:
 
-Define these once in `page_specs.json`:
+1. title treatment, such as warm hand-lettered or rounded display lettering;
+2. dialogue treatment, such as dark, readable, child-friendly lettering;
+3. caption treatment and relative size;
+4. palette and contrast rules for text on banners, bubbles, and panels.
 
-1. title font stack;
-2. body/dialogue font stack;
-3. caption font stack;
-4. title color;
-5. body color;
-6. caption color;
-7. white-on-strip color.
-
-Every page must inherit from this same system unless a deliberate cover title style is defined.
+Do not require a specific installed font for imagegen pages. The goal is consistent visual lettering across the book, not post-production font substitution.
 
 ## Imagegen Text Rules
 
 Before image generation:
 
-1. put the final page text in `page_specs.json`;
+1. put every final text block in `page_specs.json`;
 2. copy the exact text into the imagegen prompt and require verbatim Chinese characters;
-3. describe the native bubble, banner, card, or panel where each text block belongs;
-4. specify line breaks when they materially improve the intended reading rhythm;
-5. keep enough margin from bubble borders and decorative flowers.
+3. specify each block's semantic `role`, `container`, `placement`, `alignment`, and `maxLines`;
+4. specify line breaks only when they materially improve the intended reading rhythm;
+5. keep enough visual breathing room around text containers and decorative elements.
 
-Use native text containers by default:
+Use semantic placement by default:
 
-1. dialogue and captions should use `box: { x, y, w, h, padding }` in `page_specs.json`, not bare `x`/`y`;
-2. set `align: "center"` and `valign: "middle"` for speech bubbles unless the bubble shape clearly calls for left alignment;
-3. set `align: "left"` and `valign: "top"` for notebook panels or explanatory cards;
-4. keep text-safe boxes smaller than the visible bubble, leaving at least 16-28 px padding;
-5. if a bubble is irregular, choose a conservative inner rectangle rather than filling the whole shape;
-6. if text is too small or incorrect, shorten the copy or regenerate the page with a larger native bubble.
+1. use placements such as `upper-center`, `left speech bubble`, `right caption panel`, or `lower-third`;
+2. name the intended container, such as `ribbon-banner`, `speech-bubble`, `notebook-card`, or `caption-panel`;
+3. use `alignment` and `maxLines` to guide composition without prescribing pixel coordinates;
+4. reserve enough space for the full text before generation;
+5. if text is too small or incorrect, shorten the copy or regenerate the page with a larger native container.
+
+Exact coordinates are not required for normal imagegen production. An optional `fallbackBox` may be added only when the controlled repair renderer is explicitly requested.
 
 Natural embedded typography means imagegen places the requested text inside native bubbles, signs, labels, or paper panels. Do not use floating text on busy backgrounds unless it is a deliberate cover/title design.
 
@@ -62,7 +58,7 @@ After image generation:
 2. verify no text overlaps dashed borders;
 3. verify no old AI pseudo-text remains;
 4. verify every character, word, punctuation mark, and line break against `page_specs.json`;
-5. verify each dialogue block is centered within its bubble or intentionally aligned within a panel;
+5. verify each block appears in the intended semantic container and alignment;
 6. compare the lettering style against the other pages.
 
 If text is misspelled, unreadable, pseudo-text, or placed unnaturally, regenerate the page with a targeted prompt change. Do not silently accept a near-match or patch over it by default.
