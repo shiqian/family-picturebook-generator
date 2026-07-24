@@ -1,0 +1,11 @@
+{
+  "name": "family-picturebook-generator",
+  "private": true,
+  "description": "QA helper dependency for the Family Plant Picturebook Codex skill",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}
