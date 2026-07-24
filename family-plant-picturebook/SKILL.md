@@ -169,7 +169,14 @@ Keep `step_log.md` in the output folder and append one short entry after each me
 
 ### 7. Run Layered QA Before Delivery
 
-Run `scripts/check_picturebook_set.js` on the final output folder, then complete a visual and factual review. Confirm four groups:
+From the generator repository root, run the automated gate after all pages are in `output/<plant-slug>/final_pages/`:
+
+```bash
+npm install  # first run only, if sharp is not installed
+node family-plant-picturebook/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
+```
+
+The script writes `output/<plant-slug>/qa_report.md`. Read that report, then complete the visual and factual review. Confirm four groups:
 
 1. **Package:** required files exist, page filenames and order are complete, and every final page is exactly `1086 × 1448 px`.
 2. **Text:** every visible character matches `page_specs.json`; text is legible, correctly placed, and free of pseudo-text or accidental old text.
