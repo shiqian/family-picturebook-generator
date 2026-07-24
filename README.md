@@ -38,6 +38,9 @@ The bundled sample is documented in [`asset-manifest.json`](family-plant-picture
 
 ```text
 output/<plant-slug>/
+├── source/
+│   ├── scientific-dossier.md
+│   └── child-guide.md
 ├── story_text.md
 ├── page_specs.json
 ├── step_log.md
@@ -45,7 +48,7 @@ output/<plant-slug>/
 └── qa_report.md
 ```
 
-The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
+The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. The `source/` folder preserves the scientific dossier and child-facing guide used by the book. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
 
 ## Setup
 

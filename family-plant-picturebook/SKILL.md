@@ -19,11 +19,22 @@ output/<plant-slug>/
 
 The book folder must contain:
 
-1. `story_text.md` - read-aloud page copy and dialogue;
-2. `page_specs.json` - final page text, visual constraints, and semantic text-container intent;
-3. `step_log.md` - production actions, retries, and risks;
-4. `final_pages/` - finished 3:4 PNG pages in reading order;
-5. `qa_report.md` - visual and factual QA notes.
+1. `source/` - the source-backed scientific dossier and child-facing guide used for the book;
+2. `story_text.md` - read-aloud page copy and dialogue;
+3. `page_specs.json` - final page text, visual constraints, and semantic text-container intent;
+4. `step_log.md` - production actions, retries, and risks;
+5. `final_pages/` - finished 3:4 PNG pages in reading order;
+6. `qa_report.md` - visual and factual QA notes.
+
+For the full `shanghai-plant-guide-series` handoff, `source/` must contain:
+
+```text
+source/
+├── scientific-dossier.md
+└── child-guide.md
+```
+
+Use the scientific dossier as the factual authority and the child guide as the narrative source. Do not generate picturebook copy from an uncaptured chat response when these source files can be preserved in the book folder.
 
 Use a stable lowercase plant slug such as `yulan`, `guihua`, or `gou-shu`. Do not create book outputs in `out/`, inside the skill directory, or in ad-hoc folders. Draft or diagnostic files, if needed, belong under `output/<plant-slug>/drafts/` and are not delivery files.
 
