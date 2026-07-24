@@ -39,7 +39,7 @@ Do not copy the 二乔玉兰 plant facts, flowers, colors, clothing, page titles
 When starting a new book:
 
 1. inspect `assets/characters/qiqi-and-mom-reference.png` if character identity is relevant;
-2. inspect 2-3 sample pages from `assets/examples/erqiao-yulan/final_pages/` for layout and typography feel;
+2. inspect at least 2 sample pages from `assets/examples/erqiao-yulan/final_pages/` for layout and typography feel;
 3. create a new `characterOutfitSheet` based on the new plant's season, habitat, weather, and story activity;
 4. repeat that locked outfit sheet in every page prompt.
 

@@ -48,6 +48,8 @@ Accept any of these:
 2. an existing children-facing plant guide;
 3. a complete scientific dossier plus user instructions.
 
+Preferred input is both the scientific dossier and the child-facing guide. If only one is supplied, preserve that file in `source/` and use only its supported facts; do not invent or silently reconstruct the missing stage.
+
 Optional inputs:
 
 1. series number, such as `No.30`;
@@ -74,25 +76,8 @@ The bundled sample pages are a style reference only. Do not copy their plant fac
 
 1. Use only facts from the supplied dossier/guide.
 2. Do not invent morphology, name origins, folklore, safety claims, or comparisons.
-3. Keep the book warm, polished, and story-like, with mother-child interaction as the emotional center.
-4. Keep the page art in the sample-book language unless the user explicitly asks for a different look.
-5. Use the `imagegen` skill for every production page. Generate the illustration and its final Chinese text together in one image-generation call so the typography, bubbles, lighting, and composition belong to the same visual scene.
-6. Put every visible Chinese sentence in `page_specs.json` and the image prompt verbatim, then inspect the generated page for text accuracy. Never accept pseudo-text, missing text, or a near-match.
-
-## Style Target
-
-Match the bundled sample-book look:
-
-1. polished warm 3D children’s picture-book rendering;
-2. soft natural light and gentle shadow separation;
-3. rounded child proportions and expressive mother-child interaction;
-4. visible botanical structure rendered with volume;
-5. native speech bubbles, title banners, and note panels that integrate the generated text;
-6. enough scene density to feel like a complete illustrated page, not an icon sheet.
-
-Recommended prompt phrase for every page image:
-
-`native portrait 3:4 children's picture-book page, target final canvas 1086 by 1448 pixels, not 9:16, not 4:5, not square, not landscape, warm 3D rendering, soft natural light, layered depth, refined pastel palette, full-page story composition, leave safe spaces for integrated Chinese text and native speech bubbles or caption panels`
+3. Use the `imagegen` skill for every production page and every content repair; generate the illustration and final Chinese text together.
+4. Keep every visible sentence in `page_specs.json` and the recorded imagegen prompt; never accept pseudo-text, missing text, or a near-match.
 
 ## Workflow
 
@@ -135,21 +120,11 @@ The paired plan must be complete enough to drive composition before page-image g
 
 ### 3. Define the Visual System
 
-Create `characterOutfitSheet` in `page_specs.json` before generating pages. This is mandatory for each book.
-
-Keep identity consistent, but adapt clothing to the story:
-
-1. Qiqi stays recognizable through face, big eyes, child proportions, and usually two braids;
-2. Mom stays recognizable through round glasses, gentle expression, and shoulder-length brown hair;
-3. clothing may change with season, weather, habitat, and activity;
-4. within one book, keep the locked outfit sheet consistent unless the story clearly changes day, season, weather, location, or activity;
-5. repeat the exact outfit sheet in every image prompt.
-
-Use `assets/characters/qiqi-and-mom-reference.png` for identity guidance. Use the Erqiao sample pages for mood, density, and composition rhythm, not as a clothing template.
+Create the mandatory `characterOutfitSheet` in `page_specs.json` before generating pages, following `series-style-guide.md` and `assets-guide.md`.
 
 ### 4. Generate Final Page Images With `imagegen`
 
-This is the canonical production stage. Do not generate a text-free base page first and treat later text compositing as the normal workflow; for this series, integrated imagegen text produces the most natural page design.
+This is the canonical production stage: integrated imagegen text produces the most natural page design for this series.
 
 For each page:
 

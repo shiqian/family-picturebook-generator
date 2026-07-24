@@ -15,6 +15,7 @@ async function main() {
   const specPath = path.join(path.dirname(abs), "page_specs.json");
   let hasOutfitSheet = false;
   let hasPromptRecords = false;
+  let expectedFiles = null;
   if (fs.existsSync(specPath)) {
     try {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
@@ -33,6 +34,9 @@ async function main() {
               page.imagegenPrompt.text.trim().length > 0
           )
       );
+      expectedFiles = Array.isArray(spec.pages)
+        ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
+        : null;
     } catch {
       hasOutfitSheet = false;
     }
@@ -41,26 +45,32 @@ async function main() {
     .readdirSync(abs)
     .filter((file) => file.toLowerCase().endsWith(".png"))
     .sort();
+  const filesMatchSpec = Boolean(
+    expectedFiles &&
+      expectedFiles.length === files.length &&
+      expectedFiles.every((file, index) => file === files[index])
+  );
   const lines = ["# Picturebook QA Report", ""];
   lines.push(`Checked directory: ${abs}`);
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
   lines.push(`Character outfit sheet: ${hasOutfitSheet ? "PRESENT" : "MISSING"}`);
   lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
+  lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
 
   let ok = true;
   for (const file of files) {
     const full = path.join(abs, file);
     const meta = await sharp(full).metadata();
-    const ratioOk = meta.width * 4 === meta.height * 3;
-    if (!ratioOk) ok = false;
-    lines.push(`- ${file}: ${meta.width}x${meta.height} ${ratioOk ? "OK 3:4" : "NOT 3:4"}`);
+    const dimensionsOk = meta.width === 1086 && meta.height === 1448;
+    if (!dimensionsOk) ok = false;
+    lines.push(`- ${file}: ${meta.width}x${meta.height} ${dimensionsOk ? "OK 1086x1448" : "NOT 1086x1448"}`);
   }
 
   lines.push("");
   lines.push("Automated gate:");
-  lines.push("- Non-3:4 pages must not move forward to delivery.");
+  lines.push("- Pages must be exactly 1086x1448 (3:4) before delivery.");
   lines.push("- If a page is normalized by crop or canvas extension, record it and visually inspect all edges.");
   lines.push("");
   lines.push("Manual QA required:");
@@ -73,8 +83,8 @@ async function main() {
   lines.push("- Character identity is consistent; clothing fits the plant season and setting.");
   lines.push("- Plant morphology and look-alike comparisons match the source dossier.");
   lines.push("");
-  lines.push(`Overall automated ratio check: ${ok ? "PASS" : "FAIL"}`);
-  const metadataOk = hasOutfitSheet && hasPromptRecords;
+  lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
+  const metadataOk = hasOutfitSheet && hasPromptRecords && filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 
   const report = path.join(path.dirname(abs), "qa_report.md");
