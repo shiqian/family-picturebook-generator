@@ -49,7 +49,7 @@ Within one book, clothing must remain the same as the locked outfit sheet unless
 
 Every image prompt must repeat the locked outfit sheet verbatim or near-verbatim. Do not rely on memory or broad phrases such as “same outfit as before.”
 
-If a generated page changes outfit style without a story reason, regenerate that base page before typography.
+If a generated page changes outfit style without a story reason, regenerate that page before delivery.
 
 Examples:
 
@@ -67,7 +67,7 @@ Example locked outfit sheet:
 
 Each generated production page must:
 
-1. be native 3:4;
+1. target the canonical `1086 × 1448 px` canvas and remain exactly 3:4;
 2. contain the exact requested Chinese text generated through `imagegen`;
 3. include no pseudo-writing, missing characters, or spelling substitutions;
 4. place text inside native title banners, speech bubbles, captions, and infographic panels;
@@ -83,17 +83,17 @@ For botanical accuracy, describe the exact visible parts in the image prompt: fl
 
 Treat 3:4 as a delivery constraint, not a prompt preference.
 
-For every generated base page:
+For every generated production page:
 
 1. inspect dimensions immediately after generation;
 2. reject any 9:16, 4:5, square, or landscape page before typography;
-3. regenerate rejected pages before continuing the book, so clothing and scene continuity can still be corrected together;
-4. use post-processing only when the generated composition has clear safe margins and can become 3:4 without harming the plant or characters;
-5. never mix aspect ratios inside one book.
+3. deliver the final page at exactly `1086 × 1448 px`; if the generator returns another exact 3:4 size, normalize only after visual inspection confirms that no text, characters, plant details, or safe margins are harmed;
+4. regenerate rejected pages before continuing the book, so clothing and scene continuity can still be corrected together;
+5. never mix aspect ratios or delivery sizes inside one book.
 
 Recommended prompt phrase:
 
-`native portrait 3:4 children's picture-book page, final canvas 1086 by 1448 pixels, not 9:16, not 4:5, not square, not landscape, leave safe margins on all sides`.
+`native portrait 3:4 children's picture-book page, target final canvas 1086 by 1448 pixels, not 9:16, not 4:5, not square, not landscape, leave safe margins on all sides`.
 
 ## Typography Look
 
@@ -104,4 +104,4 @@ Typography must look native to the book and be generated together with the page 
 3. captions: smaller but same family feeling;
 4. white text only on native colored strips with enough contrast.
 
-Do not use opaque emergency patches unless the base art is intentionally designed for them. If a page needs a patch to become readable, regenerate the base page instead.
+Do not use opaque emergency patches unless the page is intentionally designed for them. If a page needs a patch to become readable, regenerate the page instead.

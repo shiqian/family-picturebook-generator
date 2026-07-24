@@ -48,7 +48,7 @@ async function main() {
 
   lines.push("");
   lines.push("Automated gate:");
-  lines.push("- Non-3:4 pages must not move forward to final typography.");
+  lines.push("- Non-3:4 pages must not move forward to delivery.");
   lines.push("- If a page is normalized by crop or canvas extension, record it and visually inspect all edges.");
   lines.push("");
   lines.push("Manual QA required:");

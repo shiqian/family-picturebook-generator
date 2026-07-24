@@ -1,4 +1,4 @@
 interface:
   display_name: "Family Plant Picturebook"
   short_description: "Turn plant guides into family picture-book pages."
-  default_prompt: "Use $family-plant-picturebook to turn this plant guide into a 3:4 family picture-book series."
+  default_prompt: "Use $family-plant-picturebook to turn this plant guide into a family picture-book series with imagegen-integrated text, exact 3:4 pages, and a canonical 1086 × 1448 px delivery size."

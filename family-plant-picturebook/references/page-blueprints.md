@@ -104,7 +104,7 @@ Use this minimal structure:
     "title": "二乔玉兰",
     "series": "七七的植物世界",
     "number": "No.30",
-    "size": { "width": 1086, "height": 1448 },
+    "size": { "width": 1086, "height": 1448, "ratio": "3:4" },
     "sourcePlant": "Magnolia soulangeana"
   },
   "characterOutfitSheet": {
@@ -167,7 +167,7 @@ Box fields:
 4. `valign`: `top`, `middle`, or `bottom`;
 5. `minSize`: smallest acceptable auto-fit font size.
 
-Inspect each base image before finalizing text boxes. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
+Inspect each generated page before finalizing the page record. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
 
 Recommended additional fields for richer page specs:
 

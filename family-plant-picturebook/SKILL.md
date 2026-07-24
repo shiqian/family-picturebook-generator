@@ -18,7 +18,7 @@ Create a project output folder containing:
 3. `final_pages/` - finished 3:4 PNG pages in reading order;
 4. `qa_report.md` - visual and factual QA notes.
 
-Default final image ratio is 3:4. Use `1086x1448` when a concrete pixel size is needed.
+Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this pixel size whenever the image-generation tool exposes size control; if generation returns another exact 3:4 size, normalize it to `1086 × 1448 px` only after confirming that no text, characters, plant details, or safe margins are damaged.
 
 ## Inputs
 
@@ -72,7 +72,7 @@ Match the bundled sample-book look:
 
 Recommended prompt phrase for every page image:
 
-`native portrait 3:4 children's picture-book page, final canvas 1086 by 1448 pixels, not 9:16, not 4:5, not square, not landscape, warm 3D rendering, soft natural light, layered depth, refined pastel palette, full-page story composition, leave safe spaces for empty speech bubbles and caption panels`
+`native portrait 3:4 children's picture-book page, target final canvas 1086 by 1448 pixels, not 9:16, not 4:5, not square, not landscape, warm 3D rendering, soft natural light, layered depth, refined pastel palette, full-page story composition, leave safe spaces for integrated Chinese text and native speech bubbles or caption panels`
 
 ## Workflow
 
@@ -148,9 +148,9 @@ The page image is where composition, character pose, plant layout, and final tex
 After a page image is generated:
 
 1. run the ratio check immediately;
-2. accept only exact 3:4 images, such as `1086x1448`;
+2. accept only exact 3:4 images and deliver pages at `1086 × 1448 px`;
 3. if the page is not 3:4, regenerate it before delivery;
-4. if the composition is otherwise usable and has safe margins, normalize it to `1086x1448`, then visually confirm nothing important was cut off and record that in `qa_report.md`.
+4. if the composition is otherwise usable and has safe margins, normalize it to `1086 × 1448 px`, then visually confirm nothing important was cut off and record that in `qa_report.md`.
 5. run a page-content sanity check at the same time: verify the page role matches the filename, the exact intended text is visibly present, and the character anatomy is not obviously distorted.
 
 Text placement rules:

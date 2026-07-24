@@ -9,7 +9,7 @@ The generator keeps plant facts tied to the source guide, creates a fixed portra
 - source-locked botanical storytelling with no invented plant facts;
 - a repeatable seven-page narrative: cover, encounter, name, plant secret, close-up, comparison, and ending;
 - consistent Qiqi-and-Mom character direction with a per-book outfit sheet;
-- native 3:4 page composition with imagegen-integrated Chinese text and safe text containers;
+- native 3:4 page composition at the canonical `1086 × 1448 px` delivery size, with imagegen-integrated Chinese text and safe text containers;
 - automated ratio and asset checks plus a manual visual/factual QA gate.
 
 ## Visual sample
