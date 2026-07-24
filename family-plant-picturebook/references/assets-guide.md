@@ -34,14 +34,30 @@ Use these pages as visual references for:
 
 Do not copy the 二乔玉兰 plant facts, flowers, colors, clothing, page titles, or subtitles into another plant book unless the new source content supports them.
 
+## Per-book Continuity Sheets
+
+Every book creates two visual PNG continuity sheets under its output folder:
+
+```text
+output/<plant-slug>/continuity/
+├── qiqi-outfit-sheet.png
+└── mom-outfit-sheet.png
+```
+
+Generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet should include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
+
+Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`. Attach the applicable PNG to every page prompt. These sheets are visual continuity references, not final pages or text-composition bases.
+
+Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
+
 ## Recommended Reference Loading
 
 When starting a new book:
 
 1. inspect `assets/characters/qiqi-and-mom-reference.png` if character identity is relevant;
 2. inspect at least 2 sample pages from `assets/examples/erqiao-yulan/final_pages/` for layout and typography feel;
-3. create a new `characterOutfitSheet` based on the new plant's season, habitat, weather, and story activity;
-4. repeat that locked outfit sheet in every page prompt.
+3. create the two per-book continuity sheets based on the new plant's season, habitat, weather, and story activity;
+4. repeat the applicable continuity-sheet reference and written lock in every page prompt.
 
 ## Portability Rule
 

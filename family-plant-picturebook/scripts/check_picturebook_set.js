@@ -13,17 +13,32 @@ async function main() {
   const folderName = path.basename(abs);
   const isFinalPages = folderName === "final_pages";
   const specPath = path.join(path.dirname(abs), "page_specs.json");
-  let hasOutfitSheet = false;
+  let hasContinuitySheets = false;
+  const continuityChecks = [];
   let hasPromptRecords = false;
   let expectedFiles = null;
   if (fs.existsSync(specPath)) {
     try {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
-      hasOutfitSheet = Boolean(
-        spec.characterOutfitSheet &&
-          spec.characterOutfitSheet.qiqi &&
-          spec.characterOutfitSheet.mom
-      );
+      const continuity = spec.characterContinuity;
+      const referenceImages = continuity && continuity.referenceImages;
+      for (const character of ["qiqi", "mom"]) {
+        const relativePath = referenceImages && referenceImages[character];
+        const fullPath = relativePath
+          ? path.resolve(path.dirname(specPath), relativePath)
+          : null;
+        let readable = false;
+        if (fullPath && fs.existsSync(fullPath)) {
+          try {
+            const metadata = await sharp(fullPath).metadata();
+            readable = metadata.format === "png";
+          } catch {
+            readable = false;
+          }
+        }
+        continuityChecks.push({ character, path: relativePath || "MISSING", readable });
+      }
+      hasContinuitySheets = continuityChecks.every((check) => check.readable);
       hasPromptRecords = Boolean(
         Array.isArray(spec.pages) &&
           spec.pages.length > 0 &&
@@ -38,7 +53,7 @@ async function main() {
         ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
         : null;
     } catch {
-      hasOutfitSheet = false;
+      hasContinuitySheets = false;
     }
   }
   const files = fs
@@ -54,7 +69,10 @@ async function main() {
   lines.push(`Checked directory: ${abs}`);
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
-  lines.push(`Character outfit sheet: ${hasOutfitSheet ? "PRESENT" : "MISSING"}`);
+  lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
+  for (const check of continuityChecks) {
+    lines.push(`- ${check.character}: ${check.path} ${check.readable ? "READABLE PNG" : "MISSING OR UNREADABLE"}`);
+  }
   lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
   lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
@@ -75,7 +93,7 @@ async function main() {
   lines.push("");
   lines.push("Manual QA required:");
   lines.push("- Font style is consistent across all pages.");
-  lines.push("- Character outfits match the locked characterOutfitSheet exactly unless a scene change is specified.");
+  lines.push("- Visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the locked continuity sheets and written specifications.");
   lines.push("- All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.");
   lines.push("- No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.");
   lines.push("- No sticker/plaster text blocks; text sits in native bubbles or panels.");
@@ -84,7 +102,7 @@ async function main() {
   lines.push("- Plant morphology and look-alike comparisons match the source dossier.");
   lines.push("");
   lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
-  const metadataOk = hasOutfitSheet && hasPromptRecords && filesMatchSpec;
+  const metadataOk = hasContinuitySheets && hasPromptRecords && filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 
   const report = path.join(path.dirname(abs), "qa_report.md");

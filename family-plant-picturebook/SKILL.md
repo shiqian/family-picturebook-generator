@@ -21,7 +21,7 @@ The book folder must contain:
 
 1. `source/` - the source-backed scientific dossier and child-facing guide used for the book;
 2. `story_text.md` - read-aloud page copy and dialogue;
-3. `page_specs.json` - final page text, visual constraints, semantic text-container intent, and prompt records;
+3. `page_specs.json` - final page text, visual constraints, character continuity references, semantic text-container intent, and prompt records;
 4. `step_log.md` - production actions, retries, and risks;
 5. `final_pages/` - finished 3:4 PNG pages in reading order;
 6. `qa_report.md` - visual and factual QA notes.
@@ -126,13 +126,25 @@ Before any page art is generated, freeze the paired plan for all pages in `page_
 3. the semantic container, placement, alignment, and approximate amount of space needed for each text block;
 4. which sample page or pages it borrows layout density from.
 5. seasonal and ecological background constraints for the scene, including a short whitelist of plausible companion plants and a short blacklist of plants or flowers that must not appear together if their blooming season conflicts.
-6. the complete imagegen prompt record for each page before generation begins.
+6. the complete imagegen prompt record for each page before generation begins;
+7. the applicable continuity-sheet references for each page.
 
 The paired plan must be complete enough to drive composition before page-image generation starts.
 
 ### 3. Define the Visual System
 
-Create the mandatory `characterOutfitSheet` in `page_specs.json` before generating pages, following `series-style-guide.md` and `assets-guide.md`.
+After the source handoff and before finalizing page prompts, generate and inspect two visual continuity sheets with `imagegen`:
+
+```text
+output/<plant-slug>/continuity/qiqi-outfit-sheet.png
+output/<plant-slug>/continuity/mom-outfit-sheet.png
+```
+
+Each sheet must show the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and relevant clothing/accessory detail views. Record both paths and the exact written outfit specifications in the `characterContinuity` object in `page_specs.json`.
+
+This is an internal quality checkpoint: continue automatically when both sheets satisfy the written specifications and record the approval in `step_log.md`. Pause for user input only when a continuity problem requires a design decision.
+
+Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
 
 ### 4. Generate Final Page Images With `imagegen`
 
@@ -142,11 +154,12 @@ For each page:
 
 1. use the `imagegen` skill's built-in image-generation path by default;
 2. use the page's recorded `imagegenPrompt` from `page_specs.json`; update it before every retry;
-3. include the exact page text from `page_specs.json` in the prompt and require verbatim Chinese rendering;
-4. generate a native 3:4 page image with the final text already integrated into speech bubbles, cards, banners, or panels;
-5. keep the page visually close to the sample-book style;
-6. reject weak, flat, schematic, poster-like, misspelled, or pseudo-text pages and redraw them with a targeted imagegen prompt update;
-7. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
+3. attach the applicable Qiqi and/or Mom continuity PNG sheet(s) and repeat the written locked outfit details;
+4. include the exact page text from `page_specs.json` in the prompt and require verbatim Chinese rendering;
+5. generate a native 3:4 page image with the final text already integrated into speech bubbles, cards, banners, or panels;
+6. keep the page visually close to the sample-book style;
+7. reject weak, flat, schematic, poster-like, misspelled, or pseudo-text pages and redraw them with a targeted imagegen prompt update;
+8. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
 
 The page image is where composition, character pose, plant layout, and final text are decided together.
 
@@ -157,7 +170,7 @@ All content repairs use targeted imagegen redraws. Do not create a text-free bas
 After a page image is generated:
 
 1. Check dimensions immediately. The delivery target is exactly `1086 × 1448 px` (3:4).
-2. Check the page role, exact Chinese text, text legibility, character anatomy, and plant subject at a glance.
+2. Check the page role, exact Chinese text, text legibility, visible character continuity details, character anatomy, and plant subject at a glance.
 3. If the ratio, text, or content fails, regenerate that page before moving to the next one.
 4. If the ratio is correct but the size is not `1086 × 1448 px`, normalize only when safe margins are preserved, then record it in `qa_report.md`.
 
@@ -180,7 +193,7 @@ The script writes `output/<plant-slug>/qa_report.md`. Read that report, then com
 
 1. **Package:** required files exist, page filenames and order are complete, and every final page is exactly `1086 × 1448 px`.
 2. **Text:** every visible character matches `page_specs.json`; text is legible, correctly placed, and free of pseudo-text or accidental old text.
-3. **Continuity:** Qiqi, Mom, outfits, typography feel, anatomy, page roles, and overall sample-book style remain consistent.
+3. **Continuity:** the two continuity PNGs exist; visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the written lock; typography feel, anatomy, page roles, and overall sample-book style remain consistent.
 4. **Botany:** plant morphology, comparison details, safety wording, and seasonally plausible backgrounds match the source guide.
 
 If any page fails, regenerate only that page when possible, update `step_log.md`, and rerun the QA gate before delivery.

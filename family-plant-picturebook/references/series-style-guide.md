@@ -43,11 +43,13 @@ Adapt clothing to:
 3. weather and time of day;
 4. story activity, such as walking, observing, sketching, collecting fallen leaves.
 
-Before generating a book, create a `characterOutfitSheet`. The sheet must lock exact garments, colors, silhouettes, shoes, hairstyle, and accessories for Qiqi and Mom.
+Before generating a book, create two visual PNG continuity sheets: one for Qiqi and one for Mom. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. The sheets must lock exact garments, colors, silhouettes, shoes, hairstyle, and accessories.
 
-Within one book, clothing must remain the same as the locked outfit sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
+Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
-Every image prompt must repeat the locked outfit sheet verbatim or near-verbatim. Do not rely on memory or broad phrases such as “same outfit as before.”
+Every image prompt must attach the applicable continuity PNG and repeat the written locked outfit details verbatim or near-verbatim. Do not rely on memory or broad phrases such as “same outfit as before.”
+
+Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
 
 If a generated page changes outfit style without a story reason, regenerate that page before delivery.
 
@@ -58,7 +60,7 @@ Examples:
 3. autumn fruit/tree page: knit vest, cardigan, warm earth colors;
 4. winter evergreen: warmer coats, scarf or hat.
 
-Example locked outfit sheet:
+Example written outfit specification:
 
 1. Qiqi: two braids with small pink hair ties; cream long-sleeve shirt; sage-green sleeveless quilted vest with front buttons; beige loose pants; white sneakers; no hat.
 2. Mom: shoulder-length brown hair; round glasses; cream knit cardigan; white top; beige relaxed trousers; white sneakers; woven shoulder bag.

@@ -8,7 +8,7 @@ The generator keeps plant facts tied to the source guide, creates a fixed portra
 
 - source-locked botanical storytelling with no invented plant facts;
 - a repeatable seven-page narrative: cover, encounter, name, plant secret, close-up, comparison, and ending;
-- consistent Qiqi-and-Mom character direction with a per-book outfit sheet;
+- consistent Qiqi-and-Mom character direction with two per-book visual continuity sheets;
 - native 3:4 page composition at the canonical `1086 × 1448 px` delivery size, with imagegen-integrated Chinese text and safe text containers;
 - automated ratio and asset checks plus a manual visual/factual QA gate.
 
@@ -38,6 +38,9 @@ The bundled sample is documented in [`asset-manifest.json`](family-plant-picture
 
 ```text
 output/<plant-slug>/
+├── continuity/
+│   ├── qiqi-outfit-sheet.png
+│   └── mom-outfit-sheet.png
 ├── source/
 │   ├── scientific-dossier.md
 │   └── child-guide.md
@@ -48,7 +51,7 @@ output/<plant-slug>/
 └── qa_report.md
 ```
 
-The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. The `source/` folder preserves the scientific dossier and child-facing guide used by the book. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
+The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. The `continuity/` folder contains the two per-book visual character references used for exact outfit details. The `source/` folder preserves the scientific dossier and child-facing guide used by the book. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
 
 ## Setup
 
@@ -69,6 +72,6 @@ node family-plant-picturebook/scripts/check_png_ratio.js path/to/final_pages
 node family-plant-picturebook/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
 ```
 
-`check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md` and combines automated image checks with a documented manual review checklist. New pages and all repairs must use the `imagegen` skill with final Chinese text integrated in the same generation call.
+`check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md`, verifies both per-book continuity PNGs, and combines automated image checks with a documented manual review checklist. New pages and all repairs must use the `imagegen` skill with final Chinese text integrated in the same generation call.
 
 Generated books, local dependencies, and machine-specific files are ignored; the repository stores reusable source assets and examples instead.
