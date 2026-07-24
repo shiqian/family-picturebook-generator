@@ -44,11 +44,21 @@ Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this
 
 Accept any of these:
 
-1. a plant name, then first run or request `shanghai-plant-guide-series`;
+1. a plant name; in this case, **must invoke `shanghai-plant-guide-series` before any picture-book research, drafting, or image generation**;
 2. an existing children-facing plant guide;
 3. a complete scientific dossier plus user instructions.
 
 Preferred input is both the scientific dossier and the child-facing guide. If only one is supplied, preserve that file in `source/` and use only its supported facts; do not invent or silently reconstruct the missing stage.
+
+When the input is only a plant name, do not proceed to picture-book production until the upstream workflow has produced both files below:
+
+```text
+output/<plant-slug>/source/
+├── scientific-dossier.md
+└── child-guide.md
+```
+
+These files are the required source handoff. Web research, an uncaptured chat response, or an existing example file does not substitute for running the upstream workflow.
 
 Optional inputs:
 
@@ -82,6 +92,8 @@ The bundled sample pages are a style reference only. Do not copy their plant fac
 ## Workflow
 
 ### 1. Lock the Source
+
+If the input was only a plant name, verify the upstream source handoff first. If either source file is missing, stop and run or request `shanghai-plant-guide-series`; do not begin picture-book drafting or image generation.
 
 Before drafting or generating anything, confirm in the project step log:
 
