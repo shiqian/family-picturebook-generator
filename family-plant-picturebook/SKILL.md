@@ -11,12 +11,21 @@ If the result drifts away from the bundled sample-book visual language, regenera
 
 ## What This Skill Produces
 
-Create a project output folder containing:
+Create exactly one book folder under the repository-level `output/` directory:
+
+```text
+output/<book-slug>-picturebook/
+```
+
+The book folder must contain:
 
 1. `story_text.md` - read-aloud page copy and dialogue;
 2. `page_specs.json` - final page text, visual constraints, and semantic text-container intent;
-3. `final_pages/` - finished 3:4 PNG pages in reading order;
-4. `qa_report.md` - visual and factual QA notes.
+3. `step_log.md` - production actions, retries, and risks;
+4. `final_pages/` - finished 3:4 PNG pages in reading order;
+5. `qa_report.md` - visual and factual QA notes.
+
+Do not create book outputs in `out/`, inside the skill directory, or in ad-hoc folders. Draft or diagnostic files, if needed, belong under `output/<book-slug>-picturebook/drafts/` and are not delivery files.
 
 Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this pixel size whenever the image-generation tool exposes size control; if generation returns another exact 3:4 size, normalize it to `1086 × 1448 px` only after confirming that no text, characters, plant details, or safe margins are damaged.
 
@@ -32,7 +41,7 @@ Optional inputs:
 
 1. series number, such as `No.30`;
 2. reference character image or previous pages;
-3. requested output directory.
+3. optional book slug; the default output directory is fixed by the output contract above.
 
 If no external reference images are supplied, use the bundled assets:
 
@@ -84,7 +93,7 @@ Before drafting or generating anything, confirm in the project step log:
 2. the scientific dossier or children-facing guide exists and is the only factual source;
 3. the reference files listed above have been read;
 4. at least 2 sample pages from `assets/examples/erqiao-yulan/final_pages/` have been inspected;
-5. the output folder exists and a step log has started.
+5. `output/<book-slug>-picturebook/` exists and `step_log.md` has started.
 
 If any of these are missing, stop before image generation.
 

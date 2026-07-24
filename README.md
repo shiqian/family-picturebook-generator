@@ -34,7 +34,18 @@ The repository includes a canonical sample from the “七七的植物世界” 
 └── .gitignore
 ```
 
-The bundled sample is documented in [`asset-manifest.json`](family-plant-picturebook/assets/examples/erqiao-yulan/asset-manifest.json). A generated book should additionally contain `story_text.md`, `page_specs.json`, `final_pages/`, and `qa_report.md`.
+The bundled sample is documented in [`asset-manifest.json`](family-plant-picturebook/assets/examples/erqiao-yulan/asset-manifest.json). Generated books use one locked structure:
+
+```text
+output/<book-slug>-picturebook/
+├── story_text.md
+├── page_specs.json
+├── step_log.md
+├── final_pages/
+└── qa_report.md
+```
+
+The repository-level `output/` directory is the only default destination for generated books. Draft or diagnostic files belong under that book's `drafts/` folder; `out/` and skill-source directories are not output locations.
 
 ## Setup
 
@@ -52,7 +63,7 @@ The bundled examples and character reference are intentionally kept with the ski
 npm install
 node family-plant-picturebook/scripts/check_skill_assets.js
 node family-plant-picturebook/scripts/check_png_ratio.js path/to/final_pages
-node family-plant-picturebook/scripts/check_picturebook_set.js path/to/book/final_pages
+node family-plant-picturebook/scripts/check_picturebook_set.js output/<book-slug>-picturebook/final_pages
 ```
 
 `check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md` and combines automated image checks with a documented manual review checklist. New pages must be generated with the `imagegen` skill and include their final Chinese text in the same generation call; the local text renderer is only an optional repair/diagnostic helper.

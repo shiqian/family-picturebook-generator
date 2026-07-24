@@ -6,7 +6,7 @@ const sharp = require("sharp");
 async function main() {
   const dir = process.argv[2];
   if (!dir) {
-    console.error("Usage: check_picturebook_set.js <base_pages_or_final_pages_dir>");
+    console.error("Usage: check_picturebook_set.js output/<book-slug>-picturebook/final_pages");
     process.exit(2);
   }
   const abs = path.resolve(dir);
