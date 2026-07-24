@@ -1,6 +1,6 @@
 # Text Rules
 
-Final Chinese text must be deterministic font rendering, not image-model-generated text.
+Final Chinese text is generated inside the imagegen page call so it belongs naturally to the bubbles, panels, lighting, and composition. Text must still be specified exactly and checked visually after generation.
 
 ## Common Character Policy
 
@@ -35,33 +35,38 @@ Define these once in `page_specs.json`:
 
 Every page must inherit from this same system unless a deliberate cover title style is defined.
 
-## Rendering Rules
+## Imagegen Text Rules
 
-Before rendering:
+Before image generation:
 
-1. inspect the base image;
-2. ensure the text box is native to the artwork;
-3. avoid adding opaque rectangles unless the page was designed for them;
-4. wrap lines manually for natural reading rhythm;
+1. put the final page text in `page_specs.json`;
+2. copy the exact text into the imagegen prompt and require verbatim Chinese characters;
+3. describe the native bubble, banner, card, or panel where each text block belongs;
+4. specify line breaks when they materially improve the intended reading rhythm;
 5. keep enough margin from bubble borders and decorative flowers.
 
-Use embedded text boxes by default:
+Use native text containers by default:
 
-1. dialogue and captions should use `box: { x, y, w, h, padding }`, not bare `x`/`y`;
+1. dialogue and captions should use `box: { x, y, w, h, padding }` in `page_specs.json`, not bare `x`/`y`;
 2. set `align: "center"` and `valign: "middle"` for speech bubbles unless the bubble shape clearly calls for left alignment;
 3. set `align: "left"` and `valign: "top"` for notebook panels or explanatory cards;
 4. keep text-safe boxes smaller than the visible bubble, leaving at least 16-28 px padding;
 5. if a bubble is irregular, choose a conservative inner rectangle rather than filling the whole shape;
-6. if text needs to shrink below comfortable reading size, shorten the copy or regenerate a base page with a larger bubble.
+6. if text is too small or incorrect, shorten the copy or regenerate the page with a larger native bubble.
 
-Natural embedded typography means the base art provides native empty bubbles, signs, labels, or paper panels, and the renderer places text inside those regions. Do not use floating text on busy backgrounds unless it is a deliberate cover/title design.
+Natural embedded typography means imagegen places the requested text inside native bubbles, signs, labels, or paper panels. Do not use floating text on busy backgrounds unless it is a deliberate cover/title design.
 
-After rendering:
+After image generation:
 
 1. check every character visually;
 2. verify no text overlaps dashed borders;
 3. verify no old AI pseudo-text remains;
-4. verify each dialogue block is centered within its bubble or intentionally aligned within a panel;
-5. compare font style against the other pages.
+4. verify every character, word, punctuation mark, and line break against `page_specs.json`;
+5. verify each dialogue block is centered within its bubble or intentionally aligned within a panel;
+6. compare the lettering style against the other pages.
 
-If readability requires a patch-like block, regenerate the no-text base image instead.
+If text is misspelled, unreadable, pseudo-text, or placed unnaturally, regenerate the page with a targeted prompt change. Do not silently accept a near-match or patch over it by default.
+
+## Optional renderer fallback
+
+`scripts/render_picturebook_text.js` may be used only when the user explicitly requests controlled post-processing or a repair workflow. It is not the normal page-generation method for this series.

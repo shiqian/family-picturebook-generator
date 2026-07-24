@@ -65,15 +65,17 @@ Example locked outfit sheet:
 
 ## Page Art Rules
 
-Each generated base image must:
+Each generated production page must:
 
 1. be native 3:4;
-2. include no readable text;
-3. include no pseudo-writing;
-4. include blank title banners, speech bubbles, captions, and infographic panels;
-5. reserve enough text-safe space;
+2. contain the exact requested Chinese text generated through `imagegen`;
+3. include no pseudo-writing, missing characters, or spelling substitutions;
+4. place text inside native title banners, speech bubbles, captions, and infographic panels;
+5. reserve enough text-safe space around each text container;
 6. avoid hard post-production-looking rectangles;
 7. show plant-specific morphology accurately.
+
+Do not use a text-free base image as the normal production target. The bundled sample pages are final integrated text-and-image references. A text-free base plus local overlay is an optional repair workflow only.
 
 For botanical accuracy, describe the exact visible parts in the image prompt: flower orientation, color pattern, leaf shape, fruit form, bark texture, or growth habit as supported by source facts.
 
@@ -95,7 +97,7 @@ Recommended prompt phrase:
 
 ## Typography Look
 
-Typography must look native to the book:
+Typography must look native to the book and be generated together with the page image:
 
 1. title: warm deep rose or dark brown, rounded/handwritten feeling;
 2. dialogue: dark black-brown, readable, child-friendly;

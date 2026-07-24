@@ -54,7 +54,7 @@ async function main() {
   lines.push("Manual QA required:");
   lines.push("- Font style is consistent across all pages.");
   lines.push("- Character outfits match the locked characterOutfitSheet exactly unless a scene change is specified.");
-  lines.push("- All visible Chinese text came from deterministic typography, not image generation.");
+  lines.push("- All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.");
   lines.push("- No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.");
   lines.push("- No sticker/plaster text blocks; text sits in native bubbles or panels.");
   lines.push("- Dialogue text is centered inside speech bubbles, or intentionally aligned inside panels with safe padding.");

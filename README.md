@@ -9,7 +9,7 @@ The generator keeps plant facts tied to the source guide, creates a fixed portra
 - source-locked botanical storytelling with no invented plant facts;
 - a repeatable seven-page narrative: cover, encounter, name, plant secret, close-up, comparison, and ending;
 - consistent Qiqi-and-Mom character direction with a per-book outfit sheet;
-- native 3:4 page composition with deterministic Chinese text and safe text containers;
+- native 3:4 page composition with imagegen-integrated Chinese text and safe text containers;
 - automated ratio and asset checks plus a manual visual/factual QA gate.
 
 ## Visual sample
@@ -55,6 +55,6 @@ node family-plant-picturebook/scripts/check_png_ratio.js path/to/final_pages
 node family-plant-picturebook/scripts/check_picturebook_set.js path/to/book/final_pages
 ```
 
-`check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md` and combines automated image checks with a documented manual review checklist.
+`check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md` and combines automated image checks with a documented manual review checklist. New pages must be generated with the `imagegen` skill and include their final Chinese text in the same generation call; the local text renderer is only an optional repair/diagnostic helper.
 
 Generated books, local dependencies, and machine-specific files are ignored; the repository stores reusable source assets and examples instead.

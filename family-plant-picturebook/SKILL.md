@@ -1,6 +1,6 @@
 ---
 name: family-plant-picturebook
-description: Turn a plant science dossier or children-facing plant guide into a reusable family picture-book series with direct-text page images, deterministic Chinese typography, visual QA, and 3:4 final pages. Use when the user asks to create, redraw, systematize, or reuse a “七七的植物世界” style plant 绘本, Xiaohongshu-ready picture-book images, parent-child botanical story pages, or a workflow after shanghai-plant-guide-series.
+description: Turn a plant science dossier or children-facing plant guide into a reusable family picture-book series with imagegen-generated text-and-image pages, visual QA, and 3:4 final pages. Use when the user asks to create, redraw, systematize, or reuse a “七七的植物世界” style plant 绘本, Xiaohongshu-ready picture-book images, parent-child botanical story pages, or a workflow after shanghai-plant-guide-series.
 ---
 
 # Family Plant Picturebook
@@ -56,7 +56,8 @@ The bundled sample pages are a style reference only. Do not copy their plant fac
 2. Do not invent morphology, name origins, folklore, safety claims, or comparisons.
 3. Keep the book warm, polished, and story-like, with mother-child interaction as the emotional center.
 4. Keep the page art in the sample-book language unless the user explicitly asks for a different look.
-5. Final visible Chinese text must come from deterministic font rendering, not from the image model.
+5. Use the `imagegen` skill for every production page. Generate the illustration and its final Chinese text together in one image-generation call so the typography, bubbles, lighting, and composition belong to the same visual scene.
+6. Put every visible Chinese sentence in `page_specs.json` and the image prompt verbatim, then inspect the generated page for text accuracy. Never accept pseudo-text, missing text, or a near-match.
 
 ## Style Target
 
@@ -125,19 +126,22 @@ Keep identity consistent, but adapt clothing to the story:
 
 Use `assets/characters/qiqi-and-mom-reference.png` for identity guidance. Use the Erqiao sample pages for mood, density, and composition rhythm, not as a clothing template.
 
-### 4. Generate Page Images With Text
+### 4. Generate Final Page Images With `imagegen`
 
-This is the single-stage illustration and text stage.
+This is the canonical production stage. Do not generate a text-free base page first and treat later text compositing as the normal workflow; for this series, integrated imagegen text produces the most natural page design.
 
 For each page:
 
-1. generate a native 3:4 page image that already includes the final Chinese text;
-2. keep the page visually close to the sample-book style;
-3. keep the text embedded in native bubbles, cards, banners, or panels;
-4. reject weak, flat, schematic, or poster-like pages and regenerate them before moving on.
-5. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
+1. use the `imagegen` skill's built-in image-generation path by default;
+2. include the exact page text from `page_specs.json` in the prompt and require verbatim Chinese rendering;
+3. generate a native 3:4 page image with the final text already integrated into speech bubbles, cards, banners, or panels;
+4. keep the page visually close to the sample-book style;
+5. reject weak, flat, schematic, poster-like, misspelled, or pseudo-text pages and regenerate them before moving on;
+6. for any page with crouching, pointing, carrying, or multi-character interaction, state the arm and hand pose explicitly in the prompt so the generator does not invent extra limbs.
 
 The page image is where composition, character pose, plant layout, and final text are decided together.
+
+`render_picturebook_text.js` is an optional fallback and diagnostic helper for explicitly requested post-processing or controlled repair. It is not the default production path and must not replace `imagegen` for new pages.
 
 ### 5. Check Ratio and Typography
 
@@ -147,7 +151,7 @@ After a page image is generated:
 2. accept only exact 3:4 images, such as `1086x1448`;
 3. if the page is not 3:4, regenerate it before delivery;
 4. if the composition is otherwise usable and has safe margins, normalize it to `1086x1448`, then visually confirm nothing important was cut off and record that in `qa_report.md`.
-5. run a page-content sanity check at the same time: verify the page role matches the filename, the intended text is visibly present, and the character anatomy is not obviously distorted.
+5. run a page-content sanity check at the same time: verify the page role matches the filename, the exact intended text is visibly present, and the character anatomy is not obviously distorted.
 
 Text placement rules:
 
@@ -186,7 +190,7 @@ The QA must check:
 
 1. every final page is 3:4;
 2. page filenames are ordered and complete;
-3. all Chinese text is deterministic overlay text;
+3. all visible Chinese text matches the exact text in `page_specs.json` and was generated through the required `imagegen` workflow;
 4. there are no rare or archaic characters unless explicitly requested;
 5. dialogue and caption text sits inside native bubbles or panels with safe padding;
 6. fonts are consistent across all pages;
@@ -206,11 +210,11 @@ Use these files as needed:
 
 1. `references/series-style-guide.md` - visual style, characters, clothing adaptation, page art constraints;
 2. `references/page-blueprints.md` - 7-page structure and page spec shape;
-3. `references/text-rules.md` - deterministic Chinese typography and common-character rules;
+3. `references/text-rules.md` - imagegen text fidelity, native text-container, and common-character rules;
 4. `references/assets-guide.md` - bundled character and sample-book usage;
 5. `assets/characters/qiqi-and-mom-reference.png` - default character identity reference;
 6. `assets/examples/erqiao-yulan/final_pages/` - canonical sample pages for the current series look;
-7. `scripts/render_picturebook_text.js` - optional helper for manual text composition workflows;
+7. `scripts/render_picturebook_text.js` - optional repair and diagnostic helper, not the default production path;
 8. `scripts/check_picturebook_set.js` - final output QA report;
 9. `scripts/check_png_ratio.js` - PNG ratio gate for final pages;
 10. `scripts/check_skill_assets.js` - verify bundled character and sample-book assets are present and 3:4.
