@@ -143,66 +143,31 @@ The page image is where composition, character pose, plant layout, and final tex
 
 `render_picturebook_text.js` is an optional fallback and diagnostic helper for explicitly requested post-processing or controlled repair. It is not the default production path and must not replace `imagegen` for new pages.
 
-### 5. Check Ratio and Typography
+### 5. Accept Each Generated Page
 
 After a page image is generated:
 
-1. run the ratio check immediately;
-2. accept only exact 3:4 images and deliver pages at `1086 × 1448 px`;
-3. if the page is not 3:4, regenerate it before delivery;
-4. if the composition is otherwise usable and has safe margins, normalize it to `1086 × 1448 px`, then visually confirm nothing important was cut off and record that in `qa_report.md`.
-5. run a page-content sanity check at the same time: verify the page role matches the filename, the exact intended text is visibly present, and the character anatomy is not obviously distorted.
+1. Check dimensions immediately. The delivery target is exactly `1086 × 1448 px` (3:4).
+2. Check the page role, exact Chinese text, text legibility, character anatomy, and plant subject at a glance.
+3. If the ratio, text, or content fails, regenerate that page before moving to the next one.
+4. If the ratio is correct but the size is not `1086 × 1448 px`, normalize only when safe margins are preserved, then record it in `qa_report.md`.
 
-Text placement rules:
-
-1. dialogue and captions should use `box: { x, y, w, h, padding }`;
-2. use `align: "center"` and `valign: "middle"` for speech bubbles unless the shape clearly needs a different alignment;
-3. use left/top alignment only for notebook panels, signs, or explanatory cards;
-4. avoid bare `x`/`y` placement except for decorative cover titles or very short labels;
-5. if text becomes too small, shorten the copy or regenerate the page image with a larger native bubble.
-6. if a page fails to show its required text clearly, do not accept the image as final; regenerate that page or enlarge the native text area before proceeding.
-
-One book must use one typography system:
-
-1. one title font stack;
-2. one dialogue font stack;
-3. one caption font stack;
-4. consistent colors, sizes, weights, and line spacing.
+Keep the text-box and typography details in `references/text-rules.md` and the page plan in `page_specs.json`; do not duplicate those rules in the production loop.
 
 ### 6. Keep a Step Log
 
-During the whole workflow, keep a short step log in the project folder. Record:
-
-1. the action taken;
-2. the file or page affected;
-3. the reason for the step;
-4. any issue or retry;
-5. the result.
-
-Keep the log current while you work, not only at the end.
-Add a short "risk notes" line when a page is likely to fail because of dense composition, small typography, crouching characters, or multiple foreground plants.
+Keep `step_log.md` in the output folder and append one short entry after each meaningful action or retry. Each entry should state: the page/file, the action, the result, and any risk or follow-up. Keep it current while working; do not reconstruct it only at the end.
 
 ### 7. Run Layered QA Before Delivery
 
-Run `scripts/check_picturebook_set.js` on the final output folder, then do a visual review.
+Run `scripts/check_picturebook_set.js` on the final output folder, then complete a visual and factual review. Confirm four groups:
 
-The QA must check:
+1. **Package:** required files exist, page filenames and order are complete, and every final page is exactly `1086 × 1448 px`.
+2. **Text:** every visible character matches `page_specs.json`; text is legible, correctly placed, and free of pseudo-text or accidental old text.
+3. **Continuity:** Qiqi, Mom, outfits, typography feel, anatomy, page roles, and overall sample-book style remain consistent.
+4. **Botany:** plant morphology, comparison details, safety wording, and seasonally plausible backgrounds match the source guide.
 
-1. every final page is 3:4;
-2. page filenames are ordered and complete;
-3. all visible Chinese text matches the exact text in `page_specs.json` and was generated through the required `imagegen` workflow;
-4. there are no rare or archaic characters unless explicitly requested;
-5. dialogue and caption text sits inside native bubbles or panels with safe padding;
-6. fonts are consistent across all pages;
-7. character identity is consistent and clothing matches the locked `characterOutfitSheet` unless a scene-level change is explicitly specified;
-8. plant morphology matches the source facts;
-9. look-alike comparisons include both Chinese and scientific names when shown;
-10. the page art matches the bundled sample-book mood, density, and finish instead of a flatter fallback style.
-11. the page role in the filename matches the actual page content, especially cover, comparison, and ending pages.
-12. no page contains obvious anatomical errors such as extra arms, extra hands, duplicated fingers, or merged sleeves that imply a hidden limb.
-13. background plants are seasonally plausible for the target story and do not combine incompatible bloom periods.
-
-If any page fails the visual review, regenerate only that page when possible, then rerun the QA gate.
+If any page fails, regenerate only that page when possible, update `step_log.md`, and rerun the QA gate before delivery.
 
 ## Bundled Resources
 
