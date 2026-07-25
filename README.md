@@ -36,18 +36,23 @@ The bundled [`gou-shu`](family-plant-picturebook-generator/assets/examples/gou-s
 
 ```mermaid
 flowchart TD
-    A["Plant name or source guide"] --> B["1. Source handoff<br/>shanghai-plant-guide-series"]
-    B -->|scientific dossier + child guide| C["2. Story plan<br/>story_text.md + page roles"]
-    C --> D["3. Character continuity<br/>identity reference + story context"]
-    D -->|Qiqi/Mom continuity PNGs<br/>written outfit specifications| E["4. Visual plan<br/>page_specs.json + prompts"]
-    E --> F["5. Page generation<br/>imagegen text + illustration"]
-    F -->|final_pages/*.png| G["6. Automated gate<br/>package + prompt refs + dimensions"]
-    G -->|pass| H["7. Manual QA<br/>text + continuity + botany"]
-    G -->|fail| F
-    H --> I["Deliverable<br/>output/<plant-slug>/"]
+    A["Plant name or source guide"] --> B["Initialize output<br/>init:picturebook"]
+    B --> C["1. Source handoff<br/>shanghai-plant-guide-series when needed"]
+    C --> D["Source preflight<br/>preflight:source"]
+    D -->|pass| E["2. Story plan<br/>story_text.md + page roles"]
+    D -->|fail| C
+    E --> F["3. Character continuity<br/>imagegen identity + outfit PNGs"]
+    F --> G["4. Visual plan<br/>page_specs.json + prompts"]
+    G --> H["Visual preflight<br/>preflight:visual"]
+    H -->|pass| I["5. Page generation<br/>imagegen text + illustration"]
+    H -->|fail| G
+    I -->|final_pages/*.png| J["6. Automated gate<br/>package + prompt refs + dimensions"]
+    J -->|pass| K["7. Manual QA<br/>text + continuity + botany"]
+    J -->|fail| I
+    K --> L["Deliverable<br/>output/<plant-slug>/"]
 ```
 
-The source dossier is the factual authority. The child guide supplies the narrative language. Story context determines the character outfits and pose references. Page text is generated together with the illustration; failed pages are redrawn as complete pages.
+The source dossier is the factual authority. The child guide supplies the narrative language. Initialization creates the controlled output folder and step log; source and visual preflights gate the next production stage. Story context determines the character outfits and pose references. Page text is generated together with the illustration; failed pages are redrawn as complete pages.
 
 ## Output structure
 
@@ -90,6 +95,16 @@ Run $family-plant-picturebook-generator for 桂花.
 ```
 
 For a plant name, the skill first requires the upstream `shanghai-plant-guide-series` source handoff.
+
+The skill runs these lifecycle controls from the repository root:
+
+```bash
+npm run init:picturebook -- <plant-slug>
+npm run preflight:source -- output/<plant-slug>
+npm run preflight:visual -- output/<plant-slug>
+```
+
+The source preflight runs before story and continuity production. The visual preflight runs after `story_text.md`, both continuity PNGs, and `page_specs.json` are complete, immediately before final-page generation.
 
 ## Optional standalone QA
 
