@@ -1,20 +1,44 @@
-# 构树绘本制作记录
+# Production Log — 构树 (Broussonetia papyrifera)
 
-## 2026-07-25
+## 1. Source Handoff
 
-- 接收输入“构树”；按技能要求先运行上海植物指南系列。
-- 完成目标锁定：构树 *Broussonetia papyrifera* (L.) L'Hér. ex Vent.；依据上海数字植物志，作为上海原生、极常见植物处理。
-- 保存上游科学档案与儿童版指南至 `source/`；科学档案为事实权威，儿童版为叙事来源。
-- 阅读页面蓝图、系列风格、文字规则、素材指南；检查默认角色参考图与样书封面/近景页。
-- 规划七页：封面、初遇、名字来源、雌雄异株、叶背/果实近景、与桑树区分、观察记录式结尾。
-- 事实风险锁定：不确定“构”字词源；不把构树写成可随意采食；果实毛刺和花粉过敏提示只用保守表述。
-- 生成并检查七七、妈妈连续性图；本书统一使用春末至初夏观察服装与观察本/编织包。
-- 页面 specs 冻结后逐页调用 imagegen；每页如出现文字错误、角色断肢、构树形态漂移或尺寸不符，整页重绘并记录。
-- 七页均已完成 imagegen 生成；检查缩略图后，构树叶片、雄/雌花序、橙红聚花果、桑树对照与角色服装连续性均通过人工复核。
-- 尺寸归一化：01-cover、02-meet、07-ending 原始返回尺寸分别为1085×1450、1086×1449、1085×1450；已统一安全调整为1086×1448，缩略图复核未见文字、角色、植物细节或安全边距损伤。
-- 自动门禁通过：7页、PNG、精确1086×1448、连续性规格/PNG、默认身份参考、逐页 prompt 引用、文件顺序均 PASS。
-- 人工 QA 结论：通过。所有页的文字均在原生气泡/卡片内；未采用后期叠字或文本贴片。事实风险已由源档案与儿童指南约束：不写“构”字词源为确定事实，不鼓励采食，保留花粉敏感与果面毛刺的保守提醒。
-- 用户修订：仅重绘第5页，移除妈妈针织开衫右侧多出的扣子；文字、构树叶片/果实、角色姿态与版式保持不变。修订页已复核为1086×1448 PNG。
-- 用户二次修订：恢复妈妈针织开衫左侧原有的两枚扣子，同时保持右侧多余扣子移除；第5页已再次人工复核。
-- 用户三次修订：按妈妈连续性服装图校正为“左侧两枚扣子、右侧零枚扣子”；第5页已再次人工复核，文字与构树细节未变。
-- 用户澄清左右以妈妈自身视角为准；最终第5页已改为妈妈左侧（画面右侧）两枚扣子、妈妈右侧（画面左侧）零枚扣子，并完成视觉复核。
+- Action: Received the plant name 构树 and ran `shanghai-plant-guide-series` first.
+- Output: Locked 构树 to *Broussonetia papyrifera* (L.) L'Hér. ex Vent.; saved the scientific dossier and child guide under `source/`.
+- Decision: The scientific dossier is the factual authority; the child guide is the narrative source. Treat Shanghai digital flora information as the source basis for the local context.
+
+## 2. Story Plan
+
+- Action: Read the page blueprints, series style guide, text rules, asset guide, character reference, and sample pages.
+- Output: Planned seven pages: cover, first encounter, name origin, dioecy, leaf/fruit close-up, comparison with mulberry, and observation-diary ending.
+- Risk: The origin of the Chinese character “构” is uncertain; do not present it as established fact.
+
+## 3. Character Continuity
+
+- Action: Generated and inspected Qiqi and Mom continuity sheets with `imagegen`.
+- Output: Locked late-spring/early-summer observation outfits, notebook, and woven bag.
+- Decision: Use the continuity sheets for exact outfits and accessories; use sample pages only for style and composition.
+
+## 4. Visual Plan
+
+- Action: Froze `page_specs.json` before page generation.
+- Output: Recorded page text, semantic text containers, botanical constraints, continuity references, and first-attempt prompts for all seven pages.
+- Risk: Watch for text errors, anatomy problems, drifting plant morphology, and inconsistent button placement.
+
+## 5. Page Generation
+
+- Action: Generated all pages with integrated Chinese text and illustration through `imagegen`.
+- Output: Seven final pages passed thumbnail review for leaf form, male/female inflorescences, orange-red aggregate fruit, mulberry comparison, and character continuity.
+- Revision: Safely normalized 01-cover, 02-meet, and 07-ending from their original sizes to `1086 × 1448 px` after visual inspection.
+- Revision: Redrew page 5 three times to match the continuity sheet: Mom's left side has two buttons and her right side has none, using Mom's own viewpoint for left/right.
+
+## 6. Automated Gate
+
+- Action: Ran `check_picturebook_set.js`.
+- Output: Seven PNG pages, exact `1086 × 1448 px`, continuity specifications and PNGs, bundled identity reference, prompt references, and file order all passed.
+- Result: PASS.
+
+## 7. Manual QA
+
+- Action: Reviewed text, native bubbles/cards, character anatomy and continuity, plant morphology, comparison details, and seasonal plausibility.
+- Result: PASS. No post-production text overlay or text patch was used.
+- Decision: Keep conservative wording around fruit bristles, pollen sensitivity, and non-destructive observation; do not encourage eating the fruit.

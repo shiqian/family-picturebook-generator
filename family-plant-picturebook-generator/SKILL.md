@@ -39,6 +39,21 @@ Use the scientific dossier as the factual authority and the child guide as the n
 
 Use a stable lowercase plant slug such as `yulan`, `guihua`, or `gou-shu`. Do not create book outputs in `out/`, inside the skill directory, or in ad-hoc folders. Draft or diagnostic files, if needed, belong under `output/<plant-slug>/drafts/` and are not delivery files.
 
+Use English section headings and field labels in `step_log.md`; retain Chinese plant names, quoted Chinese text, and filenames as required. Use the same seven headings for every book:
+
+```markdown
+# Production Log — <中文名> (<scientific name>)
+## 1. Source Handoff
+## 2. Story Plan
+## 3. Character Continuity
+## 4. Visual Plan
+## 5. Page Generation
+## 6. Automated Gate
+## 7. Manual QA
+```
+
+Under each heading, record concise actions, outputs, decisions or risks, and any retries.
+
 Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this pixel size whenever the image-generation tool exposes size control; if generation returns another exact 3:4 size, normalize it to `1086 × 1448 px` only after confirming that no text, characters, plant details, or safe margins are damaged.
 
 ## Inputs
