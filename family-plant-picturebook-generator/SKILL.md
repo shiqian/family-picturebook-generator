@@ -1,9 +1,9 @@
 ---
-name: family-plant-picturebook
+name: family-plant-picturebook-generator
 description: Turn a plant science dossier or children-facing plant guide into a reusable family picture-book series with imagegen-generated text-and-image pages, visual QA, and 3:4 final pages. Use when the user asks to create, redraw, systematize, or reuse a “七七的植物世界” style plant 绘本, Xiaohongshu-ready picture-book images, parent-child botanical story pages, or a workflow after shanghai-plant-guide-series.
 ---
 
-# Family Plant Picturebook
+# Family Plant Picturebook Generator
 
 Use this skill to produce a family plant picture-book series from source-backed plant content. It is the visual/story production stage after `shanghai-plant-guide-series`; it must not invent plant facts.
 
@@ -145,7 +145,7 @@ After all pages are in `output/<plant-slug>/final_pages/`, run from the generato
 
 ```bash
 npm install  # first run only, if sharp is not installed
-node family-plant-picturebook/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
+node family-plant-picturebook-generator/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
 ```
 
 The gate writes `output/<plant-slug>/qa_report.md` and checks required files, continuity specifications and PNGs, bundled identity reference, page/prompt references, filename order, PNG format, and exact `1086 × 1448 px` dimensions. If it fails, fix or redraw the affected page, update `step_log.md`, and rerun the gate.

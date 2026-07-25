@@ -2,7 +2,7 @@
   "name": "family-picturebook-generator",
   "version": "0.1.0",
   "private": true,
-  "description": "QA helper dependency for the Family Plant Picturebook Codex skill",
+  "description": "QA helper dependency for the Family Plant Picturebook Generator Codex skill",
   "engines": {
     "node": ">=18"
   },
