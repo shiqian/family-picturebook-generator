@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
+const { appendEvent, validateLog } = require("./step_log_utils");
 
 async function main() {
   const dir = process.argv[2];
@@ -34,15 +35,11 @@ async function main() {
   }));
   const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.present);
   const stepLogPath = path.join(bookDir, "step_log.md");
-  const requiredStepLogHeadings = [
-    "## 1. Source Handoff", "## 2. Story Plan", "## 3. Character Continuity",
-    "## 4. Visual Plan", "## 5. Page Generation", "## 6. Automated Gate", "## 7. Manual QA"
-  ];
   const stepLogText = fs.existsSync(stepLogPath) ? fs.readFileSync(stepLogPath, "utf8") : "";
-  const missingStepLogHeadings = requiredStepLogHeadings.filter((heading) => !stepLogText.includes(heading));
+  const stepLogCheck = validateLog(stepLogText);
   const stepLogValid = Boolean(
     requiredBookFileChecks.find((check) => check.relativePath === "step_log.md").present &&
-    missingStepLogHeadings.length === 0
+    stepLogCheck.valid
   );
   let hasContinuitySheets = false;
   let hasContinuitySpecs = false;
@@ -179,7 +176,8 @@ async function main() {
     lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING"}`);
   }
   lines.push(`Step log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
-  if (missingStepLogHeadings.length) lines.push(`Missing step-log headings: ${missingStepLogHeadings.join(", ")}`);
+  lines.push(`Step log events: ${stepLogCheck.events.length}`);
+  if (!stepLogValid && stepLogCheck.errors.length) lines.push(`Step log errors: ${stepLogCheck.errors.join("; ")}`);
   if (specError) lines.push(`Page specifications: INVALID (${specError})`);
   lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
   lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
@@ -233,6 +231,15 @@ async function main() {
 
   const report = path.join(path.dirname(abs), "qa_report.md");
   fs.writeFileSync(report, lines.join("\n"));
+  if (fs.existsSync(stepLogPath)) {
+    appendEvent(stepLogPath, {
+      actor: "Script",
+      action: "Automated gate",
+      output: metadataOk && ok ? "Picturebook package passed automated QA." : "Picturebook package failed automated QA; see qa_report.md.",
+      decision: metadataOk && ok ? "Continue to manual QA or deliver." : "Repair the package and rerun the gate.",
+      risk: metadataOk && ok ? "None recorded." : "The package is not ready for delivery."
+    });
+  }
   console.log(report);
   if (!ok || (isFinalPages && !metadataOk)) process.exit(1);
 }

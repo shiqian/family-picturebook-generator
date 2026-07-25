@@ -75,6 +75,8 @@ output/<plant-slug>/
 
 Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files belong under `output/<plant-slug>/drafts/`; do not use `out/`, ad-hoc folders, or the skill source directory for generated books.
 
+`step_log.md` is an append-only English event log. Each event records a timestamp, actor, action, output, decision, and risk; retries and user-requested revisions are added as new events.
+
 ## Setup
 
 1. Install Node.js 18 or newer.

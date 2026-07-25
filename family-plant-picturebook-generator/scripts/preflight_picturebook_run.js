@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
+const { appendEvent, validateLog } = require("./step_log_utils");
 
 const stage = process.argv[2];
 const bookDir = process.argv[3] && path.resolve(process.argv[3]);
@@ -16,19 +17,10 @@ const commonRequired = [
 ];
 const visualRequired = ["story_text.md", "page_specs.json", "continuity/qiqi-outfit-sheet.png", "continuity/mom-outfit-sheet.png"];
 const required = stage === "visual" ? [...commonRequired, ...visualRequired] : commonRequired;
-const headings = [
-  "## 1. Source Handoff",
-  "## 2. Story Plan",
-  "## 3. Character Continuity",
-  "## 4. Visual Plan",
-  "## 5. Page Generation",
-  "## 6. Automated Gate",
-  "## 7. Manual QA"
-];
 const missing = required.filter((file) => !fs.existsSync(path.join(bookDir, file)));
 const logPath = path.join(bookDir, "step_log.md");
 const log = fs.existsSync(logPath) ? fs.readFileSync(logPath, "utf8") : "";
-const missingHeadings = headings.filter((heading) => !log.includes(heading));
+const logCheck = validateLog(log);
 let specError = null;
 if (stage === "visual") {
   try {
@@ -39,10 +31,24 @@ if (stage === "visual") {
   }
 }
 
-if (missing.length || missingHeadings.length || specError) {
+const passed = missing.length === 0 && logCheck.valid && !specError;
+if (!passed) {
   if (missing.length) console.error(`Missing required files: ${missing.join(", ")}`);
-  if (missingHeadings.length) console.error(`Missing step-log headings: ${missingHeadings.join(", ")}`);
+  if (!logCheck.valid) console.error(`Invalid step_log.md: ${logCheck.errors.join("; ")}`);
   if (specError) console.error(`Invalid page_specs.json: ${specError}`);
+}
+
+if (fs.existsSync(logPath)) {
+  appendEvent(logPath, {
+    actor: "Script",
+    action: `${stage} preflight`,
+    output: passed ? "Required files and production state are valid." : "Preflight checks failed; see the command output.",
+    decision: passed ? "Continue to the next workflow stage." : "Stop and repair the package before continuing.",
+    risk: passed ? "None recorded." : "Production state is not ready."
+  });
+}
+
+if (!passed) {
   console.error(`Preflight failed for ${stage} stage.`);
   process.exit(1);
 }

@@ -39,20 +39,18 @@ Use the scientific dossier as the factual authority and the child guide as the n
 
 Use a stable lowercase plant slug such as `yulan`, `guihua`, or `gou-shu`. Do not create book outputs in `out/`, inside the skill directory, or in ad-hoc folders. Draft or diagnostic files, if needed, belong under `output/<plant-slug>/drafts/` and are not delivery files.
 
-Use English section headings and field labels in `step_log.md`; retain Chinese plant names, quoted Chinese text, and filenames as required. Use the same seven headings for every book:
+Write `step_log.md` in English, except for plant names, quoted Chinese text, and filenames when required. Create it before any workflow action and append one event for each meaningful step, user decision, retry, or automated check. Use this fixed format:
 
 ```markdown
-# Production Log — <中文名> (<scientific name>)
-## 1. Source Handoff
-## 2. Story Plan
-## 3. Character Continuity
-## 4. Visual Plan
-## 5. Page Generation
-## 6. Automated Gate
-## 7. Manual QA
+## Event 0001 — 2026-07-25 17:32:14 +08:00 — Script — Initialization
+- Timestamp: 2026-07-25 17:32:14 +08:00
+- Action: Created the controlled output folders and initialized the production log.
+- Output: `source/`, `continuity/`, and `final_pages/` created.
+- Decision: Await source handoff.
+- Risk: Plant taxon is not locked.
 ```
 
-Under each heading, record concise actions, outputs, decisions or risks, and any retries.
+Use one concise line for each field. Actors are `User`, `Codex`, or `Script`. Use timestamps to seconds in `Asia/Shanghai` time. Event numbers must increase sequentially. Record retries as new events; never rewrite history. Lifecycle scripts append their own events. When the user requests a final-page change, record the user request, Codex action, and resulting QA as separate events.
 
 Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this pixel size whenever the image-generation tool exposes size control; if generation returns another exact 3:4 size, normalize it to `1086 × 1448 px` only after confirming that no text, characters, plant details, or safe margins are damaged.
 
@@ -101,12 +99,12 @@ The bundled sample pages are a style reference only. Do not copy their plant fac
 
 ### 0. Initialize and preflight before production
 
-When the input is only a plant name, first run the upstream `shanghai-plant-guide-series` handoff.
+Always initialize the book and create `step_log.md` before any other workflow action. If the input is only a plant name, invoke `shanghai-plant-guide-series` immediately after initialization.
 
-1. Run `npm run init:picturebook -- <plant-slug>` from the generator repository root. This creates the controlled output folders and an initialized `step_log.md`.
-2. Save the source files, update the log title to `# Production Log — <中文名> (<scientific name>)`, record the source lock under `## 1. Source Handoff`, then run `npm run preflight:source -- output/<plant-slug>`.
+1. Run `npm run init:picturebook -- <plant-slug>` from the generator repository root. This creates the controlled output folders and Event 0001.
+2. Save the source files, update the log title to `# Production Log — <中文名> (<scientific name>)`, append a source-handoff event, then run `npm run preflight:source -- output/<plant-slug>`.
 3. After `story_text.md`, both continuity PNGs, and `page_specs.json` are complete, run `npm run preflight:visual -- output/<plant-slug>` before generating final pages.
-4. After each stage, append a concise checkpoint note to `step_log.md`; after each page, record its generation or retry immediately.
+4. After each stage, append a concise event to `step_log.md`; after each page, record its generation or retry immediately.
 
 `step_log.md` is a required state ledger, not end-of-run documentation. Do not generate continuity sheets before the source preflight passes or final pages before the visual preflight passes.
 
@@ -128,7 +126,7 @@ Create `story_text.md` and plan seven pages by default:
 6. look-alike comparison;
 7. warm ending.
 
-Use natural mother-child dialogue, keep every fact source-backed, and do not force a warning ending on every book. Record the story plan and any factual risks in `step_log.md`, then append a concise story-planning checkpoint.
+Use natural mother-child dialogue, keep every fact source-backed, and do not force a warning ending on every book. Record the story plan and any factual risks in one `step_log.md` event.
 
 ### 3. Design Character Outfit References
 
@@ -139,7 +137,7 @@ output/<plant-slug>/continuity/qiqi-outfit-sheet.png
 output/<plant-slug>/continuity/mom-outfit-sheet.png
 ```
 
-Use the `imagegen` skill to generate each sheet. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. Record the exact written outfit specifications and both image paths in `page_specs.json` under `characterContinuity`. Inspect the sheets internally and continue when they satisfy the story-derived season, setting, weather, activity, and written specifications; pause only when a design decision is required. Record the result in `step_log.md`, then append a concise continuity checkpoint.
+Use the `imagegen` skill to generate each sheet. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. Record the exact written outfit specifications and both image paths in `page_specs.json` under `characterContinuity`. Inspect the sheets internally and continue when they satisfy the story-derived season, setting, weather, activity, and written specifications; pause only when a design decision is required. Record the result in one `step_log.md` event.
 
 Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
 
@@ -157,13 +155,13 @@ Before drawing any final page, complete `page_specs.json` for all pages. Include
 6. the applicable identity and continuity PNG references;
 7. the complete first-attempt `imagegenPrompt` for every page, including each page's literal text.
 
-Do not prescribe pixel coordinates for normal imagegen production. Freeze this visual plan before drawing, run the visual preflight, and record a concise visual-plan checkpoint in `step_log.md`.
+Do not prescribe pixel coordinates for normal imagegen production. Freeze this visual plan before drawing, run the visual preflight, and record the result in one `step_log.md` event.
 
 ### 5. Draw the Final Pages
 
 For every page, use the `imagegen` skill's built-in image-generation path. Attach the bundled identity reference and the applicable continuity PNG(s), repeat the written outfit lock, include the exact page text, and generate the illustration and final Chinese text together on a native 3:4 canvas. When buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
 
-After each generation, check the page role, text, legibility, visible continuity details, anatomy, plant subject, and dimensions. Redraw a failed page before continuing. All content repairs use targeted complete-page imagegen redraws; never create a text-free base image and add text afterward. Only safe non-content resizing to `1086 × 1448 px` is allowed after generation. Record every generation and retry in `step_log.md` immediately after saving it, with one checkpoint per page such as `PAGE_01_GENERATED`.
+After each generation, check the page role, text, legibility, visible continuity details, anatomy, plant subject, and dimensions. Redraw a failed page before continuing. All content repairs use targeted complete-page imagegen redraws; never create a text-free base image and add text afterward. Only safe non-content resizing to `1086 × 1448 px` is allowed after generation. Record every generation and retry in one `step_log.md` event immediately after saving it.
 
 ### 6. Run the Automated Gate Check
 
@@ -185,7 +183,7 @@ Read `qa_report.md` and review the whole book for:
 3. plant morphology, comparison details, safety wording, and seasonal plausibility;
 4. page-role coverage, narrative flow, visual density, and overall sample-book style.
 
-Only deliver when both the automated gate and this visual/factual review pass. Record the final decision and any remaining risks in `step_log.md`. The final package is incomplete if `step_log.md` is missing, malformed, or not updated through the final stage.
+Only deliver when both the automated gate and this visual/factual review pass. Record the final decision and any remaining risks in one `step_log.md` event. The final package is incomplete if `step_log.md` is missing, malformed, or not updated through the final stage.
 
 ## Bundled Resources
 
@@ -201,4 +199,5 @@ Use these files as needed:
 8. `scripts/check_png_ratio.js` - PNG ratio gate for final pages;
 9. `scripts/check_skill_assets.js` - verify bundled character and sample-book assets are present and 3:4;
 10. `scripts/init_picturebook_run.js` - initialize a controlled book output folder and step log;
-11. `scripts/preflight_picturebook_run.js` - validate source or visual prerequisites before production.
+11. `scripts/preflight_picturebook_run.js` - validate source or visual prerequisites before production;
+12. `scripts/step_log_utils.js` - format, append, and validate production-log events.
