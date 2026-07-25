@@ -1,4 +1,4 @@
-# Family Picturebook Generator
+# Family Plant Picturebook Generator
 
 A reusable Codex skill for turning source-backed plant information into a consistent seven-page family picture book.
 
