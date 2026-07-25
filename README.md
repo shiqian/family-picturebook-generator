@@ -1,40 +1,55 @@
 # Family Picturebook Generator
 
-A reusable Codex skill for turning a source-backed plant guide into a consistent seven-page family picture-book series.
+A reusable Codex skill for turning source-backed plant information into a consistent seven-page family picture book.
 
-The generator keeps plant facts tied to the source guide, creates a fixed portrait page system, and includes bundled character/style references plus QA scripts for the final image set. It is the visual production stage after a scientific or child-facing plant guide has been prepared.
+It combines source control, story planning, character continuity, imagegen-integrated Chinese typography, and automated visual-package checks. The result is a repeatable production workflow for “七七的植物世界”-style parent-child botanical stories.
 
-## What it demonstrates
+## Highlights
 
-- source-locked botanical storytelling with no invented plant facts;
-- a repeatable seven-page narrative: cover, encounter, name, plant secret, close-up, comparison, and ending;
-- consistent Qiqi-and-Mom character direction with two per-book visual continuity sheets;
-- native 3:4 page composition at the canonical `1086 × 1448 px` delivery size, with imagegen-integrated Chinese text and safe text containers;
-- automated ratio and asset checks plus a manual visual/factual QA gate.
+- Source-locked storytelling with no invented botanical facts
+- Seven-page narrative system: cover, encounter, name, plant secret, close-up, comparison, and ending
+- Two per-book character continuity PNGs for stable outfits, accessories, and poses
+- Integrated text-and-image generation with `imagegen`
+- Canonical `1086 × 1448 px` portrait pages (`3:4`)
+- Automated package, prompt-reference, asset, and dimension checks plus manual visual/factual QA
 
 ## Visual sample
 
-The repository includes a canonical sample from the “七七的植物世界” series. These images define the intended visual language and composition density; they are reference assets, not a factual source for new plants.
+The bundled Erqiao Yulan pages demonstrate the intended warmth, typography feel, composition density, and parent-child storytelling rhythm. They are style references only, not factual sources for other plants.
 
-| Cover | Plant detail | Comparison |
-| --- | --- | --- |
-| ![Sample cover](family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/01-cover.png) | ![Sample flower close-up](family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png) | ![Sample comparison page](family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/06-comparison.png) |
+<table>
+  <tr>
+    <th>Cover</th>
+    <th>Botanical close-up</th>
+    <th>Comparison</th>
+  </tr>
+  <tr>
+    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/01-cover.png" alt="Sample cover" width="180"></td>
+    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png" alt="Sample botanical close-up" width="180"></td>
+    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/06-comparison.png" alt="Sample comparison page" width="180"></td>
+  </tr>
+</table>
 
-## Layout
+## Workflow
 
-```text
-.
-├── README.md
-├── family-plant-picturebook/
-│   ├── SKILL.md
-│   ├── agents/
-│   ├── assets/
-│   ├── references/
-│   └── scripts/
-└── .gitignore
+```mermaid
+flowchart TD
+    A["Plant name or source guide"] --> B["1. Source handoff<br/>shanghai-plant-guide-series"]
+    B -->|scientific dossier + child guide| C["2. Story plan<br/>story_text.md + page roles"]
+    C --> D["3. Character continuity<br/>identity reference + story context"]
+    D -->|Qiqi/Mom continuity PNGs<br/>written outfit specifications| E["4. Visual plan<br/>page_specs.json + prompts"]
+    E --> F["5. Page generation<br/>imagegen text + illustration"]
+    F -->|final_pages/*.png| G["6. Automated gate<br/>package + prompt refs + dimensions"]
+    G -->|pass| H["7. Manual QA<br/>text + continuity + botany"]
+    G -->|fail| F
+    H --> I["Deliverable<br/>output/<plant-slug>/"]
 ```
 
-The bundled sample is documented in [`asset-manifest.json`](family-plant-picturebook/assets/examples/erqiao-yulan/asset-manifest.json). Generated books use one locked structure:
+The source dossier is the factual authority. The child guide supplies the narrative language. Story context determines the character outfits and pose references. Page text is generated together with the illustration; failed pages are redrawn as complete pages.
+
+## Output structure
+
+Generated books live under the repository-level `output/` directory:
 
 ```text
 output/<plant-slug>/
@@ -51,39 +66,46 @@ output/<plant-slug>/
 └── qa_report.md
 ```
 
-The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. The `continuity/` folder contains the two per-book visual character references used for exact outfit details. The `source/` folder preserves the scientific dossier and child-facing guide used by the book. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
-
-## Production workflow
-
-The skill follows seven stages:
-
-1. get source text files from the plant name;
-2. plan the story;
-3. design the two character outfit-reference images and written outfit specifications;
-4. design the page visual system and prompts;
-5. draw final text-and-image pages with imagegen;
-6. run the automated gate check;
-7. complete manual visual and factual QA.
+Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files belong under `output/<plant-slug>/drafts/`; do not use `out/`, ad-hoc folders, or the skill source directory for generated books.
 
 ## Setup
 
-1. Clone this repository.
-2. Install Node.js 18 or newer.
-3. Run `npm install` if you want to use the full QA helper, which uses `sharp` for image metadata.
-4. Copy `family-plant-picturebook/` into your Codex skills directory, or expose this repository as a project-level skills folder.
-5. Provide either a plant name, which triggers the required upstream source workflow, or a completed scientific/children's plant guide before generating pages.
+1. Install Node.js 18 or newer.
+2. Clone this repository and enter its root.
+3. Install the QA dependency:
 
-The bundled examples and character reference are intentionally kept with the skill so new books can inherit the same visual language.
+   ```bash
+   npm install
+   ```
 
-## QA helpers
+4. Expose `family-plant-picturebook/` as a Codex skill or use it from this repository.
+5. Run the skill with a plant name or provide a completed scientific dossier and child guide.
+
+For a plant name, the skill first requires the upstream `shanghai-plant-guide-series` source handoff.
+
+## QA commands
 
 ```bash
-npm install
 node family-plant-picturebook/scripts/check_skill_assets.js
-node family-plant-picturebook/scripts/check_png_ratio.js path/to/final_pages
+node family-plant-picturebook/scripts/check_png_ratio.js output/<plant-slug>/final_pages
 node family-plant-picturebook/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
 ```
 
-`check_skill_assets.js` validates the bundled references. `check_png_ratio.js` is a dependency-free 3:4 gate. `check_picturebook_set.js` writes `qa_report.md`, verifies both per-book continuity PNGs, and combines automated image checks with a documented manual review checklist. New pages and all repairs must use the `imagegen` skill with final Chinese text integrated in the same generation call.
+The final command writes `output/<plant-slug>/qa_report.md` and verifies the continuity specifications, both continuity PNGs, bundled identity reference, per-page prompt references, page order, PNG format, and exact `1086 × 1448 px` dimensions. Manual review is still required for text accuracy, readability, character continuity, anatomy, visual quality, and botanical correctness.
 
-Generated books, local dependencies, and machine-specific files are ignored; the repository stores reusable source assets and examples instead.
+## Repository layout
+
+```text
+.
+├── README.md
+├── package.json
+├── family-plant-picturebook/
+│   ├── SKILL.md
+│   ├── agents/
+│   ├── assets/
+│   ├── references/
+│   └── scripts/
+└── .gitignore
+```
+
+The bundled assets and sample pages make the skill portable across projects. The sample asset manifest is available at [`asset-manifest.json`](family-plant-picturebook/assets/examples/erqiao-yulan/asset-manifest.json).
