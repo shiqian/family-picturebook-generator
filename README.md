@@ -83,7 +83,9 @@ Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files
 
 For a plant name, the skill first requires the upstream `shanghai-plant-guide-series` source handoff.
 
-## QA commands
+## Optional standalone QA
+
+During normal skill execution, Codex runs the automated gate and reads the resulting `qa_report.md` automatically. Use these commands only to recheck an existing output package, debug a failed generation, validate bundled assets, or support CI/development work.
 
 ```bash
 node family-plant-picturebook/scripts/check_skill_assets.js
