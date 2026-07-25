@@ -115,6 +115,8 @@ output/<plant-slug>/continuity/mom-outfit-sheet.png
 
 Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. Record the exact written outfit specifications and both image paths in `page_specs.json` under `characterContinuity`. Inspect the sheets internally and continue when they satisfy the story-derived season, setting, weather, activity, and written specifications; pause only when a design decision is required. Record the result in `step_log.md`.
 
+Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
+
 Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
 
 ### 4. Design the Visual System
@@ -133,7 +135,7 @@ Do not prescribe pixel coordinates for normal imagegen production. Freeze this v
 
 ### 5. Draw the Final Pages
 
-For every page, use the `imagegen` skill's built-in image-generation path. Attach the bundled identity reference and the applicable continuity PNG(s), repeat the written outfit lock, include the exact page text, and generate the illustration and final Chinese text together on a native 3:4 canvas.
+For every page, use the `imagegen` skill's built-in image-generation path. Attach the bundled identity reference and the applicable continuity PNG(s), repeat the written outfit lock, include the exact page text, and generate the illustration and final Chinese text together on a native 3:4 canvas. When buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
 
 After each generation, check the page role, text, legibility, visible continuity details, anatomy, plant subject, and dimensions. Redraw a failed page before continuing. All content repairs use targeted complete-page imagegen redraws; never create a text-free base image and add text afterward. Only safe non-content resizing to `1086 × 1448 px` is allowed after generation. Record every generation and retry in `step_log.md`.
 
@@ -153,7 +155,7 @@ The gate writes `output/<plant-slug>/qa_report.md` and checks required files, co
 Read `qa_report.md` and review the whole book for:
 
 1. exact, legible Chinese text with no pseudo-text or old text;
-2. Qiqi and Mom identity, outfits, bags, glasses, shoes, anatomy, and typography continuity;
+2. Qiqi and Mom identity, outfits, bags, glasses, shoes, anatomy, and typography continuity; when buttons are visible, verify their count and placement;
 3. plant morphology, comparison details, safety wording, and seasonal plausibility;
 4. page-role coverage, narrative flow, visual density, and overall sample-book style.
 

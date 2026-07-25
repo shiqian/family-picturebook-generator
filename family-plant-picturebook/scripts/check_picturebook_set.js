@@ -150,6 +150,7 @@ async function main() {
   lines.push("Manual QA required:");
   lines.push("- Font style is consistent across all pages.");
   lines.push("- Visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the locked continuity sheets and written specifications.");
+  lines.push("- When buttons are visible, verify their count, spacing, and placement against the continuity sheet; redraw the complete page if they are wrong.");
   lines.push("- All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.");
   lines.push("- No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.");
   lines.push("- No sticker/plaster text blocks; text sits in native bubbles or panels.");
