@@ -53,13 +53,25 @@ output/<plant-slug>/
 
 The repository-level `output/` directory is the only default destination for generated books. Use a stable lowercase plant slug, such as `output/yulan/` or `output/gou-shu/`. The `continuity/` folder contains the two per-book visual character references used for exact outfit details. The `source/` folder preserves the scientific dossier and child-facing guide used by the book. Draft or diagnostic files belong under that plant folder's `drafts/` directory; `out/` and skill-source directories are not output locations.
 
+## Production workflow
+
+The skill follows seven stages:
+
+1. get source text files from the plant name;
+2. plan the story;
+3. design the two character outfit-reference images and written outfit specifications;
+4. design the page visual system and prompts;
+5. draw final text-and-image pages with imagegen;
+6. run the automated gate check;
+7. complete manual visual and factual QA.
+
 ## Setup
 
 1. Clone this repository.
 2. Install Node.js 18 or newer.
 3. Run `npm install` if you want to use the full QA helper, which uses `sharp` for image metadata.
 4. Copy `family-plant-picturebook/` into your Codex skills directory, or expose this repository as a project-level skills folder.
-5. Provide a completed scientific/children's plant guide as the factual source before generating pages.
+5. Provide either a plant name, which triggers the required upstream source workflow, or a completed scientific/children's plant guide before generating pages.
 
 The bundled examples and character reference are intentionally kept with the skill so new books can inherit the same visual language.
 

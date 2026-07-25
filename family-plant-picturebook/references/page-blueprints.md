@@ -2,6 +2,15 @@
 
 Default to 7 pages. Adjust only when the user asks or the plant lacks enough supported content.
 
+## Contents
+
+- [Page roles](#page-roles)
+- [`page_specs.json` shape](#page_specsjson-shape)
+- [Text-block fields](#text-block-fields)
+- [Prompt and review rules](#prompt-and-review-rules)
+
+## Page roles
+
 ## 01-cover
 
 Purpose: introduce the series and plant.
@@ -94,7 +103,7 @@ Do not always end with “不要摘花.” Prefer:
 4. a quiet emotional moment;
 5. a safe, non-destructive activity.
 
-## page_specs.json Shape
+## `page_specs.json` Shape
 
 Use this minimal structure:
 
@@ -109,6 +118,7 @@ Use this minimal structure:
   },
   "characterContinuity": {
     "continuityRule": "Reuse this exact outfit on every page unless the story explicitly changes day, season, weather, location, or activity.",
+    "identityReference": "assets/characters/qiqi-and-mom-reference.png",
     "referenceImages": {
       "qiqi": "continuity/qiqi-outfit-sheet.png",
       "mom": "continuity/mom-outfit-sheet.png"
@@ -136,6 +146,7 @@ Use this minimal structure:
     {
       "file": "01-cover.png",
       "pageRole": "cover",
+      "characters": ["qiqi", "mom"],
       "sampleDensityFrom": ["01-cover.png", "07-ending.png"],
       "sceneSeason": "spring",
       "backgroundConstraints": {
@@ -147,7 +158,7 @@ Use this minimal structure:
         "cover pose may distort arms if too many foreground elements are requested"
       ],
       "imagegenPrompt": {
-        "text": "Use case: illustration-story. Create a native portrait 3:4 children's picture-book cover at 1086 by 1448 pixels with the exact title text below integrated into a ribbon banner. Preserve the locked Qiqi and Mom identities and the attached continuity sheets and written outfit specifications. Show the target plant with only source-supported morphology. Warm 3D rendering, soft natural light, layered depth, refined pastel palette. Avoid pseudo-text, misspelled Chinese, extra limbs, and crowded title space.",
+        "text": "Use case: illustration-story. Create a native portrait 3:4 children's picture-book cover at 1086 by 1448 pixels with the exact visible text ‘七七的植物世界 No.30’, ‘二乔玉兰’, and ‘双色“大杯子”花’ integrated into a ribbon banner and subtitle area. Preserve the locked Qiqi and Mom identities and the attached continuity sheets and written outfit specifications. Show the target plant with only source-supported morphology. Warm 3D rendering, soft natural light, layered depth, refined pastel palette. Avoid pseudo-text, misspelled Chinese, extra limbs, and crowded title space.",
         "references": [
           { "path": "assets/characters/qiqi-and-mom-reference.png", "role": "character identity" },
           { "path": "continuity/qiqi-outfit-sheet.png", "role": "Qiqi outfit and pose continuity" },
@@ -166,6 +177,26 @@ Use this minimal structure:
           "alignment": "center",
           "maxLines": 1,
           "priority": "required"
+        },
+        {
+          "id": "plant-name",
+          "text": "二乔玉兰",
+          "role": "title",
+          "container": "open-title-area",
+          "placement": "center",
+          "alignment": "center",
+          "maxLines": 1,
+          "priority": "required"
+        },
+        {
+          "id": "plant-hook",
+          "text": "双色“大杯子”花",
+          "role": "caption",
+          "container": "subtitle-area",
+          "placement": "center",
+          "alignment": "center",
+          "maxLines": 1,
+          "priority": "required"
         }
       ],
       "qaHints": {
@@ -179,6 +210,8 @@ Use this minimal structure:
 }
 ```
 
+## Text-block fields
+
 For normal imagegen production, do not prescribe pixel coordinates. Each `textBlocks` item should identify the exact text plus its semantic layout intent:
 
 1. `id`: stable page-local identifier;
@@ -190,7 +223,9 @@ For normal imagegen production, do not prescribe pixel coordinates. Each `textBl
 7. `maxLines`: a composition guardrail;
 8. `priority`: `required` or `optional`.
 
-Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt; update it before every retry and record the retry reason in `step_log.md`. Its `references` list must include the applicable continuity PNG(s); sample or earlier final pages may be included only for style and composition.
+## Prompt and review rules
+
+Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in `step_log.md`. Its `references` list must include `assets/characters/qiqi-and-mom-reference.png` plus the continuity PNG for every character listed in that page's `characters` array. A page with no visible characters may use an empty `characters` array. Sample or earlier final pages may be included only for style and composition.
 
 Inspect each generated page before finalizing the page record. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
 

@@ -14,14 +14,41 @@ async function main() {
   const isFinalPages = folderName === "final_pages";
   const specPath = path.join(path.dirname(abs), "page_specs.json");
   let hasContinuitySheets = false;
+  let hasContinuitySpecs = false;
+  let identityReferenceOk = false;
   const continuityChecks = [];
   let hasPromptRecords = false;
+  let promptReferencesOk = false;
   let expectedFiles = null;
   if (fs.existsSync(specPath)) {
     try {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
       const continuity = spec.characterContinuity;
       const referenceImages = continuity && continuity.referenceImages;
+      hasContinuitySpecs = Boolean(
+        continuity &&
+          typeof continuity.qiqi === "string" &&
+          continuity.qiqi.trim() &&
+          typeof continuity.mom === "string" &&
+          continuity.mom.trim() &&
+          referenceImages &&
+          typeof referenceImages.qiqi === "string" &&
+          referenceImages.qiqi.trim() &&
+          typeof referenceImages.mom === "string" &&
+          referenceImages.mom.trim() &&
+          referenceImages.qiqi !== referenceImages.mom
+      );
+      const identityReference = continuity && continuity.identityReference;
+      if (identityReference === "assets/characters/qiqi-and-mom-reference.png") {
+        try {
+          const identityMeta = await sharp(
+            path.resolve(__dirname, "..", identityReference)
+          ).metadata();
+          identityReferenceOk = identityMeta.format === "png";
+        } catch {
+          identityReferenceOk = false;
+        }
+      }
       for (const character of ["qiqi", "mom"]) {
         const relativePath = referenceImages && referenceImages[character];
         const fullPath = relativePath
@@ -39,21 +66,47 @@ async function main() {
         continuityChecks.push({ character, path: relativePath || "MISSING", readable });
       }
       hasContinuitySheets = continuityChecks.every((check) => check.readable);
+      const pages = Array.isArray(spec.pages) ? spec.pages : [];
       hasPromptRecords = Boolean(
-        Array.isArray(spec.pages) &&
-          spec.pages.length > 0 &&
-          spec.pages.every(
+        pages.length > 0 &&
+          pages.every(
             (page) =>
               page.imagegenPrompt &&
               typeof page.imagegenPrompt.text === "string" &&
               page.imagegenPrompt.text.trim().length > 0
           )
       );
+      promptReferencesOk = Boolean(
+        pages.length > 0 &&
+          pages.every((page) => {
+            const characters = Array.isArray(page.characters)
+              ? page.characters
+              : ["qiqi", "mom"];
+            if (!characters.every((character) => ["qiqi", "mom"].includes(character))) {
+              return false;
+            }
+            const requiredReferences = [
+              "assets/characters/qiqi-and-mom-reference.png",
+              ...characters
+                .filter((character) => referenceImages && referenceImages[character])
+                .map((character) => referenceImages[character])
+            ];
+            const references = Array.isArray(page.imagegenPrompt?.references)
+              ? page.imagegenPrompt.references
+              : [];
+            return requiredReferences.every((requiredPath) =>
+              references.some((reference) => reference && reference.path === requiredPath)
+            );
+          })
+      );
       expectedFiles = Array.isArray(spec.pages)
         ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
         : null;
     } catch {
       hasContinuitySheets = false;
+      hasContinuitySpecs = false;
+      identityReferenceOk = false;
+      promptReferencesOk = false;
     }
   }
   const files = fs
@@ -69,11 +122,14 @@ async function main() {
   lines.push(`Checked directory: ${abs}`);
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
+  lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
   lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
   for (const check of continuityChecks) {
     lines.push(`- ${check.character}: ${check.path} ${check.readable ? "READABLE PNG" : "MISSING OR UNREADABLE"}`);
   }
+  lines.push(`Bundled identity reference: ${identityReferenceOk ? "PRESENT" : "MISSING"}`);
   lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
+  lines.push(`Prompt continuity references: ${promptReferencesOk ? "PASS" : "FAIL"}`);
   lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
 
@@ -102,7 +158,13 @@ async function main() {
   lines.push("- Plant morphology and look-alike comparisons match the source dossier.");
   lines.push("");
   lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
-  const metadataOk = hasContinuitySheets && hasPromptRecords && filesMatchSpec;
+  const metadataOk =
+    hasContinuitySpecs &&
+    hasContinuitySheets &&
+    identityReferenceOk &&
+    hasPromptRecords &&
+    promptReferencesOk &&
+    filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 
   const report = path.join(path.dirname(abs), "qa_report.md");
