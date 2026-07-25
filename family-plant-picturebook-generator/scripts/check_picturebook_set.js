@@ -33,6 +33,17 @@ async function main() {
     present: fs.existsSync(path.join(bookDir, relativePath))
   }));
   const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.present);
+  const stepLogPath = path.join(bookDir, "step_log.md");
+  const requiredStepLogHeadings = [
+    "## 1. Source Handoff", "## 2. Story Plan", "## 3. Character Continuity",
+    "## 4. Visual Plan", "## 5. Page Generation", "## 6. Automated Gate", "## 7. Manual QA"
+  ];
+  const stepLogText = fs.existsSync(stepLogPath) ? fs.readFileSync(stepLogPath, "utf8") : "";
+  const missingStepLogHeadings = requiredStepLogHeadings.filter((heading) => !stepLogText.includes(heading));
+  const stepLogValid = Boolean(
+    requiredBookFileChecks.find((check) => check.relativePath === "step_log.md").present &&
+    missingStepLogHeadings.length === 0
+  );
   let hasContinuitySheets = false;
   let hasContinuitySpecs = false;
   let identityReferenceOk = false;
@@ -167,6 +178,8 @@ async function main() {
   for (const check of requiredBookFileChecks) {
     lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING"}`);
   }
+  lines.push(`Step log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
+  if (missingStepLogHeadings.length) lines.push(`Missing step-log headings: ${missingStepLogHeadings.join(", ")}`);
   if (specError) lines.push(`Page specifications: INVALID (${specError})`);
   lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
   lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
@@ -208,6 +221,7 @@ async function main() {
   lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
   const metadataOk =
     requiredBookFilesOk &&
+    stepLogValid &&
     hasContinuitySpecs &&
     hasContinuitySheets &&
     identityReferenceOk &&
