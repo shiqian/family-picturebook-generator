@@ -24,11 +24,13 @@ The bundled Erqiao Yulan pages demonstrate the intended warmth, typography feel,
     <th>Comparison</th>
   </tr>
   <tr>
-    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/01-cover.png" alt="Sample cover" width="180"></td>
-    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png" alt="Sample botanical close-up" width="180"></td>
-    <td><img src="family-plant-picturebook/assets/examples/erqiao-yulan/final_pages/06-comparison.png" alt="Sample comparison page" width="180"></td>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/01-cover.png" alt="Sample cover" width="180"></td>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png" alt="Sample botanical close-up" width="180"></td>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/06-comparison.png" alt="Sample comparison page" width="180"></td>
   </tr>
 </table>
+
+The bundled [`gou-shu`](family-plant-picturebook-generator/assets/examples/gou-shu/) package is a complete generated-book example. It includes the source dossiers, child guide, continuity sheets, story plan, page specifications, seven final pages, production log, and QA report, so it demonstrates the full output contract as well as the visual result.
 
 ## Workflow
 
@@ -78,7 +80,7 @@ Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files
    npm install
    ```
 
-4. Expose `family-plant-picturebook/` as a Codex skill or use it from this repository.
+4. Expose `family-plant-picturebook-generator/` as a Codex skill or use it from this repository.
 5. Run the skill with a plant name or provide a completed scientific dossier and child guide.
 
 For a plant name, the skill first requires the upstream `shanghai-plant-guide-series` source handoff.
@@ -88,9 +90,9 @@ For a plant name, the skill first requires the upstream `shanghai-plant-guide-se
 During normal skill execution, Codex runs the automated gate and reads the resulting `qa_report.md` automatically. Use these commands only to recheck an existing output package, debug a failed generation, validate bundled assets, or support CI/development work.
 
 ```bash
-node family-plant-picturebook/scripts/check_skill_assets.js
-node family-plant-picturebook/scripts/check_png_ratio.js output/<plant-slug>/final_pages
-node family-plant-picturebook/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
+node family-plant-picturebook-generator/scripts/check_skill_assets.js
+node family-plant-picturebook-generator/scripts/check_png_ratio.js output/<plant-slug>/final_pages
+node family-plant-picturebook-generator/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
 ```
 
 The final command writes `output/<plant-slug>/qa_report.md` and verifies the continuity specifications, both continuity PNGs, bundled identity reference, per-page prompt references, page order, PNG format, and exact `1086 × 1448 px` dimensions. Manual review is still required for text accuracy, readability, character continuity, anatomy, visual quality, and botanical correctness.
@@ -101,7 +103,7 @@ The final command writes `output/<plant-slug>/qa_report.md` and verifies the con
 .
 ├── README.md
 ├── package.json
-├── family-plant-picturebook/
+├── family-plant-picturebook-generator/
 │   ├── SKILL.md
 │   ├── agents/
 │   ├── assets/
@@ -110,4 +112,4 @@ The final command writes `output/<plant-slug>/qa_report.md` and verifies the con
 └── .gitignore
 ```
 
-The bundled assets and sample pages make the skill portable across projects. The sample asset manifest is available at [`asset-manifest.json`](family-plant-picturebook/assets/examples/erqiao-yulan/asset-manifest.json).
+The bundled assets and sample pages make the skill portable across projects. The canonical sample asset manifest is available at [`asset-manifest.json`](family-plant-picturebook-generator/assets/examples/erqiao-yulan/asset-manifest.json); the complete generated-book example is [`gou-shu/`](family-plant-picturebook-generator/assets/examples/gou-shu/).
