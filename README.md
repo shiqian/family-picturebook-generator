@@ -2,7 +2,7 @@
 
 A reusable Codex skill for turning source-backed plant information into a consistent seven-page family picture book.
 
-It combines source control, story planning, character continuity, imagegen-integrated Chinese typography, and automated visual-package checks. The result is a repeatable production workflow for “七七的植物世界”-style parent-child botanical stories.
+It combines source control, story planning, character continuity, imagegen-integrated Chinese typography, and automated package, asset, and dimension checks. The result is a repeatable production workflow for “七七的植物世界”-style parent-child botanical stories.
 
 ## Highlights
 
@@ -82,6 +82,12 @@ Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files
 
 4. Expose `family-plant-picturebook-generator/` as a Codex skill or use it from this repository.
 5. Run the skill with a plant name or provide a completed scientific dossier and child guide.
+
+Example:
+
+```text
+Run $family-plant-picturebook-generator for 桂花.
+```
 
 For a plant name, the skill first requires the upstream `shanghai-plant-guide-series` source handoff.
 

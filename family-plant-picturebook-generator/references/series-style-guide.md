@@ -2,6 +2,15 @@
 
 Use this guide for “七七的植物世界” family plant picture books.
 
+## Contents
+
+- [Visual Identity](#visual-identity)
+- [Characters](#characters)
+- [Clothing Policy](#clothing-policy)
+- [Page Art Rules](#page-art-rules)
+- [Ratio Discipline](#ratio-discipline)
+- [Typography Look](#typography-look)
+
 ## Visual Identity
 
 The series is warm, refined, and story-like:
@@ -45,13 +54,13 @@ Adapt clothing to:
 
 Before generating a book, create two visual PNG continuity sheets: one for Qiqi and one for Mom. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. The sheets must lock exact garments, colors, silhouettes, shoes, hairstyle, and accessories.
 
-Use `assets/characters/qiqi-and-mom-reference.png` as the shared identity anchor when generating both sheets. The bundled image establishes identity; the per-book sheets establish the current outfits and pose references.
+Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-reference.png` as the shared identity anchor. The bundled image establishes identity; the per-book sheets establish the current outfits and pose references.
 
 Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
 Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and repeat the written locked outfit details verbatim or near-verbatim. Do not rely on memory or broad phrases such as “same outfit as before.”
 
-Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
+Use continuity sheets for exact character and outfit details; use sample or earlier final pages only for style and composition.
 
 If a generated page changes outfit style without a story reason, regenerate that page before delivery.
 

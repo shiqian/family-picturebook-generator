@@ -49,7 +49,7 @@ Accept any of these:
 2. an existing children-facing plant guide;
 3. a complete scientific dossier plus user instructions.
 
-Preferred input is both the scientific dossier and the child-facing guide. If only one is supplied, preserve that file in `source/` and use only its supported facts; do not invent or silently reconstruct the missing stage.
+Preferred input is both the scientific dossier and the child-facing guide. A single supplied file may be used for drafting, but it cannot pass the final package gate until both source files are present; do not invent or silently reconstruct the missing stage.
 
 When the input is only a plant name, do not proceed to picture-book production until the upstream workflow has produced both required source files. Web research, an uncaptured chat response, or an existing example file does not substitute for running the upstream workflow.
 
@@ -79,7 +79,7 @@ The bundled sample pages are a style reference only. Do not copy their plant fac
 
 1. Use only facts from the supplied dossier/guide.
 2. Do not invent morphology, name origins, folklore, safety claims, or comparisons.
-3. Use the `imagegen` skill for every production page and every content repair; generate the illustration and final Chinese text together.
+3. Use the `imagegen` skill for every continuity sheet, production page, and content repair; generate each visual asset with its required text integrated in the same imagegen call.
 4. Keep every visible sentence in `page_specs.json` and the recorded imagegen prompt; never accept pseudo-text, missing text, or a near-match.
 
 ## Workflow
@@ -113,7 +113,7 @@ output/<plant-slug>/continuity/qiqi-outfit-sheet.png
 output/<plant-slug>/continuity/mom-outfit-sheet.png
 ```
 
-Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. Record the exact written outfit specifications and both image paths in `page_specs.json` under `characterContinuity`. Inspect the sheets internally and continue when they satisfy the story-derived season, setting, weather, activity, and written specifications; pause only when a design decision is required. Record the result in `step_log.md`.
+Use the `imagegen` skill to generate each sheet. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. Record the exact written outfit specifications and both image paths in `page_specs.json` under `characterContinuity`. Inspect the sheets internally and continue when they satisfy the story-derived season, setting, weather, activity, and written specifications; pause only when a design decision is required. Record the result in `step_log.md`.
 
 Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
 

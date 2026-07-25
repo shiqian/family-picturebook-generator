@@ -1,6 +1,6 @@
 # Picturebook QA Report
 
-Checked directory: /Users/xiaoqian/Documents/family plant picturebook/output/gou-shu/final_pages
+Checked directory: output/gou-shu/final_pages
 Checked stage: final_pages
 PNG pages: 7
 Character continuity specifications: PRESENT

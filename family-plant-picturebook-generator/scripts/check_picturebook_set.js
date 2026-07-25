@@ -10,16 +10,38 @@ async function main() {
     process.exit(2);
   }
   const abs = path.resolve(dir);
+  if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
+    console.error(`Missing final_pages directory: ${abs}`);
+    process.exit(1);
+  }
   const folderName = path.basename(abs);
   const isFinalPages = folderName === "final_pages";
+  if (!isFinalPages) {
+    console.error(`Expected a final_pages directory: ${abs}`);
+    process.exit(1);
+  }
+  const bookDir = path.dirname(abs);
   const specPath = path.join(path.dirname(abs), "page_specs.json");
+  const requiredBookFiles = [
+    "source/scientific-dossier.md",
+    "source/child-guide.md",
+    "story_text.md",
+    "step_log.md"
+  ];
+  const requiredBookFileChecks = requiredBookFiles.map((relativePath) => ({
+    relativePath,
+    present: fs.existsSync(path.join(bookDir, relativePath))
+  }));
+  const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.present);
   let hasContinuitySheets = false;
   let hasContinuitySpecs = false;
   let identityReferenceOk = false;
   const continuityChecks = [];
   let hasPromptRecords = false;
+  let promptTextOk = false;
   let promptReferencesOk = false;
   let expectedFiles = null;
+  let specError = null;
   if (fs.existsSync(specPath)) {
     try {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
@@ -76,6 +98,20 @@ async function main() {
               page.imagegenPrompt.text.trim().length > 0
           )
       );
+      promptTextOk = Boolean(
+        pages.length > 0 &&
+          pages.every((page) => {
+            const promptText = page.imagegenPrompt?.text;
+            const textBlocks = Array.isArray(page.textBlocks) ? page.textBlocks : [];
+            return (
+              typeof promptText === "string" &&
+              textBlocks.length > 0 &&
+              textBlocks.every(
+                (block) => typeof block.text === "string" && promptText.includes(block.text)
+              )
+            );
+          })
+      );
       promptReferencesOk = Boolean(
         pages.length > 0 &&
           pages.every((page) => {
@@ -102,12 +138,17 @@ async function main() {
       expectedFiles = Array.isArray(spec.pages)
         ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
         : null;
-    } catch {
+    } catch (error) {
+      specError = error.message;
       hasContinuitySheets = false;
       hasContinuitySpecs = false;
       identityReferenceOk = false;
+      hasPromptRecords = false;
+      promptTextOk = false;
       promptReferencesOk = false;
     }
+  } else {
+    specError = "page_specs.json is missing";
   }
   const files = fs
     .readdirSync(abs)
@@ -115,6 +156,7 @@ async function main() {
     .sort();
   const filesMatchSpec = Boolean(
     expectedFiles &&
+      expectedFiles.length > 0 &&
       expectedFiles.length === files.length &&
       expectedFiles.every((file, index) => file === files[index])
   );
@@ -122,6 +164,10 @@ async function main() {
   lines.push(`Checked directory: ${abs}`);
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
+  for (const check of requiredBookFileChecks) {
+    lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING"}`);
+  }
+  if (specError) lines.push(`Page specifications: INVALID (${specError})`);
   lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
   lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
   for (const check of continuityChecks) {
@@ -129,6 +175,7 @@ async function main() {
   }
   lines.push(`Bundled identity reference: ${identityReferenceOk ? "PRESENT" : "MISSING"}`);
   lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
+  lines.push(`Prompt text matches page text blocks: ${promptTextOk ? "PASS" : "FAIL"}`);
   lines.push(`Prompt continuity references: ${promptReferencesOk ? "PASS" : "FAIL"}`);
   lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
@@ -160,10 +207,12 @@ async function main() {
   lines.push("");
   lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
   const metadataOk =
+    requiredBookFilesOk &&
     hasContinuitySpecs &&
     hasContinuitySheets &&
     identityReferenceOk &&
     hasPromptRecords &&
+    promptTextOk &&
     promptReferencesOk &&
     filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);

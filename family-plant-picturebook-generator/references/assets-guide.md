@@ -44,13 +44,11 @@ output/<plant-slug>/continuity/
 └── mom-outfit-sheet.png
 ```
 
-Generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet should include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
+Use `imagegen` to generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet should include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
 
 Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`. Attach the applicable PNG to every page prompt. These sheets are visual continuity references, not final pages or text-composition bases.
 
 Use the bundled `assets/characters/qiqi-and-mom-reference.png` as the identity anchor for both sheets. This is one combined identity image; the Qiqi and Mom continuity PNGs add the current book's exact outfits, accessories, and pose views.
-
-Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
 
 ## Recommended Reference Loading
 

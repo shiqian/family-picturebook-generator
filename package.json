@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "description": "QA helper dependency for the Family Plant Picturebook Generator Codex skill",
+  "scripts": {
+    "check:assets": "node family-plant-picturebook-generator/scripts/check_skill_assets.js",
+    "check:ratio": "node family-plant-picturebook-generator/scripts/check_png_ratio.js",
+    "check:picturebook": "node family-plant-picturebook-generator/scripts/check_picturebook_set.js"
+  },
   "engines": {
     "node": ">=18"
   },
