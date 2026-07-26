@@ -204,6 +204,7 @@ Action:
   - sample-page layout-density references for style only;
   - seasonal and ecological background constraints;
   - the applicable identity and continuity PNG references;
+  - at least one bundled sample-page style reference;
   - the complete first-attempt `imagegenPrompt` for every page, including each page's literal text.
 
 Requirements:
@@ -229,10 +230,11 @@ For each page:
 
 1. Use the `imagegen` skill's built-in image-generation path.
 2. Attach the identity reference and applicable continuity PNGs.
-3. Repeat the written outfit lock and exact page text.
-4. Generate illustration and Chinese text together on a native 3:4 canvas.
-5. If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
-6. Check page role, text, legibility, continuity, anatomy, plant subject, and dimensions.
+3. Attach at least one sample page from `assets/examples/erqiao-yulan/final_pages/` for style and composition only.
+4. Repeat the complete written outfit lock for each character shown and the exact page text.
+5. Generate illustration and Chinese text together on a native 3:4 canvas.
+6. If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
+7. Check page role, text, legibility, continuity, anatomy, plant subject, and dimensions.
 
 Requirements:
 
@@ -266,6 +268,7 @@ The gate writes `output/<plant-slug>/qa_report.md` and checks:
 - continuity specifications and PNGs;
 - bundled identity reference;
 - page and prompt references;
+- sample-page style references and written outfit locks in every applicable prompt;
 - filename order and PNG format;
 - exact `1086 × 1448 px` dimensions.
 

@@ -58,7 +58,7 @@ Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-refe
 
 Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
-Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and repeat the written locked outfit details verbatim or near-verbatim. Do not rely on memory or broad phrases such as “same outfit as before.”
+Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and at least one bundled Erqiao sample page for style and composition. The prompt must repeat the complete written locked outfit details for each character shown. Do not rely on memory or broad phrases such as “same outfit as before.”
 
 Use continuity sheets for exact character and outfit details; use sample or earlier final pages only for style and composition.
 

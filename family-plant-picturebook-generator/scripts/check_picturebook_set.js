@@ -48,6 +48,8 @@ async function main() {
   let hasPromptRecords = false;
   let promptTextOk = false;
   let promptReferencesOk = false;
+  let promptStyleReferencesOk = false;
+  let promptOutfitLocksOk = false;
   let expectedFiles = null;
   let specError = null;
   if (fs.existsSync(specPath)) {
@@ -141,6 +143,33 @@ async function main() {
             );
           })
       );
+      promptStyleReferencesOk = Boolean(
+        pages.length > 0 &&
+          pages.every((page) => {
+            const references = Array.isArray(page.imagegenPrompt?.references)
+              ? page.imagegenPrompt.references
+              : [];
+            return references.some(
+              (reference) =>
+                reference &&
+                typeof reference.path === "string" &&
+                reference.path.startsWith("assets/examples/erqiao-yulan/final_pages/")
+            );
+          })
+      );
+      promptOutfitLocksOk = Boolean(
+        pages.length > 0 &&
+          pages.every((page) => {
+            const promptText = page.imagegenPrompt?.text;
+            const characters = Array.isArray(page.characters) ? page.characters : [];
+            if (typeof promptText !== "string" || !Array.isArray(page.characters)) return false;
+            return characters.every(
+              (character) =>
+                typeof continuity?.[character] === "string" &&
+                promptText.includes(continuity[character])
+            );
+          })
+      );
       expectedFiles = Array.isArray(spec.pages)
         ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
         : null;
@@ -152,6 +181,8 @@ async function main() {
       hasPromptRecords = false;
       promptTextOk = false;
       promptReferencesOk = false;
+      promptStyleReferencesOk = false;
+      promptOutfitLocksOk = false;
     }
   } else {
     specError = "page_specs.json is missing";
@@ -186,6 +217,8 @@ async function main() {
   lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
   lines.push(`Prompt text matches page text blocks: ${promptTextOk ? "PASS" : "FAIL"}`);
   lines.push(`Prompt continuity references: ${promptReferencesOk ? "PASS" : "FAIL"}`);
+  lines.push(`Prompt style references: ${promptStyleReferencesOk ? "PASS" : "FAIL"}`);
+  lines.push(`Prompt written outfit locks: ${promptOutfitLocksOk ? "PASS" : "FAIL"}`);
   lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
 
@@ -224,6 +257,8 @@ async function main() {
     hasPromptRecords &&
     promptTextOk &&
     promptReferencesOk &&
+    promptStyleReferencesOk &&
+    promptOutfitLocksOk &&
     filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 
