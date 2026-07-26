@@ -9,6 +9,7 @@ A reusable Codex skill for turning source-backed plant information into consiste
 - [Install](#install)
 - [Use](#use)
 - [Workflow](#workflow)
+- [Visual example](#visual-example)
 - [Output](#output)
 - [QA](#qa)
 - [Reference assets](#reference-assets)
