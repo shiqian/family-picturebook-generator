@@ -50,7 +50,8 @@ Final page contract: exact 3:4 ratio at `1086 × 1448 px` for delivery. Use this
 |---|---|
 | Plant name only | Requires a `shanghai-plant-guide-series` source handoff before this skill can proceed. |
 | Child-facing plant guide | Use as narrative source; obtain the scientific dossier before final delivery. |
-| Scientific dossier plus instructions | Use the dossier as factual authority; create or obtain the child guide before final delivery. |
+| Complete scientific dossier | Use as factual authority; create or obtain the child-facing guide before final delivery. |
+| Optional user instructions | Apply when they do not conflict with source facts or workflow gates. |
 
 A single supplied file may support drafting, but the final package requires both source files. Do not invent or silently reconstruct a missing stage. Web research, an uncaptured chat response, or an example file does not replace the upstream workflow.
 
