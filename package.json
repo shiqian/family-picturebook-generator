@@ -5,8 +5,6 @@
   "description": "QA helper dependency for the Family Plant Picturebook Generator Codex skill",
   "scripts": {
     "init:picturebook": "node family-plant-picturebook-generator/scripts/init_picturebook_run.js",
-    "preflight:source": "node family-plant-picturebook-generator/scripts/preflight_picturebook_run.js source",
-    "preflight:visual": "node family-plant-picturebook-generator/scripts/preflight_picturebook_run.js visual",
     "check:assets": "node family-plant-picturebook-generator/scripts/check_skill_assets.js",
     "check:ratio": "node family-plant-picturebook-generator/scripts/check_png_ratio.js",
     "check:picturebook": "node family-plant-picturebook-generator/scripts/check_picturebook_set.js"

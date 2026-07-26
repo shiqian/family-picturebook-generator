@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const FIELDS = ["Timestamp", "Action", "Output", "Decision", "Risk"];
+const FIELDS = ["Output", "Risk"];
 
 function formatTimestamp(date = new Date()) {
   const parts = new Intl.DateTimeFormat("sv-SE", {
@@ -19,17 +19,17 @@ function formatTimestamp(date = new Date()) {
 
 function parseEvents(text) {
   return text
-    .split(/^## Event /m)
+    .split(/^## /m)
     .slice(1)
     .map((block) => {
       const [header, ...body] = block.split("\n");
-      const match = header.match(/^(\d{4}) — (.+?) — (User|Codex|Script) — (.+)$/);
+      const match = header.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}) \| (User|Codex|Script) \| (.+?) \| (.+)$/);
       if (!match) return { number: null, timestamp: null, actor: null, action: null, body: body.join("\n") };
       return {
-        number: Number(match[1]),
-        timestamp: match[2],
-        actor: match[3],
-        action: match[4],
+        timestamp: match[1],
+        actor: match[2],
+        action: match[3],
+        outcome: match[4],
         body: body.join("\n")
       };
     });
@@ -40,8 +40,7 @@ function validateLog(text) {
   let previousTime = 0;
   const errors = [];
   events.forEach((event, index) => {
-    if (event.number !== index + 1) errors.push(`event ${index + 1} is not sequential`);
-    if (!event.number || !event.timestamp || !event.actor || !event.action) {
+    if (!event.timestamp || !event.actor || !event.action || !event.outcome) {
       errors.push(`event ${index + 1} has an invalid header`);
       return;
     }
@@ -62,24 +61,20 @@ function validateLog(text) {
   return { events, errors, valid: events.length > 0 && errors.length === 0 };
 }
 
-function appendEvent(logPath, { actor, action, output, decision, risk }) {
+function appendEvent(logPath, { actor, action, outcome = "completed", output, risk }) {
   const existing = fs.existsSync(logPath) ? fs.readFileSync(logPath, "utf8") : "# Production Log\n\n";
   const events = parseEvents(existing);
-  const number = String(events.length + 1).padStart(4, "0");
   const timestamp = formatTimestamp();
   const clean = (value) => String(value).replace(/\s+/g, " ").trim();
   const entry = [
-    `## Event ${number} — ${timestamp} — ${actor} — ${clean(action)}`,
-    `- Timestamp: ${timestamp}`,
-    `- Action: ${clean(action)}`,
+    `## ${timestamp} | ${actor} | ${clean(action)} | ${clean(outcome)}`,
     `- Output: ${clean(output)}`,
-    `- Decision: ${clean(decision)}`,
     `- Risk: ${clean(risk)}`,
     "",
     ""
   ].join("\n");
   fs.writeFileSync(logPath, `${existing.replace(/\s*$/, "\n\n")}${entry}`);
-  return number;
+  return timestamp;
 }
 
 module.exports = { appendEvent, formatTimestamp, validateLog };

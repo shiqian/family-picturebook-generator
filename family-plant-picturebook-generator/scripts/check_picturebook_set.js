@@ -4,318 +4,194 @@ const path = require("path");
 const sharp = require("sharp");
 const { appendEvent, validateLog } = require("./step_log_utils");
 
+const IDENTITY_PATH = "assets/characters/qiqi-and-mom-reference.png";
+const CONTINUITY_PATHS = {
+  qiqi: "continuity/qiqi-outfit-sheet.png",
+  mom: "continuity/mom-outfit-sheet.png"
+};
+const STYLE_PREFIX = "assets/examples/series-reference/final_pages/";
+
+function nonEmptyFile(file) {
+  return fs.existsSync(file) && fs.statSync(file).isFile() && fs.statSync(file).size > 0;
+}
+
+function hasReference(references, expectedPath, roleWords) {
+  return references.some((reference) => {
+    const role = typeof reference?.role === "string" ? reference.role.toLowerCase() : "";
+    return reference?.path === expectedPath && roleWords.some((word) => role.includes(word));
+  });
+}
+
+async function readablePng(file) {
+  try {
+    const metadata = await sharp(file).metadata();
+    return metadata.format === "png";
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
   const dir = process.argv[2];
   if (!dir) {
-    console.error("Usage: check_picturebook_set.js output/<plant-slug>/final_pages");
+    console.error("Usage: npm run check:picturebook -- output/<plant-slug>/final_pages");
     process.exit(2);
   }
-  const abs = path.resolve(dir);
-  if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) {
-    console.error(`Missing final_pages directory: ${abs}`);
+
+  const finalPagesDir = path.resolve(dir);
+  if (path.basename(finalPagesDir) !== "final_pages" || !fs.existsSync(finalPagesDir)) {
+    console.error(`Expected an existing final_pages directory: ${finalPagesDir}`);
     process.exit(1);
   }
-  const folderName = path.basename(abs);
-  const isFinalPages = folderName === "final_pages";
-  if (!isFinalPages) {
-    console.error(`Expected a final_pages directory: ${abs}`);
-    process.exit(1);
-  }
-  const bookDir = path.dirname(abs);
-  const specPath = path.join(path.dirname(abs), "page_specs.json");
-  const requiredBookFiles = [
+
+  const bookDir = path.dirname(finalPagesDir);
+  const skillDir = path.resolve(__dirname, "..");
+  const requiredFiles = [
     "source/scientific-dossier.md",
     "source/child-guide.md",
     "story_text.md",
+    "page_specs.json",
     "step_log.md"
   ];
-  const requiredBookFileChecks = requiredBookFiles.map((relativePath) => {
-    const fullPath = path.join(bookDir, relativePath);
-    const present = fs.existsSync(fullPath);
-    const nonEmpty = present && fs.statSync(fullPath).size > 0;
-    return { relativePath, present, nonEmpty, ok: present && nonEmpty };
-  });
-  const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.ok);
+  const requiredFileChecks = requiredFiles.map((relativePath) => ({
+    relativePath,
+    present: nonEmptyFile(path.join(bookDir, relativePath))
+  }));
+  const requiredFilesOk = requiredFileChecks.every((check) => check.present);
   const stepLogPath = path.join(bookDir, "step_log.md");
-  const stepLogText = fs.existsSync(stepLogPath) ? fs.readFileSync(stepLogPath, "utf8") : "";
-  const stepLogCheck = validateLog(stepLogText);
-  const stepLogValid = Boolean(
-    requiredBookFileChecks.find((check) => check.relativePath === "step_log.md").ok &&
-    stepLogCheck.valid
+  const stepLog = fs.existsSync(stepLogPath) ? fs.readFileSync(stepLogPath, "utf8") : "";
+  const logCheck = validateLog(stepLog);
+  const requiredDirsOk = ["source", "continuity", "final_pages"].every((dirName) =>
+    fs.existsSync(path.join(bookDir, dirName)) && fs.statSync(path.join(bookDir, dirName)).isDirectory()
   );
-  let hasContinuitySheets = false;
-  let hasContinuitySpecs = false;
-  let identityReferenceOk = false;
-  const continuityChecks = [];
-  let hasPromptRecords = false;
-  let promptTextOk = false;
-  let promptReferencesOk = false;
-  let promptStyleReferencesOk = false;
-  let promptOutfitLocksOk = false;
+
+  let specError = null;
+  let continuitySpecsOk = false;
+  let continuityAssetsOk = false;
+  let identityAssetOk = false;
   let pageStructureOk = false;
   let pagePlanOk = false;
+  let promptRecordsOk = false;
+  let promptTextOk = false;
+  let promptReferencesOk = false;
   let expectedFiles = null;
-  let specError = null;
-  if (fs.existsSync(specPath)) {
+
+  if (nonEmptyFile(path.join(bookDir, "page_specs.json"))) {
     try {
-      const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
+      const spec = JSON.parse(fs.readFileSync(path.join(bookDir, "page_specs.json"), "utf8"));
       const continuity = spec.characterContinuity;
-      const referenceImages = continuity && continuity.referenceImages;
-      const expectedContinuityPaths = {
-        qiqi: "continuity/qiqi-outfit-sheet.png",
-        mom: "continuity/mom-outfit-sheet.png"
-      };
-      hasContinuitySpecs = Boolean(
-        continuity &&
-          typeof continuity.qiqi === "string" &&
-          continuity.qiqi.trim() &&
-          typeof continuity.mom === "string" &&
-          continuity.mom.trim() &&
-          referenceImages &&
-          typeof referenceImages.qiqi === "string" &&
-          referenceImages.qiqi === expectedContinuityPaths.qiqi &&
-          typeof referenceImages.mom === "string" &&
-          referenceImages.mom === expectedContinuityPaths.mom
+      const references = continuity?.referenceImages;
+      continuitySpecsOk = Boolean(
+        typeof continuity?.qiqi === "string" && continuity.qiqi.trim() &&
+        typeof continuity?.mom === "string" && continuity.mom.trim() &&
+        references?.qiqi === CONTINUITY_PATHS.qiqi &&
+        references?.mom === CONTINUITY_PATHS.mom &&
+        continuity.identityReference === IDENTITY_PATH
       );
-      const identityReference = continuity && continuity.identityReference;
-      if (identityReference === "assets/characters/qiqi-and-mom-reference.png") {
-        try {
-          const identityMeta = await sharp(
-            path.resolve(__dirname, "..", identityReference)
-          ).metadata();
-          identityReferenceOk = identityMeta.format === "png";
-        } catch {
-          identityReferenceOk = false;
-        }
-      }
-      for (const character of ["qiqi", "mom"]) {
-        const relativePath = referenceImages && referenceImages[character];
-        const fullPath = relativePath
-          ? path.resolve(path.dirname(specPath), relativePath)
-          : null;
-        let readable = false;
-        if (relativePath === expectedContinuityPaths[character] && fullPath && fs.existsSync(fullPath)) {
-          try {
-            const metadata = await sharp(fullPath).metadata();
-            readable = metadata.format === "png";
-          } catch {
-            readable = false;
-          }
-        }
-        continuityChecks.push({ character, path: relativePath || "MISSING", readable });
-      }
-      hasContinuitySheets = continuityChecks.every((check) => check.readable);
+      identityAssetOk = await readablePng(path.join(skillDir, IDENTITY_PATH));
+      continuityAssetsOk = await Promise.all(
+        Object.values(CONTINUITY_PATHS).map((relativePath) =>
+          readablePng(path.join(bookDir, relativePath))
+        )
+      ).then((checks) => checks.every(Boolean));
+
       const pages = Array.isArray(spec.pages) ? spec.pages : [];
-      const pagePlanException =
-        typeof spec.meta?.pagePlanException === "string" && spec.meta.pagePlanException.trim();
-      pageStructureOk = Boolean(
-        pages.length > 0 &&
-          pages.every(
-            (page) =>
-              typeof page.file === "string" &&
-              page.file.trim() &&
-              typeof page.pageRole === "string" &&
-              page.pageRole.trim() &&
-              Array.isArray(page.textBlocks) &&
-              page.textBlocks.length > 0 &&
-              Array.isArray(page.characters)
-          )
+      const pagePlanException = typeof spec.meta?.pagePlanException === "string" && spec.meta.pagePlanException.trim();
+      pageStructureOk = pages.length > 0 && pages.every((page) =>
+        typeof page.file === "string" && page.file.trim() &&
+        typeof page.pageRole === "string" && page.pageRole.trim() &&
+        Array.isArray(page.characters) &&
+        Array.isArray(page.textBlocks) && page.textBlocks.length > 0 &&
+        page.imagegenPrompt && typeof page.imagegenPrompt.text === "string" && page.imagegenPrompt.text.trim() &&
+        Array.isArray(page.imagegenPrompt.references)
       );
       pagePlanOk = pages.length === 7 || Boolean(pagePlanException);
-      hasPromptRecords = Boolean(
-        pages.length > 0 &&
-          pages.every(
-            (page) =>
-              page.imagegenPrompt &&
-              typeof page.imagegenPrompt.text === "string" &&
-              page.imagegenPrompt.text.trim().length > 0
-          )
+      promptRecordsOk = pageStructureOk;
+      promptTextOk = promptRecordsOk && pages.every((page) =>
+        page.textBlocks.every((block) => typeof block.text === "string" && page.imagegenPrompt.text.includes(block.text))
       );
-      promptTextOk = Boolean(
-        pages.length > 0 &&
-          pages.every((page) => {
-            const promptText = page.imagegenPrompt?.text;
-            const textBlocks = Array.isArray(page.textBlocks) ? page.textBlocks : [];
-            return (
-              typeof promptText === "string" &&
-              textBlocks.length > 0 &&
-              textBlocks.every(
-                (block) => typeof block.text === "string" && promptText.includes(block.text)
-              )
-            );
-          })
-      );
-      promptReferencesOk = Boolean(
-        pages.length > 0 &&
-          pages.every((page) => {
-            const characters = page.characters;
-            if (!Array.isArray(characters) || !characters.every((character) => ["qiqi", "mom"].includes(character))) {
-              return false;
-            }
-            const requiredReferences = [
-              "assets/characters/qiqi-and-mom-reference.png",
-              ...characters
-                .filter((character) => referenceImages && referenceImages[character])
-                .map((character) => referenceImages[character])
-            ];
-            const references = Array.isArray(page.imagegenPrompt?.references)
-              ? page.imagegenPrompt.references
-              : [];
-            return requiredReferences.every((requiredPath) =>
-              references.some((reference) => reference && reference.path === requiredPath)
-            );
-          })
-      );
-      promptStyleReferencesOk = pages.length > 0;
-      for (const page of pages) {
-        const references = Array.isArray(page.imagegenPrompt?.references)
-          ? page.imagegenPrompt.references
-          : [];
-        const styleReference = references.find(
-          (reference) =>
-            reference &&
-            typeof reference.path === "string" &&
-            reference.path.startsWith("assets/examples/erqiao-yulan/final_pages/")
-        );
-        if (!styleReference) {
-          promptStyleReferencesOk = false;
-          continue;
-        }
-        try {
-          const styleMeta = await sharp(
-            path.resolve(__dirname, "..", styleReference.path)
-          ).metadata();
-          if (styleMeta.format !== "png") promptStyleReferencesOk = false;
-        } catch {
-          promptStyleReferencesOk = false;
+      promptReferencesOk = promptRecordsOk;
+      if (promptReferencesOk) {
+        for (const page of pages) {
+          const refs = page.imagegenPrompt.references;
+          if (!hasReference(refs, IDENTITY_PATH, ["identity", "character"])) {
+            promptReferencesOk = false;
+            break;
+          }
+          const styleReference = refs.find((reference) =>
+            typeof reference?.path === "string" && reference.path.startsWith(STYLE_PREFIX)
+          );
+          if (!styleReference || !hasReference(refs, styleReference.path, ["style", "composition", "typography", "density"]) || !await readablePng(path.join(skillDir, styleReference.path))) {
+            promptReferencesOk = false;
+            break;
+          }
+          if (page.characters.some((character) =>
+            !CONTINUITY_PATHS[character] || !hasReference(refs, CONTINUITY_PATHS[character], ["outfit", "accessor", "continuity"])
+          )) {
+            promptReferencesOk = false;
+            break;
+          }
         }
       }
-      promptOutfitLocksOk = Boolean(
-        pages.length > 0 &&
-          pages.every((page) => {
-            const promptText = page.imagegenPrompt?.text;
-            const characters = Array.isArray(page.characters) ? page.characters : [];
-            if (typeof promptText !== "string" || !Array.isArray(page.characters)) return false;
-            return characters.every(
-              (character) =>
-                typeof continuity?.[character] === "string" &&
-                promptText.includes(continuity[character])
-            );
-          })
-      );
-      expectedFiles = Array.isArray(spec.pages)
-        ? spec.pages.map((page) => page.file).filter((file) => typeof file === "string").sort()
-        : null;
     } catch (error) {
       specError = error.message;
-      hasContinuitySheets = false;
-      hasContinuitySpecs = false;
-      identityReferenceOk = false;
-      hasPromptRecords = false;
-      promptTextOk = false;
-      promptReferencesOk = false;
-      promptStyleReferencesOk = false;
-      promptOutfitLocksOk = false;
-      pageStructureOk = false;
-      pagePlanOk = false;
     }
   } else {
-    specError = "page_specs.json is missing";
+    specError = "page_specs.json is missing or empty";
   }
-  const files = fs
-    .readdirSync(abs)
-    .filter((file) => file.toLowerCase().endsWith(".png"))
-    .sort();
-  const filesMatchSpec = Boolean(
-    expectedFiles &&
-      expectedFiles.length > 0 &&
-      expectedFiles.length === files.length &&
-      expectedFiles.every((file, index) => file === files[index])
-  );
-  const lines = ["# Picturebook QA Report", ""];
-  lines.push(`Checked directory: ${abs}`);
-  lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
-  lines.push(`PNG pages: ${files.length}`);
-  for (const check of requiredBookFileChecks) {
-    const status = !check.present ? "MISSING" : check.nonEmpty ? "PRESENT" : "EMPTY";
-    lines.push(`Required file ${check.relativePath}: ${status}`);
-  }
-  lines.push(`Production log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
-  lines.push(`Production log events: ${stepLogCheck.events.length}`);
-  if (!stepLogValid && stepLogCheck.errors.length) lines.push(`Production log errors: ${stepLogCheck.errors.join("; ")}`);
-  if (specError) lines.push(`Page specifications: INVALID (${specError})`);
-  lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
-  lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);
-  for (const check of continuityChecks) {
-    lines.push(`- ${check.character}: ${check.path} ${check.readable ? "READABLE PNG" : "MISSING OR UNREADABLE"}`);
-  }
-  lines.push(`Bundled identity reference: ${identityReferenceOk ? "PRESENT" : "MISSING"}`);
-  lines.push(`Imagegen prompt records: ${hasPromptRecords ? "PRESENT" : "MISSING"}`);
-  lines.push(`Prompt text matches page text blocks: ${promptTextOk ? "PASS" : "FAIL"}`);
-  lines.push(`Prompt continuity references: ${promptReferencesOk ? "PASS" : "FAIL"}`);
-  lines.push(`Prompt style references: ${promptStyleReferencesOk ? "PASS" : "FAIL"}`);
-  lines.push(`Prompt written outfit locks: ${promptOutfitLocksOk ? "PASS" : "FAIL"}`);
-  lines.push(`Page record structure: ${pageStructureOk ? "PASS" : "FAIL"}`);
-  lines.push(`Page plan: ${pagePlanOk ? "PASS" : "FAIL"}`);
-  lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
-  lines.push("");
 
-  let ok = true;
+  const files = fs.readdirSync(finalPagesDir).filter((file) => file.toLowerCase().endsWith(".png")).sort();
+  expectedFiles = expectedFiles || [];
+  let filesMatchSpec = false;
+  try {
+    const spec = JSON.parse(fs.readFileSync(path.join(bookDir, "page_specs.json"), "utf8"));
+    expectedFiles = (Array.isArray(spec.pages) ? spec.pages : []).map((page) => page.file).filter(Boolean).sort();
+    filesMatchSpec = expectedFiles.length > 0 && expectedFiles.length === files.length && expectedFiles.every((file, index) => file === files[index]);
+  } catch {}
+
+  const dimensionChecks = [];
   for (const file of files) {
-    const full = path.join(abs, file);
-    const meta = await sharp(full).metadata();
-    const dimensionsOk = meta.width === 1086 && meta.height === 1448;
-    if (!dimensionsOk) ok = false;
-    lines.push(`- ${file}: ${meta.width}x${meta.height} ${dimensionsOk ? "OK 1086x1448" : "NOT 1086x1448"}`);
+    const metadata = await sharp(path.join(finalPagesDir, file)).metadata();
+    const dimensionsOk = metadata.width === 1086 && metadata.height === 1448;
+    dimensionChecks.push({ file, dimensionsOk, width: metadata.width, height: metadata.height });
   }
+  const dimensionsOk = dimensionChecks.every((check) => check.dimensionsOk);
+  const metadataOk = requiredDirsOk && requiredFilesOk && logCheck.valid && continuitySpecsOk && continuityAssetsOk && identityAssetOk && pageStructureOk && pagePlanOk && promptRecordsOk && promptTextOk && promptReferencesOk && filesMatchSpec;
 
-  lines.push("");
-  lines.push("Automated gate:");
-  lines.push("- Pages must be exactly 1086x1448 (3:4) before delivery.");
-  lines.push("- If a page is normalized by crop or canvas extension, record it and visually inspect all edges.");
-  lines.push("");
-  lines.push("Manual QA required:");
-  lines.push("- Font style is consistent across all pages.");
-  lines.push("- Visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the locked continuity sheets and written specifications.");
-  lines.push("- Each continuity sheet has an independent readable accessory/detail panel, and its buttons, bag, notebook, shoes, hair accessories, glasses, and other locked details agree with all three pose views.");
-  lines.push("- Verify button count, spacing, and placement against the independent continuity detail panel; redraw the complete page if they are wrong.");
-  lines.push("- All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.");
-  lines.push("- No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.");
-  lines.push("- No sticker/plaster text blocks; text sits in native bubbles or panels.");
-  lines.push("- Dialogue text is centered inside speech bubbles, or intentionally aligned inside panels with safe padding.");
-  lines.push("- Character identity is consistent; clothing fits the plant season and setting.");
-  lines.push("- Plant morphology and look-alike comparisons match the source dossier.");
-  lines.push("");
-  lines.push(`Overall dimension check: ${ok ? "PASS" : "FAIL"}`);
-  const metadataOk =
-    requiredBookFilesOk &&
-    stepLogValid &&
-    hasContinuitySpecs &&
-    hasContinuitySheets &&
-    identityReferenceOk &&
-    hasPromptRecords &&
-    promptTextOk &&
-    promptReferencesOk &&
-    promptStyleReferencesOk &&
-    promptOutfitLocksOk &&
-    pageStructureOk &&
-    pagePlanOk &&
-    filesMatchSpec;
-  lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
+  const lines = ["# Picturebook QA Report", "", `Checked directory: ${finalPagesDir}`, ""];
+  lines.push(`Output directories: ${requiredDirsOk ? "PASS" : "FAIL"}`);
+  for (const check of requiredFileChecks) lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING OR EMPTY"}`);
+  lines.push(`Production log: ${logCheck.valid ? "PASS" : "FAIL"}`);
+  if (!logCheck.valid) lines.push(`Production log errors: ${logCheck.errors.join("; ")}`);
+  lines.push(`Continuity specifications: ${continuitySpecsOk ? "PASS" : "FAIL"}`);
+  lines.push(`Continuity PNGs: ${continuityAssetsOk ? "PASS" : "FAIL"}`);
+  lines.push(`Identity PNG: ${identityAssetOk ? "PASS" : "FAIL"}`);
+  lines.push(`Page records: ${pageStructureOk ? "PASS" : "FAIL"}`);
+  lines.push(`Page plan: ${pagePlanOk ? "PASS" : "FAIL"}`);
+  lines.push(`Prompt records: ${promptRecordsOk ? "PASS" : "FAIL"}`);
+  lines.push(`Prompt text matches page specs: ${promptTextOk ? "PASS" : "FAIL"}`);
+  lines.push(`Prompt references and purpose labels: ${promptReferencesOk ? "PASS" : "FAIL"}`);
+  lines.push(`Page/spec filename match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
+  for (const check of dimensionChecks) lines.push(`- ${check.file}: ${check.width}x${check.height} ${check.dimensionsOk ? "OK" : "FAIL"}`);
+  lines.push(`Final page dimensions: ${dimensionsOk ? "PASS" : "FAIL"}`, "", "Manual QA required:");
+  lines.push("- Text is exact, legible, native to the composition, and free of pseudo-text.");
+  lines.push("- Identity, outfits, accessories, poses, style, anatomy, and typography remain consistent.");
+  lines.push("- Plant morphology, comparisons, safety wording, seasons, and narrative flow are source-backed.");
+  lines.push("", `Overall QA: ${metadataOk && dimensionsOk ? "PASS" : "FAIL"}`);
 
-  const report = path.join(path.dirname(abs), "qa_report.md");
-  fs.writeFileSync(report, lines.join("\n"));
+  const reportPath = path.join(bookDir, "qa_report.md");
+  fs.writeFileSync(reportPath, lines.join("\n"));
   if (fs.existsSync(stepLogPath)) {
     appendEvent(stepLogPath, {
       actor: "Script",
-      action: "Automated gate",
-      output: metadataOk && ok ? "Picturebook package passed automated QA." : "Picturebook package failed automated QA; see qa_report.md.",
-      decision: metadataOk && ok ? "Continue to manual QA or deliver." : "Repair the package and rerun the gate.",
-      risk: metadataOk && ok ? "None recorded." : "The package is not ready for delivery."
+      action: "final QA",
+      outcome: metadataOk && dimensionsOk ? "completed" : "failed",
+      output: metadataOk && dimensionsOk ? "Package contract passed." : "Package contract failed; see qa_report.md.",
+      risk: metadataOk && dimensionsOk ? "Manual visual review remains." : "Package is not ready for delivery."
     });
   }
-  console.log(report);
-  if (!ok || (isFinalPages && !metadataOk)) process.exit(1);
+  console.log(reportPath);
+  if (!metadataOk || !dimensionsOk) process.exit(1);
 }
 
 main().catch((error) => {

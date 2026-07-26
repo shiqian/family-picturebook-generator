@@ -18,9 +18,9 @@ if (!fs.existsSync(logPath)) {
   fs.writeFileSync(logPath, `# Production Log — ${slug}\n\n`);
   appendEvent(logPath, {
     actor: "Script",
-    action: "Initialization",
+    action: "initialize",
+    outcome: "completed",
     output: "source/, continuity/, and final_pages/ created.",
-    decision: "Await source handoff.",
     risk: "Plant taxon is not locked yet."
   });
   console.log(`Created ${logPath}`);

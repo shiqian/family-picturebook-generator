@@ -110,11 +110,11 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
 ```json
 {
   "meta": {
-    "title": "二乔玉兰",
+    "title": "示例植物",
     "series": "七七的植物世界",
     "number": "No.30",
     "size": { "width": 1086, "height": 1448, "ratio": "3:4" },
-    "sourcePlant": "Magnolia soulangeana"
+    "sourcePlant": "Example species"
   },
   "characterContinuity": {
     "continuityRule": "Reuse this exact outfit on every page unless the story explicitly changes day, season, weather, location, or activity.",
@@ -158,12 +158,12 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
         "cover pose may distort arms if too many foreground elements are requested"
       ],
       "imagegenPrompt": {
-        "text": "Use case: illustration-story. Create a native portrait 3:4 children's picture-book cover at 1086 by 1448 pixels with the exact visible text ‘七七的植物世界 No.30’, ‘二乔玉兰’, and ‘双色“大杯子”花’ integrated into a ribbon banner and subtitle area. Preserve the locked Qiqi and Mom identities and the attached continuity sheets and written outfit specifications. Show the target plant with only source-supported morphology. Warm 3D rendering, soft natural light, layered depth, refined pastel palette. Avoid pseudo-text, misspelled Chinese, extra limbs, and crowded title space.",
+        "text": "Use case: illustration-story. Create a native portrait 3:4 children's picture-book cover at 1086 by 1448 pixels with the exact visible text ‘七七的植物世界 No.00’, ‘示例植物’, and ‘source-backed visual hook’ integrated into a ribbon banner and subtitle area. Preserve the locked Qiqi and Mom identities and the attached continuity sheets and written outfit specifications. Show the target plant with only source-supported morphology. Warm 3D rendering, soft natural light, layered depth, refined pastel palette. Avoid pseudo-text, misspelled Chinese, extra limbs, and crowded title space.",
         "references": [
-          { "path": "assets/characters/qiqi-and-mom-reference.png", "role": "character identity" },
-          { "path": "continuity/qiqi-outfit-sheet.png", "role": "Qiqi outfit and pose continuity" },
-          { "path": "continuity/mom-outfit-sheet.png", "role": "Mom outfit and pose continuity" },
-          { "path": "assets/examples/erqiao-yulan/final_pages/01-cover.png", "role": "composition and style" }
+          { "path": "assets/characters/qiqi-and-mom-reference.png", "role": "character identity only" },
+          { "path": "continuity/qiqi-outfit-sheet.png", "role": "Qiqi outfit and accessory continuity" },
+          { "path": "continuity/mom-outfit-sheet.png", "role": "Mom outfit and accessory continuity" },
+          { "path": "assets/examples/series-reference/final_pages/01-cover.png", "role": "series style and composition only" }
         ],
         "avoid": ["pseudo-text", "misspelled Chinese", "extra arms", "crowded title space"]
       },
@@ -180,7 +180,7 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
         },
         {
           "id": "plant-name",
-          "text": "二乔玉兰",
+          "text": "示例植物",
           "role": "title",
           "container": "open-title-area",
           "placement": "center",
@@ -190,7 +190,7 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
         },
         {
           "id": "plant-hook",
-          "text": "双色“大杯子”花",
+          "text": "source-backed visual hook",
           "role": "caption",
           "container": "subtitle-area",
           "placement": "center",
@@ -225,7 +225,7 @@ For normal imagegen production, do not prescribe pixel coordinates. Each `textBl
 
 ## Prompt and review rules
 
-Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in the production log `step_log.md`. Its `references` list must include `assets/characters/qiqi-and-mom-reference.png`, the continuity PNG for every character listed in that page's `characters` array, and at least one page from `assets/examples/erqiao-yulan/final_pages/` for style and composition. A page with no visible characters may use an empty `characters` array, but it still uses a sample page for series style. The prompt text must include the complete written outfit specification for every character shown. Sample or earlier final pages may guide only style and composition; they never override continuity details.
+Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in `step_log.md`. Its `references` list must include the identity reference with a purpose label, the continuity PNG for every character listed in `characters` with an outfit/accessory purpose label, and at least one page from `assets/examples/series-reference/final_pages/` with a style/composition purpose label. A page with no visible characters may use an empty `characters` array, but it still uses a series-reference page for style. State reference purposes in the prompt and never let a style reference override continuity details.
 
 Inspect each generated page before finalizing the page record. Text must feel embedded in native bubbles or panels, not pasted onto the illustration.
 

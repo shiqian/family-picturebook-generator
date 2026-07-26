@@ -18,14 +18,13 @@ function main() {
   const skillDir = path.resolve(__dirname, "..");
   const required = [
     "assets/characters/qiqi-and-mom-reference.png",
-    "assets/examples/erqiao-yulan/asset-manifest.json",
-    "assets/examples/erqiao-yulan/final_pages/01-cover.png",
-    "assets/examples/erqiao-yulan/final_pages/02-meet.png",
-    "assets/examples/erqiao-yulan/final_pages/03-name.png",
-    "assets/examples/erqiao-yulan/final_pages/04-why-first-flower.png",
-    "assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png",
-    "assets/examples/erqiao-yulan/final_pages/06-comparison.png",
-    "assets/examples/erqiao-yulan/final_pages/07-ending.png"
+    "assets/examples/series-reference/final_pages/01-cover.png",
+    "assets/examples/series-reference/final_pages/02-meet.png",
+    "assets/examples/series-reference/final_pages/03-name.png",
+    "assets/examples/series-reference/final_pages/04-plant-secret.png",
+    "assets/examples/series-reference/final_pages/05-closeup.png",
+    "assets/examples/series-reference/final_pages/06-compare.png",
+    "assets/examples/series-reference/final_pages/07-ending.png"
   ];
 
   let ok = true;

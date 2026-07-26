@@ -43,7 +43,7 @@ Mom:
 
 ## Clothing Policy
 
-Do not lock clothing to the Erqiao magnolia sample.
+Do not copy clothing from the bundled series-reference pages.
 
 Adapt clothing to:
 
@@ -58,7 +58,7 @@ Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-refe
 
 Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
-Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and at least one bundled Erqiao sample page for style and composition. The prompt must repeat the complete written locked outfit details for each character shown. Do not rely on memory or broad phrases such as “same outfit as before.”
+Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and at least one bundled series-reference page for style and composition. State the purpose of each attachment; use the continuity PNG and the written lock in `page_specs.json` for exact outfit details.
 
 Use continuity sheets for exact character and outfit details; use sample or earlier final pages only for style and composition.
 
@@ -88,7 +88,7 @@ Each generated production page must:
 6. avoid hard post-production-looking rectangles;
 7. show plant-specific morphology accurately.
 
-The bundled sample pages are final integrated text-and-image references. If a page fails, redraw the complete page with imagegen; do not create a text-free base and add text afterward.
+The bundled series-reference pages are final integrated text-and-image references. If a page fails, redraw the complete page with imagegen; do not create a text-free base and add text afterward.
 
 For botanical accuracy, describe the exact visible parts in the image prompt: flower orientation, color pattern, leaf shape, fruit form, bark texture, or growth habit as supported by source facts.
 

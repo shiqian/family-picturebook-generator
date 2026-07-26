@@ -16,11 +16,11 @@ Use it to preserve identity:
 
 When prompting image generation, describe identity and the current book's locked outfit separately. Do not say only “same as reference image,” because that can accidentally copy old clothing.
 
-## Canonical Sample Book
+## Canonical Series Reference
 
 Default sample pages:
 
-`assets/examples/erqiao-yulan/final_pages/`
+`assets/examples/series-reference/final_pages/`
 
 Use these pages as visual references for:
 
@@ -32,7 +32,7 @@ Use these pages as visual references for:
 6. botanical close-up density;
 7. overall series polish.
 
-Do not copy the 二乔玉兰 plant facts, flowers, colors, clothing, page titles, or subtitles into another plant book unless the new source content supports them.
+Use these pages only for style, composition, typography, and visual density. Do not copy their plant facts, names, clothing, page titles, or subtitles into another plant book.
 
 ## Per-book Continuity Sheets
 
@@ -56,10 +56,10 @@ Use the bundled `assets/characters/qiqi-and-mom-reference.png` as the identity a
 
 When starting a new book:
 
-1. inspect `assets/characters/qiqi-and-mom-reference.png` if character identity is relevant;
-2. inspect at least 2 sample pages from `assets/examples/erqiao-yulan/final_pages/` for layout and typography feel;
+1. inspect `assets/characters/qiqi-and-mom-reference.png` for character identity;
+2. inspect at least 2 pages from `assets/examples/series-reference/final_pages/` for layout and typography feel;
 3. create the two per-book continuity sheets based on the new plant's season, habitat, weather, and story activity;
-4. repeat the applicable continuity-sheet reference and written lock in every page prompt.
+4. attach the applicable continuity-sheet reference and state its outfit/accessory purpose in every page prompt.
 
 ## Portability Rule
 
