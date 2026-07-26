@@ -113,9 +113,9 @@ The source preflight runs before story and continuity production. The visual pre
 During normal skill execution, Codex runs the automated gate and reads the resulting `qa_report.md` automatically. Use these commands only to recheck an existing output package, debug a failed generation, validate bundled assets, or support CI/development work.
 
 ```bash
-node family-plant-picturebook-generator/scripts/check_skill_assets.js
-node family-plant-picturebook-generator/scripts/check_png_ratio.js output/<plant-slug>/final_pages
-node family-plant-picturebook-generator/scripts/check_picturebook_set.js output/<plant-slug>/final_pages
+npm run check:assets
+npm run check:ratio -- output/<plant-slug>/final_pages
+npm run check:picturebook -- output/<plant-slug>/final_pages
 ```
 
 The final command writes `output/<plant-slug>/qa_report.md` and verifies the continuity specifications, both continuity PNGs, bundled identity reference, per-page prompt references, page order, PNG format, and exact `1086 × 1448 px` dimensions. Manual review is still required for text accuracy, readability, character continuity, anatomy, visual quality, and botanical correctness.

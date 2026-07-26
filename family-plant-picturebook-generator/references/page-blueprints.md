@@ -5,7 +5,7 @@ Default to 7 pages. Adjust only when the user asks or the plant lacks enough sup
 ## Contents
 
 - [Page roles](#page-roles)
-- [`page_specs.json` shape](#page_specsjson-shape)
+- [Illustrative `page_specs.json` shape](#illustrative-page_specsjson-shape)
 - [Text-block fields](#text-block-fields)
 - [Prompt and review rules](#prompt-and-review-rules)
 
@@ -103,9 +103,9 @@ Do not always end with “不要摘花.” Prefer:
 4. a quiet emotional moment;
 5. a safe, non-destructive activity.
 
-## `page_specs.json` Shape
+## Illustrative `page_specs.json` Shape
 
-Use this minimal structure:
+The following is a plant-specific illustrative excerpt, not a copy-ready book specification. Replace all plant names, facts, seasons, prompts, text, and reference pages with values supported by the current source files.
 
 ```json
 {
