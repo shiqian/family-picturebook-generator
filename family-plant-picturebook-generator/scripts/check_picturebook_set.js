@@ -123,10 +123,8 @@ async function main() {
       promptReferencesOk = Boolean(
         pages.length > 0 &&
           pages.every((page) => {
-            const characters = Array.isArray(page.characters)
-              ? page.characters
-              : ["qiqi", "mom"];
-            if (!characters.every((character) => ["qiqi", "mom"].includes(character))) {
+            const characters = page.characters;
+            if (!Array.isArray(characters) || !characters.every((character) => ["qiqi", "mom"].includes(character))) {
               return false;
             }
             const requiredReferences = [

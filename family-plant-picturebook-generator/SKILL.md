@@ -94,8 +94,7 @@ Action:
 
 Record:
 
-- Append one event for each meaningful action, user decision, retry, and automated check.
-- Confirm that the initialization event exists before continuing.
+- The initialization script creates the first production-log event; confirm that it exists before continuing.
 
 Gate:
 
@@ -112,7 +111,7 @@ Action:
 
 Record:
 
-- Append the source-handoff and source-preflight events.
+- Append one production-log event for the source handoff. The preflight script appends the source-preflight event.
 
 Gate:
 
@@ -123,9 +122,10 @@ Gate:
 Action:
 
 1. Read the scientific dossier as factual authority and the child guide as narrative source.
-2. Read the four reference files and inspect at least two bundled sample pages.
-3. Create `story_text.md`.
-4. Plan seven pages by default:
+2. Read `references/page-blueprints.md`, `references/series-style-guide.md`, `references/text-rules.md`, and `references/assets-guide.md`.
+3. Inspect at least two sample pages from `assets/examples/erqiao-yulan/final_pages/` for style, typography, composition, and visual density.
+4. Create `story_text.md`.
+5. Plan seven pages by default:
 
    1. cover;
    2. first encounter;
@@ -143,7 +143,7 @@ Requirements:
 
 Record:
 
-- Record the story plan and factual risks in one `step_log.md` event.
+- Append one production-log event summarizing the story plan, outputs, decisions, and factual risks.
 
 Gate:
 
@@ -155,12 +155,18 @@ Action:
 
 1. Use `story_text.md` and page roles to derive season, setting, weather, activities, poses, and accessories.
 2. Use `assets/characters/qiqi-and-mom-reference.png` as the shared identity reference.
-3. Generate two book-specific PNGs with `imagegen`:
+3. Generate exactly two separate book-specific PNGs with `imagegen`:
 
 ```text
 output/<plant-slug>/continuity/qiqi-outfit-sheet.png
 output/<plant-slug>/continuity/mom-outfit-sheet.png
 ```
+
+- `qiqi-outfit-sheet.png` — Qiqi, the girl;
+- `mom-outfit-sheet.png` — Mom.
+
+4. Write the exact outfit specifications and both PNG paths to `page_specs.json` under `characterContinuity`.
+5. Inspect both continuity sheets.
 
 Each sheet must show:
 
@@ -169,17 +175,15 @@ Each sheet must show:
 - crouching or kneeling three-quarter;
 - relevant clothing and accessory details.
 
-Record:
-
-- exact written outfit specifications in `page_specs.json`;
-- both PNG paths under `characterContinuity`;
-- the continuity result in one `step_log.md` event.
-
 Requirements:
 
 - Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
 - Use continuity sheets for exact character and outfit details.
 - Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
+
+Record:
+
+- Append one production-log event summarizing the continuity design, created files, decision, and remaining risk.
 
 Gate:
 
@@ -209,7 +213,7 @@ Requirements:
 
 Record:
 
-- Record the frozen visual plan and visual-preflight result in one `step_log.md` event.
+- Append one production-log event summarizing the frozen visual plan. The preflight script appends the visual-preflight event.
 
 Gate:
 
@@ -228,16 +232,16 @@ For each page:
 5. If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
 6. Check page role, text, legibility, continuity, anatomy, plant subject, and dimensions.
 
-Record:
-
-- Record the generation or retry immediately in one `step_log.md` event.
-
 Requirements:
 
 - Redraw a failed page before continuing.
 - Use a complete-page imagegen redraw for content repairs.
 - Never create a text-free base image and add text afterward.
 - Only safe non-content resizing to `1086 × 1448 px` is allowed after generation.
+
+Record:
+
+- Append one production-log event immediately after each page generation or retry. Include the page file, output, decision, and risk.
 
 Gate:
 
@@ -265,7 +269,7 @@ The gate writes `output/<plant-slug>/qa_report.md` and checks:
 
 Record:
 
-- The script appends the automated gate result to `step_log.md`.
+- The gate script appends the automated result to the production log.
 
 Gate:
 
@@ -284,7 +288,7 @@ Action:
 
 Record:
 
-- Record the final decision and remaining risks in one `step_log.md` event.
+- Append one final production-log event with the delivery decision and remaining risks.
 
 Gate:
 
