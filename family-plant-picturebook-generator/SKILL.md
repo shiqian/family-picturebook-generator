@@ -106,10 +106,9 @@ Gate:
 Action:
 
 1. If the input is a plant name, use `shanghai-plant-guide-series` before research, drafting, or image generation.
-2. Read the scientific dossier as factual authority and the child guide as narrative source.
-3. Save both source files under `output/<plant-slug>/source/`.
-4. Update the log title to `# Production Log — <中文名> (<scientific name>)`.
-5. Run `npm run preflight:source -- output/<plant-slug>`.
+2. Save or confirm both source files under `output/<plant-slug>/source/`.
+3. Update the log title to `# Production Log — <中文名> (<scientific name>)`.
+4. Run `npm run preflight:source -- output/<plant-slug>`.
 
 Record:
 
@@ -123,9 +122,10 @@ Gate:
 
 Action:
 
-1. Read the four reference files and inspect at least two bundled sample pages.
-2. Create `story_text.md`.
-3. Plan seven pages by default:
+1. Read the scientific dossier as factual authority and the child guide as narrative source.
+2. Read the four reference files and inspect at least two bundled sample pages.
+3. Create `story_text.md`.
+4. Plan seven pages by default:
 
    1. cover;
    2. first encounter;
