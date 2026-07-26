@@ -175,9 +175,9 @@ async function main() {
   for (const check of requiredBookFileChecks) {
     lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING"}`);
   }
-  lines.push(`Step log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
-  lines.push(`Step log events: ${stepLogCheck.events.length}`);
-  if (!stepLogValid && stepLogCheck.errors.length) lines.push(`Step log errors: ${stepLogCheck.errors.join("; ")}`);
+  lines.push(`Production log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
+  lines.push(`Production log events: ${stepLogCheck.events.length}`);
+  if (!stepLogValid && stepLogCheck.errors.length) lines.push(`Production log errors: ${stepLogCheck.errors.join("; ")}`);
   if (specError) lines.push(`Page specifications: INVALID (${specError})`);
   lines.push(`Character continuity specifications: ${hasContinuitySpecs ? "PRESENT" : "MISSING"}`);
   lines.push(`Character continuity sheets: ${hasContinuitySheets ? "PRESENT" : "MISSING"}`);

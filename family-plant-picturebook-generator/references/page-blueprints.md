@@ -212,7 +212,7 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
 
 ## Text-block fields
 
-For normal imagegen production, do not prescribe pixel coordinates. Each `textBlocks` item should identify the exact text plus its semantic layout intent:
+For normal imagegen production, do not prescribe pixel coordinates. Each `textBlocks` item must identify the exact text plus its semantic layout intent:
 
 1. `id`: stable page-local identifier;
 2. `text`: exact visible text, copied verbatim into the imagegen prompt;
@@ -225,9 +225,9 @@ For normal imagegen production, do not prescribe pixel coordinates. Each `textBl
 
 ## Prompt and review rules
 
-Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in `step_log.md`. Its `references` list must include `assets/characters/qiqi-and-mom-reference.png` plus the continuity PNG for every character listed in that page's `characters` array. A page with no visible characters may use an empty `characters` array. Sample or earlier final pages may be included only for style and composition.
+Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in the production log `step_log.md`. Its `references` list must include `assets/characters/qiqi-and-mom-reference.png` plus the continuity PNG for every character listed in that page's `characters` array. A page with no visible characters may use an empty `characters` array. Sample or earlier final pages may be included only for style and composition.
 
-Inspect each generated page before finalizing the page record. Text should feel embedded in native bubbles or panels, not pasted onto the illustration.
+Inspect each generated page before finalizing the page record. Text must feel embedded in native bubbles or panels, not pasted onto the illustration.
 
 Recommended additional fields for richer page specs:
 

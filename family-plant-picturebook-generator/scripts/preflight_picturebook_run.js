@@ -34,7 +34,7 @@ if (stage === "visual") {
 const passed = missing.length === 0 && logCheck.valid && !specError;
 if (!passed) {
   if (missing.length) console.error(`Missing required files: ${missing.join(", ")}`);
-  if (!logCheck.valid) console.error(`Invalid step_log.md: ${logCheck.errors.join("; ")}`);
+  if (!logCheck.valid) console.error(`Invalid production log (step_log.md): ${logCheck.errors.join("; ")}`);
   if (specError) console.error(`Invalid page_specs.json: ${specError}`);
 }
 

@@ -22,7 +22,7 @@ The series is warm, refined, and story-like:
 5. mother-child interaction as the emotional center;
 6. native speech bubbles, banners, and panels that integrate the generated text naturally.
 
-Avoid generic AI poster layouts. Pages should feel like a continuous picture book, not separate ads.
+Avoid generic AI poster layouts. Aim for pages that feel like a continuous picture book, not separate ads.
 
 ## Characters
 

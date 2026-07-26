@@ -1,6 +1,6 @@
-# Production Step Log
+# Production Log Specification
 
-Use `output/<plant-slug>/step_log.md` as an append-only production record.
+Use `output/<plant-slug>/step_log.md` as the append-only production log.
 
 ## Required format
 

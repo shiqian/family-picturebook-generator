@@ -52,7 +52,7 @@ flowchart TD
     K --> L["Deliverable<br/>output/<plant-slug>/"]
 ```
 
-The source dossier is the factual authority. The child guide supplies the narrative language. Initialization creates the controlled output folder and step log; source and visual preflights gate the next production stage. Story context determines the character outfits and pose references. Page text is generated together with the illustration; failed pages are redrawn as complete pages.
+The source dossier is the factual authority. The child guide supplies the narrative language. Initialization creates the controlled output folder and production log; source and visual preflights gate the next production stage. Story context determines the character outfits and pose references. Page text is generated together with the illustration; failed pages are redrawn as complete pages.
 
 ## Output structure
 
@@ -75,7 +75,7 @@ output/<plant-slug>/
 
 Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Draft files belong under `output/<plant-slug>/drafts/`; do not use `out/`, ad-hoc folders, or the skill source directory for generated books.
 
-`step_log.md` is an append-only English event log. Each event records a timestamp, actor, action, output, decision, and risk; retries and user-requested revisions are added as new events.
+`step_log.md` is the append-only English production log. Each event records a timestamp, actor, action, output, decision, and risk; retries and user-requested revisions are added as new events.
 
 ## Setup
 

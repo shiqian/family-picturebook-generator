@@ -44,7 +44,7 @@ output/<plant-slug>/continuity/
 └── mom-outfit-sheet.png
 ```
 
-Use `imagegen` to generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet should include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
+Use `imagegen` to generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet must include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
 
 Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`. Attach the applicable PNG to every page prompt. These sheets are visual continuity references, not final pages or text-composition bases.
 
