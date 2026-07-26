@@ -67,7 +67,7 @@ For a plant name, the workflow obtains the scientific dossier and child guide th
 ## What the skill does
 
 - Creates source-backed seven-page botanical picture books without inventing plant facts.
-- Generates two separate per-book continuity sheets: one for Qiqi and one for Mom.
+- Generates two separate per-book continuity sheets: one for Qiqi and one for Mom, each with three pose views and an independent accessory detail panel.
 - Generates Chinese text and illustrations together through `imagegen`.
 - Delivers exact `1086 × 1448 px` (`3:4`) PNG pages.
 - Produces a controlled package with source files, story text, page specifications, production history, final pages, and QA results.
@@ -137,7 +137,9 @@ Automated checks cover:
 
 - required files and production-log structure;
 - both continuity PNGs and the bundled identity reference;
-- literal page text, prompt records, character declarations, and continuity references;
+- literal page text, prompt records, character declarations, continuity references, and written outfit locks;
+- readable bundled style references on every page prompt;
+- non-empty source files and complete page records, with seven pages unless an exception is documented;
 - page order, PNG format, and exact `1086 × 1448 px` dimensions.
 
 Manual QA covers text accuracy, character and outfit continuity, anatomy, button details, plant morphology, comparison details, safety wording, seasonal plausibility, and narrative flow.

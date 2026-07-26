@@ -18,6 +18,9 @@ const commonRequired = [
 const visualRequired = ["story_text.md", "page_specs.json", "continuity/qiqi-outfit-sheet.png", "continuity/mom-outfit-sheet.png"];
 const required = stage === "visual" ? [...commonRequired, ...visualRequired] : commonRequired;
 const missing = required.filter((file) => !fs.existsSync(path.join(bookDir, file)));
+const empty = required.filter(
+  (file) => fs.existsSync(path.join(bookDir, file)) && fs.statSync(path.join(bookDir, file)).size === 0
+);
 const logPath = path.join(bookDir, "step_log.md");
 const log = fs.existsSync(logPath) ? fs.readFileSync(logPath, "utf8") : "";
 const logCheck = validateLog(log);
@@ -31,9 +34,10 @@ if (stage === "visual") {
   }
 }
 
-const passed = missing.length === 0 && logCheck.valid && !specError;
+const passed = missing.length === 0 && empty.length === 0 && logCheck.valid && !specError;
 if (!passed) {
   if (missing.length) console.error(`Missing required files: ${missing.join(", ")}`);
+  if (empty.length) console.error(`Empty required files: ${empty.join(", ")}`);
   if (!logCheck.valid) console.error(`Invalid production log (step_log.md): ${logCheck.errors.join("; ")}`);
   if (specError) console.error(`Invalid page_specs.json: ${specError}`);
 }

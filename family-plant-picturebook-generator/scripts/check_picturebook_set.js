@@ -29,16 +29,18 @@ async function main() {
     "story_text.md",
     "step_log.md"
   ];
-  const requiredBookFileChecks = requiredBookFiles.map((relativePath) => ({
-    relativePath,
-    present: fs.existsSync(path.join(bookDir, relativePath))
-  }));
-  const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.present);
+  const requiredBookFileChecks = requiredBookFiles.map((relativePath) => {
+    const fullPath = path.join(bookDir, relativePath);
+    const present = fs.existsSync(fullPath);
+    const nonEmpty = present && fs.statSync(fullPath).size > 0;
+    return { relativePath, present, nonEmpty, ok: present && nonEmpty };
+  });
+  const requiredBookFilesOk = requiredBookFileChecks.every((check) => check.ok);
   const stepLogPath = path.join(bookDir, "step_log.md");
   const stepLogText = fs.existsSync(stepLogPath) ? fs.readFileSync(stepLogPath, "utf8") : "";
   const stepLogCheck = validateLog(stepLogText);
   const stepLogValid = Boolean(
-    requiredBookFileChecks.find((check) => check.relativePath === "step_log.md").present &&
+    requiredBookFileChecks.find((check) => check.relativePath === "step_log.md").ok &&
     stepLogCheck.valid
   );
   let hasContinuitySheets = false;
@@ -50,6 +52,8 @@ async function main() {
   let promptReferencesOk = false;
   let promptStyleReferencesOk = false;
   let promptOutfitLocksOk = false;
+  let pageStructureOk = false;
+  let pagePlanOk = false;
   let expectedFiles = null;
   let specError = null;
   if (fs.existsSync(specPath)) {
@@ -57,6 +61,10 @@ async function main() {
       const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
       const continuity = spec.characterContinuity;
       const referenceImages = continuity && continuity.referenceImages;
+      const expectedContinuityPaths = {
+        qiqi: "continuity/qiqi-outfit-sheet.png",
+        mom: "continuity/mom-outfit-sheet.png"
+      };
       hasContinuitySpecs = Boolean(
         continuity &&
           typeof continuity.qiqi === "string" &&
@@ -65,10 +73,9 @@ async function main() {
           continuity.mom.trim() &&
           referenceImages &&
           typeof referenceImages.qiqi === "string" &&
-          referenceImages.qiqi.trim() &&
+          referenceImages.qiqi === expectedContinuityPaths.qiqi &&
           typeof referenceImages.mom === "string" &&
-          referenceImages.mom.trim() &&
-          referenceImages.qiqi !== referenceImages.mom
+          referenceImages.mom === expectedContinuityPaths.mom
       );
       const identityReference = continuity && continuity.identityReference;
       if (identityReference === "assets/characters/qiqi-and-mom-reference.png") {
@@ -87,7 +94,7 @@ async function main() {
           ? path.resolve(path.dirname(specPath), relativePath)
           : null;
         let readable = false;
-        if (fullPath && fs.existsSync(fullPath)) {
+        if (relativePath === expectedContinuityPaths[character] && fullPath && fs.existsSync(fullPath)) {
           try {
             const metadata = await sharp(fullPath).metadata();
             readable = metadata.format === "png";
@@ -99,6 +106,22 @@ async function main() {
       }
       hasContinuitySheets = continuityChecks.every((check) => check.readable);
       const pages = Array.isArray(spec.pages) ? spec.pages : [];
+      const pagePlanException =
+        typeof spec.meta?.pagePlanException === "string" && spec.meta.pagePlanException.trim();
+      pageStructureOk = Boolean(
+        pages.length > 0 &&
+          pages.every(
+            (page) =>
+              typeof page.file === "string" &&
+              page.file.trim() &&
+              typeof page.pageRole === "string" &&
+              page.pageRole.trim() &&
+              Array.isArray(page.textBlocks) &&
+              page.textBlocks.length > 0 &&
+              Array.isArray(page.characters)
+          )
+      );
+      pagePlanOk = pages.length === 7 || Boolean(pagePlanException);
       hasPromptRecords = Boolean(
         pages.length > 0 &&
           pages.every(
@@ -143,20 +166,30 @@ async function main() {
             );
           })
       );
-      promptStyleReferencesOk = Boolean(
-        pages.length > 0 &&
-          pages.every((page) => {
-            const references = Array.isArray(page.imagegenPrompt?.references)
-              ? page.imagegenPrompt.references
-              : [];
-            return references.some(
-              (reference) =>
-                reference &&
-                typeof reference.path === "string" &&
-                reference.path.startsWith("assets/examples/erqiao-yulan/final_pages/")
-            );
-          })
-      );
+      promptStyleReferencesOk = pages.length > 0;
+      for (const page of pages) {
+        const references = Array.isArray(page.imagegenPrompt?.references)
+          ? page.imagegenPrompt.references
+          : [];
+        const styleReference = references.find(
+          (reference) =>
+            reference &&
+            typeof reference.path === "string" &&
+            reference.path.startsWith("assets/examples/erqiao-yulan/final_pages/")
+        );
+        if (!styleReference) {
+          promptStyleReferencesOk = false;
+          continue;
+        }
+        try {
+          const styleMeta = await sharp(
+            path.resolve(__dirname, "..", styleReference.path)
+          ).metadata();
+          if (styleMeta.format !== "png") promptStyleReferencesOk = false;
+        } catch {
+          promptStyleReferencesOk = false;
+        }
+      }
       promptOutfitLocksOk = Boolean(
         pages.length > 0 &&
           pages.every((page) => {
@@ -183,6 +216,8 @@ async function main() {
       promptReferencesOk = false;
       promptStyleReferencesOk = false;
       promptOutfitLocksOk = false;
+      pageStructureOk = false;
+      pagePlanOk = false;
     }
   } else {
     specError = "page_specs.json is missing";
@@ -202,7 +237,8 @@ async function main() {
   lines.push(`Checked stage: ${isFinalPages ? "final_pages" : folderName}`);
   lines.push(`PNG pages: ${files.length}`);
   for (const check of requiredBookFileChecks) {
-    lines.push(`Required file ${check.relativePath}: ${check.present ? "PRESENT" : "MISSING"}`);
+    const status = !check.present ? "MISSING" : check.nonEmpty ? "PRESENT" : "EMPTY";
+    lines.push(`Required file ${check.relativePath}: ${status}`);
   }
   lines.push(`Production log structure: ${stepLogValid ? "PASS" : "FAIL"}`);
   lines.push(`Production log events: ${stepLogCheck.events.length}`);
@@ -219,6 +255,8 @@ async function main() {
   lines.push(`Prompt continuity references: ${promptReferencesOk ? "PASS" : "FAIL"}`);
   lines.push(`Prompt style references: ${promptStyleReferencesOk ? "PASS" : "FAIL"}`);
   lines.push(`Prompt written outfit locks: ${promptOutfitLocksOk ? "PASS" : "FAIL"}`);
+  lines.push(`Page record structure: ${pageStructureOk ? "PASS" : "FAIL"}`);
+  lines.push(`Page plan: ${pagePlanOk ? "PASS" : "FAIL"}`);
   lines.push(`Page/spec file match: ${filesMatchSpec ? "PASS" : "FAIL"}`);
   lines.push("");
 
@@ -240,7 +278,7 @@ async function main() {
   lines.push("- Font style is consistent across all pages.");
   lines.push("- Visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the locked continuity sheets and written specifications.");
   lines.push("- Each continuity sheet has an independent readable accessory/detail panel, and its buttons, bag, notebook, shoes, hair accessories, glasses, and other locked details agree with all three pose views.");
-  lines.push("- When buttons are visible, verify their count, spacing, and placement against the continuity sheet; redraw the complete page if they are wrong.");
+  lines.push("- Verify button count, spacing, and placement against the independent continuity detail panel; redraw the complete page if they are wrong.");
   lines.push("- All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.");
   lines.push("- No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.");
   lines.push("- No sticker/plaster text blocks; text sits in native bubbles or panels.");
@@ -260,6 +298,8 @@ async function main() {
     promptReferencesOk &&
     promptStyleReferencesOk &&
     promptOutfitLocksOk &&
+    pageStructureOk &&
+    pagePlanOk &&
     filesMatchSpec;
   lines.push(`Overall metadata check: ${metadataOk ? "PASS" : "FAIL"}`);
 

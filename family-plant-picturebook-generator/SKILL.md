@@ -147,7 +147,7 @@ Record:
 
 Gate:
 
-- The story has seven page roles unless a documented plant-specific reason requires a change.
+- The story has seven page roles unless `meta.pagePlanException` documents a plant-specific reason for a different count.
 
 ### 3. Design Character Outfit References
 
@@ -182,7 +182,7 @@ Use this generation instruction for both sheets: “Draw the accessory detail pa
 
 Requirements:
 
-- Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
+- Treat buttons as a high-risk detail: record their exact count and placement in the independent detail panel; if they are not story-relevant, simplify or hide them.
 - Use continuity sheets for exact character and outfit details.
 - Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
 
@@ -274,6 +274,8 @@ The gate writes `output/<plant-slug>/qa_report.md` and checks:
 - bundled identity reference;
 - page and prompt references;
 - sample-page style references and written outfit locks in every applicable prompt;
+- non-empty source files and complete page records;
+- seven-page structure unless `meta.pagePlanException` documents a plant-specific exception;
 - filename order and PNG format;
 - exact `1086 × 1448 px` dimensions.
 
@@ -292,7 +294,7 @@ Action:
 - Read `qa_report.md` and review:
 
 - exact, legible Chinese text with no pseudo-text or old text;
-- Qiqi and Mom identity, outfits, bags, glasses, shoes, anatomy, and typography continuity; when buttons are visible, verify their count and placement;
+- Qiqi and Mom identity, outfits, bags, glasses, shoes, anatomy, and typography continuity; verify button count and placement against the independent detail panel;
 - plant morphology, comparison details, safety wording, and seasonal plausibility;
 - page-role coverage, narrative flow, visual density, and overall sample-book style.
 

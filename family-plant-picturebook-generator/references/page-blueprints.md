@@ -1,6 +1,6 @@
 # Page Blueprints
 
-Default to 7 pages. Adjust only when the user asks or the plant lacks enough supported content.
+Default to 7 pages. Adjust only when the user asks or the plant lacks enough supported content. If the plan is not seven pages, add a concise `meta.pagePlanException` explaining why.
 
 ## Contents
 

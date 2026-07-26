@@ -8,7 +8,7 @@ Required file source/child-guide.md: PRESENT
 Required file story_text.md: PRESENT
 Required file step_log.md: PRESENT
 Production log structure: PASS
-Production log events: 13
+Production log events: 14
 Character continuity specifications: PRESENT
 Character continuity sheets: PRESENT
 - qiqi: continuity/qiqi-outfit-sheet.png READABLE PNG
@@ -19,6 +19,8 @@ Prompt text matches page text blocks: PASS
 Prompt continuity references: PASS
 Prompt style references: PASS
 Prompt written outfit locks: PASS
+Page record structure: PASS
+Page plan: PASS
 Page/spec file match: PASS
 
 - 01-cover.png: 1086x1448 OK 1086x1448
@@ -37,7 +39,7 @@ Manual QA required:
 - Font style is consistent across all pages.
 - Visible hairstyle, outfit silhouette/colors, bag, glasses, shoes, and major accessories match the locked continuity sheets and written specifications.
 - Each continuity sheet has an independent readable accessory/detail panel, and its buttons, bag, notebook, shoes, hair accessories, glasses, and other locked details agree with all three pose views.
-- When buttons are visible, verify their count, spacing, and placement against the continuity sheet; redraw the complete page if they are wrong.
+- Verify button count, spacing, and placement against the independent continuity detail panel; redraw the complete page if they are wrong.
 - All visible Chinese text matches page_specs.json and was generated through the required imagegen workflow.
 - No rare characters, pseudo-text, old text shadows, or typo-prone glyphs.
 - No sticker/plaster text blocks; text sits in native bubbles or panels.
