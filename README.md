@@ -17,13 +17,10 @@ It combines source control, story planning, per-character visual continuity, ima
 
 ## What it provides
 
-- Source-locked storytelling with no invented botanical facts
-- A seven-page narrative system: cover, encounter, name, plant secret, close-up, comparison, and ending
-- Two separate per-book character continuity PNGs for stable outfits, accessories, and poses
-- Imagegen-generated text and illustration in the same page-generation call
-- Canonical `1086 × 1448 px` portrait pages (`3:4`)
-- Automated package, prompt-reference, asset, and dimension checks
-- Manual review for text accuracy, character continuity, anatomy, visual quality, and botany
+- Source-backed seven-page botanical picture books with no invented plant facts
+- Two separate per-book continuity sheets for stable Qiqi and Mom outfits, accessories, and poses
+- Imagegen-generated Chinese text and illustration on canonical `1086 × 1448 px` (`3:4`) pages
+- A controlled output package containing source files, story text, page specifications, production history, final pages, and QA results
 
 ## Key contributions
 
