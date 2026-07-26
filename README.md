@@ -84,6 +84,7 @@ Selected pages from the bundled Gou-shu reference series:
 
 <p>
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/01-cover.png" alt="Gou-shu reference cover" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/04-plant-secret.png" alt="Gou-shu plant-secret reference" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/05-closeup.png" alt="Gou-shu botanical close-up reference" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/06-compare.png" alt="Gou-shu comparison reference" width="180">
 </p>
