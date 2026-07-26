@@ -79,7 +79,7 @@ Source files are completed before story, character, visual, or image work. Every
 
 ## Output
 
-Each run creates exactly one book under `output/<plant-slug>/`:
+Each run creates exactly one book under `output/<plant-slug>/` at the repository root—the directory containing `package.json` and `README.md`:
 
 ```text
 output/<plant-slug>/

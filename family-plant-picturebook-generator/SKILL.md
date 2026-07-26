@@ -9,7 +9,7 @@ Create a source-backed family plant picture book. Use only facts from the suppli
 
 ## Output contract
 
-Create exactly one book under:
+At the repository root—the directory containing `package.json` and `README.md`—create exactly one book under:
 
 ```text
 output/<plant-slug>/
@@ -83,7 +83,7 @@ Never copy plant facts, names, clothing, or page text from the bundled visual re
 
 ### 1. Initialize output
 
-1. Run `npm run init:picturebook -- <plant-slug>` from the repository root.
+1. From the repository root—the directory containing `package.json` and `README.md`—run `npm run init:picturebook -- <plant-slug>`.
 2. Create the output folder and child folders.
 3. Create `step_log.md` immediately, before any production action.
 4. Confirm the first log event exists.
