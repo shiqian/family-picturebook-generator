@@ -108,7 +108,7 @@ Append a concise `source handoff` event to `step_log.md` immediately.
 5. Plan seven pages by default: cover, first encounter, name, plant secret, close-up, comparison, and warm ending.
 6. If using another page count, add `meta.pagePlanException` to `page_specs.json`.
 
-Freeze `story_text.md` before generating any character or page image. Append a concise `story plan frozen` event to `step_log.md`.
+Freeze `story_text.md` before generating any character or page image. Append a concise `story plan frozen` event to `step_log.md` immediately.
 
 Use natural mother-child dialogue and source-backed facts. Do not force a warning ending.
 
