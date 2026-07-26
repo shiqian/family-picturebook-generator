@@ -238,7 +238,7 @@ For each page:
 3. Attach at least one sample page from `assets/examples/erqiao-yulan/final_pages/` for style and composition only.
 4. Repeat the complete written outfit lock for each character shown and the exact page text.
 5. Generate illustration and Chinese text together on a native 3:4 canvas.
-6. If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the continuity sheet. Do not add, remove, or redesign buttons.”
+6. If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the independent continuity detail panel. Do not add, remove, or redesign buttons.”
 7. Check page role, text, legibility, continuity, anatomy, plant subject, and dimensions.
 
 Requirements:
