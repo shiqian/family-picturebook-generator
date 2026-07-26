@@ -174,7 +174,11 @@ Each sheet must show:
 - standing front;
 - standing three-quarter;
 - crouching or kneeling three-quarter;
-- relevant clothing and accessory details.
+- an independent enlarged clothing-and-accessory detail panel.
+
+The detail panel is a separate reference area, not a fourth pose. It must clearly show the exact buttons, bag, notebook, shoes, hair accessories, glasses, and other locked details. Do not rely on details inferred from the pose views.
+
+Use this generation instruction for both sheets: “Draw the accessory detail panel separately from the three full-body pose views. Preserve the same exact design, colors, shapes, and counts across all views. Show no alternative accessory versions.”
 
 Requirements:
 
@@ -189,6 +193,7 @@ Record:
 Gate:
 
 - Both sheets must be readable and show the required views and locked details.
+- The independent detail panel must be readable and agree with every pose view.
 - Pause only if a design decision remains unresolved.
 
 ### 4. Design the Visual System

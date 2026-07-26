@@ -124,8 +124,8 @@ The following is a plant-specific illustrative excerpt, not a copy-ready book sp
       "mom": "continuity/mom-outfit-sheet.png"
     },
     "viewMap": {
-      "qiqi": ["standing-front", "standing-three-quarter", "crouching-three-quarter"],
-      "mom": ["standing-front", "standing-three-quarter", "kneeling-three-quarter"]
+      "qiqi": ["standing-front", "standing-three-quarter", "crouching-three-quarter", "accessory-detail-panel"],
+      "mom": ["standing-front", "standing-three-quarter", "kneeling-three-quarter", "accessory-detail-panel"]
     },
     "qiqi": "Two braids with small hair ties; exact top, outerwear, pants/skirt, shoes, and accessories locked for this book.",
     "mom": "Round glasses; shoulder-length brown hair; exact top, outerwear, pants/skirt, shoes, and accessories locked for this book."

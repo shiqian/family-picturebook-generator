@@ -44,7 +44,9 @@ output/<plant-slug>/continuity/
 └── mom-outfit-sheet.png
 ```
 
-Use `imagegen` to generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet must include the character's standing front view, standing three-quarter view, crouching or kneeling three-quarter view, and close details for clothing and accessories.
+Use `imagegen` to generate and inspect both sheets after the source handoff and before finalizing page prompts. Each sheet must include four clearly separated areas: standing front, standing three-quarter, crouching or kneeling three-quarter, and an independent enlarged clothing-and-accessory detail panel. The detail panel is not another pose; it must separately show exact buttons, bags, notebooks, shoes, hair accessories, glasses, and other locked details.
+
+Use this prompt instruction: “Draw the accessory detail panel separately from the three full-body pose views. Preserve the same exact design, colors, shapes, and counts across all views. Show no alternative accessory versions.”
 
 Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`. Attach the applicable PNG to every page prompt. These sheets are visual continuity references, not final pages or text-composition bases.
 

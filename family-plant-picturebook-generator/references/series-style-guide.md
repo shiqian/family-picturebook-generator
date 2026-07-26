@@ -52,9 +52,9 @@ Adapt clothing to:
 3. weather and time of day;
 4. story activity, such as walking, observing, sketching, collecting fallen leaves.
 
-Before generating a book, create two visual PNG continuity sheets: one for Qiqi and one for Mom. Each sheet must show standing front, standing three-quarter, crouching or kneeling three-quarter, and relevant clothing/accessory details. The sheets must lock exact garments, colors, silhouettes, shoes, hairstyle, and accessories.
+Before generating a book, create two visual PNG continuity sheets: one for Qiqi and one for Mom. Each sheet must show three full-body views—standing front, standing three-quarter, and crouching or kneeling three-quarter—plus a separate enlarged clothing-and-accessory detail panel. The detail panel must independently lock exact garments, colors, silhouettes, shoes, hairstyle, buttons, bags, notebooks, glasses, and other accessories; do not infer those details from a pose view.
 
-Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-reference.png` as the shared identity anchor. The bundled image establishes identity; the per-book sheets establish the current outfits and pose references.
+Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-reference.png` as the shared identity anchor. Prompt it to “draw the accessory detail panel separately from the three full-body pose views” and to preserve the same exact design across all views. The bundled image establishes identity; the per-book sheets establish the current outfits, accessory details, and pose references.
 
 Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
