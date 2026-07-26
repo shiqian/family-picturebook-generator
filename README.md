@@ -170,7 +170,7 @@ The bundled [Erqiao Yulan pages](family-plant-picturebook-generator/assets/examp
   </tr>
 </table>
 
-The bundled [`gou-shu` example](family-plant-picturebook-generator/assets/examples/gou-shu/) is a complete generated-book package with source files, continuity sheets, story plan, page specifications, seven final pages, production log, and QA report.
+Generated test books such as `gou-shu` are kept locally under `assets/examples/` and are ignored by Git; generate a fresh book through the workflow to reproduce them.
 
 ## Key contributions
 

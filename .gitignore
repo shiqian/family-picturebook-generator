@@ -3,3 +3,5 @@ node_modules/
 out/
 output/
 
+# Local generated test book; keep it out of version control.
+family-plant-picturebook-generator/assets/examples/gou-shu/
