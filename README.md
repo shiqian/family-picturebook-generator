@@ -77,6 +77,20 @@ flowchart TD
 
 Source files are completed before story, character, visual, or image work. Every image-generation call identifies the purpose of each attached reference: character identity, outfit/accessory continuity, or series style and composition.
 
+## Visual example
+
+Selected pages from the bundled Gou-shu reference series:
+
+<p>
+  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/01-cover.png" alt="Gou-shu reference cover" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/05-closeup.png" alt="Gou-shu botanical close-up reference" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/06-compare.png" alt="Gou-shu comparison reference" width="180">
+</p>
+
+These pages demonstrate the visual style and story structure. They are visual references only, not factual sources.
+
+[View all seven reference pages](family-plant-picturebook-generator/assets/examples/series-reference/final_pages/)
+
 ## Output
 
 Each run creates exactly one book under `output/<plant-slug>/` at the repository root—the directory containing `package.json` and `README.md`:
