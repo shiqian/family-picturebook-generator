@@ -11,6 +11,7 @@ It combines source control, story planning, per-character visual continuity, ima
 - [Workflow](#workflow)
 - [Inputs and dependencies](#inputs-and-dependencies)
 - [Setup](#setup)
+- [Install the related skills](#install-the-related-skills)
 - [Output contract](#output-contract)
 - [Quality assurance](#quality-assurance)
 - [Repository layout](#repository-layout)
@@ -104,13 +105,7 @@ The workflow depends on:
 
 ## Setup
 
-From the repository root:
-
-```bash
-npm install
-```
-
-Expose `family-plant-picturebook-generator/` as a Codex skill or use it from this repository.
+Install Node.js 18 or newer, then follow [Install the related skills](#install-the-related-skills) to clone the repositories, install the QA dependency, and expose both skills to Codex.
 
 Example request:
 
@@ -125,6 +120,61 @@ npm run init:picturebook -- <plant-slug>
 npm run preflight:source -- output/<plant-slug>
 npm run preflight:visual -- output/<plant-slug>
 ```
+
+## Install the related skills
+
+The generator uses `shanghai-plant-guide-series` when the input is only a plant name. External users should therefore make both repositories available to Codex.
+
+### 1. Clone both repositories
+
+Choose any local parent directory for your skills. The following example uses `~/codex-projects/`:
+
+```bash
+mkdir -p ~/codex-projects
+cd ~/codex-projects
+git clone https://github.com/shiqian/shanghai-plant-guide.git
+git clone https://github.com/shiqian/family-plant-picturebook-generator.git
+```
+
+Install the generator’s QA dependency from its repository root:
+
+```bash
+cd ~/codex-projects/family-plant-picturebook-generator
+npm install
+```
+
+### 2. Expose the skill directories to Codex
+
+Codex discovers a skill when its directory contains `SKILL.md` and is available under `~/.codex/skills/<skill-name>/`.
+
+Create the skills directory and link the two cloned skill folders:
+
+```bash
+mkdir -p ~/.codex/skills
+ln -sfn ~/codex-projects/shanghai-plant-guide/shanghai-plant-guide-series \
+  ~/.codex/skills/shanghai-plant-guide-series
+ln -sfn ~/codex-projects/family-plant-picturebook-generator/family-plant-picturebook-generator \
+  ~/.codex/skills/family-plant-picturebook-generator
+```
+
+Verify the expected files exist:
+
+```bash
+test -f ~/.codex/skills/shanghai-plant-guide-series/SKILL.md
+test -f ~/.codex/skills/family-plant-picturebook-generator/SKILL.md
+```
+
+If your Codex installation uses a custom skills directory, place or link the same two directories there instead. Copying the directories is also valid; symlinks make it easier to update them with `git pull`.
+
+### 3. Run the workflow
+
+Start a new Codex task and request:
+
+```text
+Run $family-plant-picturebook-generator for 桂花.
+```
+
+With a plant name, the generator must obtain the scientific dossier and child guide through `shanghai-plant-guide-series` before story planning or image generation. With source files already available, provide both files and invoke the generator directly.
 
 ## Output contract
 
