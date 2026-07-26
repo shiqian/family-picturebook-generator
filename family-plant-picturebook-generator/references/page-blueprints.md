@@ -225,7 +225,7 @@ For normal imagegen production, do not prescribe pixel coordinates. Each `textBl
 
 ## Prompt and review rules
 
-Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in `step_log.md`. Its `references` list must include the identity reference with a purpose label, the continuity PNG for every character listed in `characters` with an outfit/accessory purpose label, and at least one page from `assets/examples/series-reference/final_pages/` with a style/composition purpose label. A page with no visible characters may use an empty `characters` array, but it still uses a series-reference page for style. State reference purposes in the prompt and never let a style reference override continuity details.
+Each page must also contain an `imagegenPrompt` record before generation. Its `text` field is the complete prompt used for the first attempt and must include the literal text from that page's `textBlocks`; update it before every retry and record the retry reason in `step_log.md`. Follow the reference rule in `references/assets-guide.md`, record the required paths and purpose labels in `references`, and state those purposes in the prompt. A page with no visible characters may use an empty `characters` array.
 
 Inspect each generated page before finalizing the page record. Text must feel embedded in native bubbles or panels, not pasted onto the illustration.
 

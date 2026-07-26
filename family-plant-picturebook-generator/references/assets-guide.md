@@ -48,7 +48,14 @@ Use `imagegen` to generate and inspect both sheets after the source handoff and 
 
 Use this prompt instruction: “Draw the accessory detail panel separately from the three full-body pose views. Preserve the same exact design, colors, shapes, and counts across all views. Show no alternative accessory versions.”
 
-Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`. Attach the applicable continuity PNG to every final-page or repair prompt that shows that character. These sheets are visual continuity references, not final pages or text-composition bases.
+Record the two paths and the written locked details in `page_specs.json` under `characterContinuity`.
+
+Reference rule:
+
+- Continuity-sheet generation uses the bundled identity PNG as the identity reference; derive outfit and accessory details from the story plan and written specifications.
+- Final-page and repair prompts use the identity PNG, applicable continuity PNGs, and a series-reference page. Record each path and purpose in `page_specs.json`.
+
+These sheets are visual continuity references, not final pages or text-composition bases.
 
 Use the bundled `assets/characters/qiqi-and-mom-reference.png` as the identity anchor for both sheets. This is one combined identity image; the Qiqi and Mom continuity PNGs add the current book's exact outfits, accessories, and pose views.
 
@@ -59,7 +66,7 @@ When starting a new book:
 1. inspect `assets/characters/qiqi-and-mom-reference.png` for character identity;
 2. during story planning, inspect at least 2 pages from `assets/examples/series-reference/final_pages/` for layout and typography feel; do not attach them to continuity-sheet generation;
 3. create the two per-book continuity sheets based on the new plant's season, habitat, weather, and story activity;
-4. attach the applicable continuity-sheet reference and state its outfit/accessory purpose in every final-page or repair prompt that shows that character.
+4. follow the reference rule above and record the applicable paths and purposes in every final-page or repair prompt.
 
 ## Portability Rule
 

@@ -54,7 +54,7 @@ Load references only at the stage where they are needed. Do not preload all refe
 | 1. Initialize | `references/step-log.md` | Create and validate the append-only log. |
 | 2. Source handoff | No picture-book references | Finish both upstream source files first. |
 | 3. Story plan | `references/page-blueprints.md`; at least two pages from `assets/examples/series-reference/final_pages/` | Page roles, story rhythm, dialogue, and visual density. |
-| 4. Character references | `references/assets-guide.md`; `references/series-style-guide.md`; identity PNG | Character identity, story-derived outfit design, accessories, and poses. Do not attach series-reference pages. |
+| 4. Character references | `references/assets-guide.md`; `references/series-style-guide.md`; identity PNG | Character identity, story-derived outfit design, accessories, and poses. |
 | 5. Visual system | `references/text-rules.md`; reuse `references/page-blueprints.md`; `references/series-style-guide.md` as needed | Text fidelity, page schema, semantic containers, and visual constraints. |
 | 6. Image generation | Relevant parts of `references/text-rules.md` and `references/series-style-guide.md` | Prompt and review rules for the current image. |
 | 7. QA | `page_specs.json`, source files, and `qa_report.md`; consult references only for manual review | Deterministic package checks plus manual text, factual, and visual review. |
@@ -71,9 +71,8 @@ Never copy plant facts, names, clothing, or page text from the bundled visual re
 - Use only facts from the scientific dossier and child guide.
 - Use `imagegen` for every continuity sheet, final page, and content repair.
 - Generate Chinese text and illustration in the same imagegen call.
-- Use the image-specific attachment matrix and state each reference purpose:
-  - continuity sheet: attach `assets/characters/qiqi-and-mom-reference.png` for identity only; do not attach series-reference pages;
-  - final page or repair: attach the identity PNG, the continuity PNG for every visible character, and one series-reference page for style and composition.
+- Before each image call, follow the applicable reference instructions in `references/assets-guide.md` and `references/page-blueprints.md`.
+- Record the prompt and reference paths in `page_specs.json`.
 - Never create a text-free base and add text afterward.
 - Redraw the complete page when text, content, outfit, anatomy, or style fails.
 - Keep every visible sentence in `page_specs.json` and the recorded imagegen prompt.
@@ -117,9 +116,8 @@ Use natural mother-child dialogue and source-backed facts. Do not force a warnin
 
 1. Read `references/assets-guide.md` and `references/series-style-guide.md`.
 2. Use the story plan to derive season, habitat, weather, activity, poses, and accessories.
-3. Attach `assets/characters/qiqi-and-mom-reference.png` for identity only.
-4. Do not attach series-reference pages when generating continuity sheets.
-5. Generate exactly two PNGs with `imagegen`:
+3. Follow the continuity-sheet reference instructions in `references/assets-guide.md`.
+4. Generate exactly two PNGs with `imagegen`:
 
 ```text
 output/<plant-slug>/continuity/qiqi-outfit-sheet.png
@@ -156,12 +154,11 @@ Freeze the visual plan before any final-page generation. The final QA command ch
 For every continuity sheet, final page, retry, or repair:
 
 1. Use the `imagegen` skill.
-2. For a continuity sheet, attach the identity PNG only and state that it controls identity; derive outfit and accessory details from the frozen story plan and written specifications.
-3. For a final page or repair, attach the identity PNG, the continuity PNG for every visible character, and one series-reference page; label identity, outfit/accessory, and style/composition purposes explicitly.
-4. For final pages, include exact page text and native semantic text-container instructions. For continuity sheets, include the exact written outfit and accessory specification.
-5. Generate text and illustration together on a native 3:4 canvas.
-6. Inspect the result before continuing to the next page.
-7. Record a concise production-log event immediately for the meaningful generation or repair. Do not defer logging until final QA.
+2. Follow the applicable reference instructions in `references/assets-guide.md` and `references/page-blueprints.md`.
+3. For final pages, include exact page text and native semantic text-container instructions. For continuity sheets, include the exact written outfit and accessory specification.
+4. Generate text and illustration together on a native 3:4 canvas.
+5. Inspect the result before continuing to the next page.
+6. Record a concise production-log event immediately for the meaningful generation or repair. Do not defer logging until final QA.
 
 If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the independent continuity detail panel. Do not add, remove, or redesign buttons.”
 

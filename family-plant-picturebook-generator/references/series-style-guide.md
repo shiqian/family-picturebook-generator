@@ -58,7 +58,7 @@ Use `imagegen` to generate both sheets with `assets/characters/qiqi-and-mom-refe
 
 Within one book, clothing must remain the same as the written lock and visual continuity sheet unless the scene clearly changes day, season, weather, location, or activity. “Similar color” is not enough: a sage-green vest, a sage-green dress, and a sage-green jacket are different outfits.
 
-Every final-page image prompt must attach the bundled identity reference, the applicable continuity PNG, and at least one bundled series-reference page for style and composition. State the purpose of each attachment; use the continuity PNG and the written lock in `page_specs.json` for exact outfit details.
+For final-page reference attachments, follow `references/assets-guide.md`. Use the continuity PNG and written lock in `page_specs.json` for exact outfit details.
 
 Use continuity sheets for exact character and outfit details; use sample or earlier final pages only for style and composition.
 
