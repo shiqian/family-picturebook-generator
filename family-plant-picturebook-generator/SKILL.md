@@ -56,7 +56,7 @@ Load references only at the stage where they are needed. Do not preload all refe
 | 3. Story plan | `references/page-blueprints.md`; at least two pages from `assets/examples/series-reference/final_pages/` | Page roles, story rhythm, dialogue, and visual density. |
 | 4. Character references | `references/assets-guide.md`; `references/series-style-guide.md`; identity PNG | Character identity, story-derived outfit design, accessories, and poses. |
 | 5. Visual system | `references/text-rules.md`; reuse `references/page-blueprints.md`; `references/series-style-guide.md` as needed | Text fidelity, page schema, semantic containers, and visual constraints. |
-| 6. Image generation | Relevant parts of `references/text-rules.md` and `references/series-style-guide.md` | Prompt and review rules for the current image. |
+| 6. Image generation | Relevant parts of `references/assets-guide.md`, `references/page-blueprints.md`, `references/text-rules.md`, and `references/series-style-guide.md` | Prompt and review rules for the current image. |
 | 7. QA | `page_specs.json`, source files, and `qa_report.md`; consult references only for manual review | Deterministic package checks plus manual text, factual, and visual review. |
 
 Bundled references are visual only:
@@ -124,10 +124,10 @@ output/<plant-slug>/continuity/qiqi-outfit-sheet.png
 output/<plant-slug>/continuity/mom-outfit-sheet.png
 ```
 
-Each sheet must contain standing front, standing three-quarter, crouching or kneeling three-quarter, and an independent accessory-detail panel. The panel must show exact buttons, bag, notebook, shoes, hair accessories, glasses, and other locked details. Preserve the same design, colors, shapes, and counts across all views.
+Follow `references/assets-guide.md` for the required sheet views and accessory-detail panel.
 
-6. Write the exact outfit specifications and canonical PNG paths under `characterContinuity` in `page_specs.json`.
-7. Inspect both sheets and confirm the detail panel agrees with all poses.
+5. Write the exact outfit specifications and canonical PNG paths under `characterContinuity` in `page_specs.json`.
+6. Inspect both sheets and confirm the detail panel agrees with all poses.
 
 Append a concise `character continuity` event to `step_log.md` immediately.
 
@@ -160,7 +160,7 @@ For every continuity sheet, final page, retry, or repair:
 5. Inspect the result before continuing to the next page.
 6. Record a concise production-log event immediately for the meaningful generation or repair. Do not defer logging until final QA.
 
-If buttons are visible, state: “Preserve the exact button count, spacing, and placement from the independent continuity detail panel. Do not add, remove, or redesign buttons.”
+Follow the button and accessory guidance in `references/assets-guide.md` when those details are visible.
 
 ### 7. Automate and manually review QA
 
@@ -179,15 +179,6 @@ The command writes `qa_report.md` and checks only deterministic package contract
 - image-generation reference paths and purpose labels;
 - page records and page-plan exception;
 - final PNG filenames, format, and exact dimensions.
-
-After automated QA passes, manually review:
-
-- exact Chinese text and native typography;
-- identity, outfit, accessory, pose, and style continuity;
-- independent detail-panel agreement;
-- anatomy and button details;
-- plant morphology, comparison facts, safety wording, and seasonal plausibility;
-- page roles, narrative flow, and visual density.
 
 Use `references/visual-qa-checklist.md` as the required page-by-page checklist. Copy its checks into `qa_report.md`, mark every item PASS or FAIL, and set `Manual QA sign-off: PASS` only after all pages pass. Any failure requires a complete imagegen redraw and a repair event in `step_log.md`.
 
