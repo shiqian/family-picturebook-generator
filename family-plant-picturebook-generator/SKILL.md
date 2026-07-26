@@ -95,7 +95,7 @@ Action:
 Record:
 
 - Append one event for each meaningful action, user decision, retry, and automated check.
-- Confirm the initialization event before continuing.
+- Confirm that the initialization event exists before continuing.
 
 Gate:
 
@@ -175,14 +175,16 @@ Record:
 - both PNG paths under `characterContinuity`;
 - the continuity result in one `step_log.md` event.
 
+Requirements:
+
+- Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
+- Use continuity sheets for exact character and outfit details.
+- Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
+
 Gate:
 
-- Inspect both sheets before continuing.
-- Pause only when a design decision is required.
-
-Treat buttons as a high-risk detail: if visible, include a close-up and record their exact count and placement; if they are not story-relevant, simplify or hide them.
-
-Use continuity sheets for exact character and outfit details. Use sample or earlier final pages only for style and composition; never infer locked outfit details from them.
+- Both sheets must be readable and show the required views and locked details.
+- Pause only if a design decision remains unresolved.
 
 ### 4. Design the Visual System
 
@@ -207,7 +209,7 @@ Requirements:
 
 Record:
 
-- Record the result in one `step_log.md` event.
+- Record the frozen visual plan and visual-preflight result in one `step_log.md` event.
 
 Gate:
 
@@ -254,7 +256,7 @@ node family-plant-picturebook-generator/scripts/check_picturebook_set.js output/
 
 The gate writes `output/<plant-slug>/qa_report.md` and checks:
 
-- required files and event-log structure;
+- required files and production-log structure;
 - continuity specifications and PNGs;
 - bundled identity reference;
 - page and prompt references;
@@ -267,7 +269,7 @@ Record:
 
 Gate:
 
-- If it fails, fix or redraw the affected page, append an event, and rerun the gate.
+- Repair the reported package or page issue, append an event, and rerun the gate.
 
 ### 7. Complete Manual QA
 
