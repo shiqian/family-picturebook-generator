@@ -25,6 +25,15 @@ It combines source control, story planning, per-character visual continuity, ima
 - Automated package, prompt-reference, asset, and dimension checks
 - Manual review for text accuracy, character continuity, anatomy, visual quality, and botany
 
+## Key contributions
+
+- Designed an end-to-end source-to-delivery workflow for AI-generated botanical picture books, including upstream research handoff, story planning, visual design, generation, and QA gates.
+- Built a reusable Codex skill with progressive-disclosure references, bundled visual assets, deterministic scripts, and structured production outputs.
+- Implemented automated Node.js QA for source files, prompt references, continuity assets, PNG format, filename order, and exact `1086 × 1448 px` delivery dimensions.
+- Established per-character visual continuity using separate Qiqi and Mom outfit-reference sheets to improve cross-page consistency.
+- Defined an imagegen-first text-and-image workflow with complete-page redraws for content repairs and no post-production text overlays.
+- Added append-only production logging to track actions, outputs, decisions, retries, risks, and automated checks.
+
 ## Visual examples
 
 The bundled Erqiao Yulan pages demonstrate the intended warmth, typography feel, composition density, and parent-child storytelling rhythm. They are style references only, not factual sources for other plants.
