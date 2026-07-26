@@ -64,15 +64,15 @@ Default bundled references:
 
 ## Reference Files
 
-Read these before production:
+Load each reference at the workflow step where it is needed:
 
 | File | Use |
 |---|---|
-| `references/page-blueprints.md` | Page roles and `page_specs.json` shape |
-| `references/series-style-guide.md` | Style, character, clothing, and art constraints |
-| `references/text-rules.md` | Text fidelity and text-container rules |
-| `references/assets-guide.md` | Bundled asset usage |
-| `references/step-log.md` | Logging specification and production-log rules |
+| `references/page-blueprints.md` | Step 2: page roles and `page_specs.json` shape |
+| `references/series-style-guide.md` | Steps 3–5: style, character, clothing, and art constraints |
+| `references/text-rules.md` | Steps 4–5: text fidelity and text-container rules |
+| `references/assets-guide.md` | Step 3: bundled asset usage |
+| `references/step-log.md` | Step 0: logging specification and production-log rules |
 
 The bundled sample pages are a style reference only. Do not copy their plant facts, names, clothing, or page copy into other books unless the source content supports it.
 
@@ -122,8 +122,8 @@ Gate:
 Action:
 
 1. Read the scientific dossier as factual authority and the child guide as narrative source.
-2. Read `references/page-blueprints.md`, `references/series-style-guide.md`, `references/text-rules.md`, and `references/assets-guide.md`.
-3. Inspect at least two sample pages from `assets/examples/erqiao-yulan/final_pages/` for style, typography, composition, and visual density.
+2. Read `references/page-blueprints.md`.
+3. Inspect at least two sample pages from `assets/examples/erqiao-yulan/final_pages/` for story rhythm and visual density.
 4. Create `story_text.md`.
 5. Plan seven pages by default:
 
@@ -153,9 +153,10 @@ Gate:
 
 Action:
 
-1. Use `story_text.md` and page roles to derive season, setting, weather, activities, poses, and accessories.
-2. Use `assets/characters/qiqi-and-mom-reference.png` as the shared identity reference.
-3. Generate exactly two separate book-specific PNGs with `imagegen`:
+1. Read `references/series-style-guide.md` and `references/assets-guide.md`.
+2. Use `story_text.md` and page roles to derive season, setting, weather, activities, poses, and accessories.
+3. Use `assets/characters/qiqi-and-mom-reference.png` as the shared identity reference.
+4. Generate exactly two separate book-specific PNGs with `imagegen`:
 
 ```text
 output/<plant-slug>/continuity/qiqi-outfit-sheet.png
@@ -165,8 +166,8 @@ output/<plant-slug>/continuity/mom-outfit-sheet.png
 - `qiqi-outfit-sheet.png` — Qiqi, the girl;
 - `mom-outfit-sheet.png` — Mom.
 
-4. Write the exact outfit specifications and both PNG paths to `page_specs.json` under `characterContinuity`.
-5. Inspect both continuity sheets.
+5. Write the exact outfit specifications and both PNG paths to `page_specs.json` under `characterContinuity`.
+6. Inspect both continuity sheets.
 
 Each sheet must show:
 
@@ -194,7 +195,8 @@ Gate:
 
 Action:
 
-- Before drawing final pages, complete `page_specs.json` for every page. Include:
+1. Read `references/text-rules.md` and `references/series-style-guide.md`.
+2. Before drawing final pages, complete `page_specs.json` for every page. Include:
 
   - exact visible text in `textBlocks`;
   - `characters` present on each page;
