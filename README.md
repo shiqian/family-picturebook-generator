@@ -132,3 +132,7 @@ The bundled identity asset is [`assets/characters/qiqi-and-mom-reference.png`](f
 │   └── scripts/
 └── .gitignore
 ```
+
+## License
+
+The skill, scripts, documentation, and bundled reference assets are released under the [MIT License](LICENSE).

@@ -2,6 +2,7 @@
   "name": "family-plant-picturebook-generator",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "description": "QA helper dependency for the Family Plant Picturebook Generator Codex skill",
   "scripts": {
     "init:picturebook": "node family-plant-picturebook-generator/scripts/init_picturebook_run.js",
