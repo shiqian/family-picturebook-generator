@@ -1,172 +1,60 @@
 # Family Plant Picturebook Generator
 
-A reusable Codex skill that turns source-backed plant information into a consistent family picture-book series.
-
-It combines source control, story planning, per-character visual continuity, imagegen-integrated Chinese typography, automated package checks, and manual visual/factual QA for “七七的植物世界”-style parent-child botanical stories.
+A reusable Codex skill for turning source-backed plant information into consistent family picture books with imagegen-generated text and illustrations.
 
 ## Contents
 
-- [What it provides](#what-it-provides)
-- [Visual examples](#visual-examples)
+- [Quick start](#quick-start)
+- [What the skill does](#what-the-skill-does)
 - [Workflow](#workflow)
-- [Inputs and dependencies](#inputs-and-dependencies)
-- [Setup](#setup)
-- [Install the related skills](#install-the-related-skills)
-- [Output contract](#output-contract)
+- [Output](#output)
+- [Inputs](#inputs)
 - [Quality assurance](#quality-assurance)
-- [Repository layout](#repository-layout)
+- [Examples](#examples)
+- [Key contributions](#key-contributions)
 
-## What it provides
+## Quick start
 
-- Source-backed seven-page botanical picture books with no invented plant facts
-- Two separate per-book continuity sheets for stable Qiqi and Mom outfits, accessories, and poses
-- Imagegen-generated Chinese text and illustration on canonical `1086 × 1448 px` (`3:4`) pages
-- A controlled output package containing source files, story text, page specifications, production history, final pages, and QA results
+The generator uses `shanghai-plant-guide-series` when the user provides only a plant name. Clone both repositories directly under the user’s Codex skills directory.
 
-## Key contributions
+### 1. Clone and expose both skills
 
-- Designed an end-to-end source-to-delivery workflow for AI-generated botanical picture books, including upstream research handoff, story planning, visual design, generation, and QA gates.
-- Built a reusable Codex skill with progressive-disclosure references, bundled visual assets, deterministic scripts, and structured production outputs.
-- Implemented automated Node.js QA for source files, prompt references, continuity assets, PNG format, filename order, and exact `1086 × 1448 px` delivery dimensions.
-- Established per-character visual continuity using separate Qiqi and Mom outfit-reference sheets to improve cross-page consistency.
-- Defined an imagegen-first text-and-image workflow with complete-page redraws for content repairs and no post-production text overlays.
-- Added append-only production logging to track actions, outputs, decisions, retries, risks, and automated checks.
-
-## Visual examples
-
-The bundled Erqiao Yulan pages demonstrate the intended warmth, typography feel, composition density, and parent-child storytelling rhythm. They are style references only, not factual sources for other plants.
-
-<table>
-  <tr>
-    <th>Cover</th>
-    <th>Botanical close-up</th>
-    <th>Comparison</th>
-  </tr>
-  <tr>
-    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/01-cover.png" alt="Sample cover" width="180"></td>
-    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png" alt="Sample botanical close-up" width="180"></td>
-    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/06-comparison.png" alt="Sample comparison page" width="180"></td>
-  </tr>
-</table>
-
-The bundled [`gou-shu`](family-plant-picturebook-generator/assets/examples/gou-shu/) package is a complete generated-book example containing source files, story plan, continuity sheets, page specifications, seven final pages, production log, and QA report.
-
-## Workflow
-
-The skill uses progressive disclosure: it loads only the references needed at each stage.
-
-```mermaid
-flowchart TD
-    A["Plant name or source files"] --> B["0. Initialize\noutput/<slug> + step_log.md"]
-    B --> C["1. Source handoff\nupstream series when needed"]
-    C --> D{"Source preflight"}
-    D -->|fail| C
-    D -->|pass| E["2. Story plan\nread sources + page blueprint\nstory_text.md"]
-    E --> F["3. Character continuity\nstyle/assets references\n2 separate PNG sheets"]
-    F --> G["4. Visual system\ntext rules + page_specs.json\nprompts and references"]
-    G --> H{"Visual preflight"}
-    H -->|fail| G
-    H -->|pass| I["5. Page generation\nimagegen text + illustration"]
-    I --> J["6. Automated gate\npackage, references, PNGs, dimensions"]
-    J -->|fail| R["Repair reported package or page issue\nappend production-log event"]
-    R --> J
-    J -->|pass| K["7. Manual QA\ntext, continuity, anatomy, botany"]
-    K --> L["Deliver output/<slug>/"]
-```
-
-### Stage dependencies
-
-1. Initialization creates the controlled output folder and the first production-log event.
-2. Source handoff supplies `scientific-dossier.md` and `child-guide.md`; source preflight must pass before story or image work.
-3. Story planning reads the source files, `page-blueprints.md`, and at least two sample pages from `assets/examples/erqiao-yulan/final_pages/`.
-4. Character continuity uses the story context, style guide, asset guide, and bundled identity image to create one Qiqi sheet and one Mom sheet.
-5. Visual planning uses the text rules, style guide, continuity references, and source-backed story to freeze `page_specs.json`.
-6. Visual preflight must pass before final-page generation.
-7. Every page is generated with image and required Chinese text together through `imagegen`.
-8. Automated QA runs before manual QA; delivery requires both gates to pass.
-
-## Inputs and dependencies
-
-| Input | Handling |
-|---|---|
-| Plant name only | Run or request `shanghai-plant-guide-series` before research, drafting, or image generation. |
-| Child-facing plant guide | Use as the narrative source; obtain the scientific dossier before delivery. |
-| Complete scientific dossier | Use as factual authority; create or obtain the child-facing guide before delivery. |
-| Optional user instructions | Apply only when they do not conflict with source facts or workflow gates. |
-
-The final book package always requires both source files. Do not silently reconstruct a missing upstream stage from web research, an uncaptured chat response, or an example file.
-
-The workflow depends on:
-
-- Node.js 18 or newer;
-- the `imagegen` skill for continuity sheets, final pages, and content repairs;
-- `shanghai-plant-guide-series` when the input is only a plant name;
-- the repository QA dependency `sharp` for PNG metadata and readability checks.
-
-## Setup
-
-Install Node.js 18 or newer, then follow [Install the related skills](#install-the-related-skills) to clone the repositories, install the QA dependency, and expose both skills to Codex.
-
-Example request:
-
-```text
-Run $family-plant-picturebook-generator for 桂花.
-```
-
-The normal skill workflow runs the lifecycle controls automatically. The commands are also available for development and troubleshooting:
-
-```bash
-npm run init:picturebook -- <plant-slug>
-npm run preflight:source -- output/<plant-slug>
-npm run preflight:visual -- output/<plant-slug>
-```
-
-## Install the related skills
-
-The generator uses `shanghai-plant-guide-series` when the input is only a plant name. External users should therefore make both repositories available to Codex.
-
-### 1. Clone both repositories
-
-Choose any local parent directory for your skills. The following example uses `~/codex-projects/`:
-
-```bash
-mkdir -p ~/codex-projects
-cd ~/codex-projects
-git clone https://github.com/shiqian/shanghai-plant-guide.git
-git clone https://github.com/shiqian/family-plant-picturebook-generator.git
-```
-
-Install the generator’s QA dependency from its repository root:
-
-```bash
-cd ~/codex-projects/family-plant-picturebook-generator
-npm install
-```
-
-### 2. Expose the skill directories to Codex
-
-Codex discovers a skill when its directory contains `SKILL.md` and is available under `~/.codex/skills/<skill-name>/`.
-
-Create the skills directory and link the two cloned skill folders:
+These commands work on macOS and Linux. They keep the Git repositories under `~/.codex/skills/` and expose the actual skill directories where Codex can discover them.
 
 ```bash
 mkdir -p ~/.codex/skills
-ln -sfn ~/codex-projects/shanghai-plant-guide/shanghai-plant-guide-series \
+cd ~/.codex/skills
+
+git clone https://github.com/shiqian/shanghai-plant-guide.git \
+  shanghai-plant-guide-repo
+git clone https://github.com/shiqian/family-plant-picturebook-generator.git \
+  family-plant-picturebook-generator-repo
+
+ln -sfn ~/.codex/skills/shanghai-plant-guide-repo/shanghai-plant-guide-series \
   ~/.codex/skills/shanghai-plant-guide-series
-ln -sfn ~/codex-projects/family-plant-picturebook-generator/family-plant-picturebook-generator \
+ln -sfn ~/.codex/skills/family-plant-picturebook-generator-repo/family-plant-picturebook-generator \
   ~/.codex/skills/family-plant-picturebook-generator
 ```
 
-Verify the expected files exist:
+Each exposed directory must contain a `SKILL.md` file:
 
 ```bash
 test -f ~/.codex/skills/shanghai-plant-guide-series/SKILL.md
 test -f ~/.codex/skills/family-plant-picturebook-generator/SKILL.md
 ```
 
-If your Codex installation uses a custom skills directory, place or link the same two directories there instead. Copying the directories is also valid; symlinks make it easier to update them with `git pull`.
+If the repositories are already cloned, run `git pull` in each repository instead of cloning again. Copying the skill directories also works; symlinks make updates easier.
 
-### 3. Run the workflow
+### 2. Install the generator dependency
+
+```bash
+cd ~/.codex/skills/family-plant-picturebook-generator-repo
+npm install
+```
+
+The dependency is used by the deterministic PNG and picture-book QA scripts.
+
+### 3. Run the skill
 
 Start a new Codex task and request:
 
@@ -174,11 +62,42 @@ Start a new Codex task and request:
 Run $family-plant-picturebook-generator for 桂花.
 ```
 
-With a plant name, the generator must obtain the scientific dossier and child guide through `shanghai-plant-guide-series` before story planning or image generation. With source files already available, provide both files and invoke the generator directly.
+For a plant name, the workflow obtains the scientific dossier and child guide through `shanghai-plant-guide-series` before story planning or image generation.
 
-## Output contract
+## What the skill does
 
-Generated books live under the repository-level `output/` directory. Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`.
+- Creates source-backed seven-page botanical picture books without inventing plant facts.
+- Generates two separate per-book continuity sheets: one for Qiqi and one for Mom.
+- Generates Chinese text and illustrations together through `imagegen`.
+- Delivers exact `1086 × 1448 px` (`3:4`) PNG pages.
+- Produces a controlled package with source files, story text, page specifications, production history, final pages, and QA results.
+
+## Workflow
+
+```mermaid
+flowchart TD
+    A["Plant name or source files"] --> B["0. Initialize\noutput/<slug> + production log"]
+    B --> C["1. Source handoff\nupstream series when needed"]
+    C --> D{"Source preflight"}
+    D -->|fail| C
+    D -->|pass| E["2. Story plan\nsource + page blueprint + samples"]
+    E --> F["3. Character continuity\nstyle/assets + 2 PNG sheets"]
+    F --> G["4. Visual system\ntext rules + page_specs.json"]
+    G --> H{"Visual preflight"}
+    H -->|fail| G
+    H -->|pass| I["5. Page generation\nimagegen text + illustration"]
+    I --> J["6. Automated gate"]
+    J -->|fail| R["Repair package or page\nappend production-log event"]
+    R --> J
+    J -->|pass| K["7. Manual QA"]
+    K --> L["Deliver output/<slug>/"]
+```
+
+The source dossier is the factual authority. The child guide supplies the narrative language. Text is generated inside the same imagegen call as the illustration, and failed content pages are redrawn as complete pages.
+
+## Output
+
+Generated books live under the repository-level `output/` directory:
 
 ```text
 output/<plant-slug>/
@@ -195,38 +114,70 @@ output/<plant-slug>/
 └── qa_report.md
 ```
 
-`step_log.md` is the append-only English production log. Each event records a timestamp, actor, action, output, decision, and risk. Retries and user-requested revisions are appended as new events. See [`references/step-log.md`](family-plant-picturebook-generator/references/step-log.md) for the logging specification.
+Use a stable lowercase slug such as `yulan`, `guihua`, or `gou-shu`. Keep drafts under `output/<plant-slug>/drafts/`; do not use `out/`, ad-hoc folders, or the skill source directory.
 
-Do not create generated books in `out/`, ad-hoc folders, or the skill source directory. Draft or diagnostic files belong under `output/<plant-slug>/drafts/`.
+`step_log.md` is the append-only English production log. Each event records a timestamp, actor, action, output, decision, and risk. See [`references/step-log.md`](family-plant-picturebook-generator/references/step-log.md) for its specification.
+
+## Inputs
+
+| Input | Handling |
+|---|---|
+| Plant name only | Run or request `shanghai-plant-guide-series` first. |
+| Child-facing plant guide | Use as narrative source; obtain the scientific dossier before delivery. |
+| Complete scientific dossier | Use as factual authority; create or obtain the child-facing guide before delivery. |
+| Optional user instructions | Apply only when they do not conflict with source facts or workflow gates. |
+
+The final package always requires both source files. Do not reconstruct a missing upstream stage from web research, an uncaptured chat response, or an example file.
 
 ## Quality assurance
 
-During normal skill execution, Codex runs the automated gate and reads `qa_report.md` automatically. The gate checks:
+During normal execution, the skill runs source and visual preflights, the automated package gate, and manual QA.
 
-- required source, story, log, continuity, and page-spec files;
-- production-log structure and event validity;
+Automated checks cover:
+
+- required files and production-log structure;
 - both continuity PNGs and the bundled identity reference;
-- per-page prompt records, literal text, character declarations, and continuity references;
-- final-page filename order and PNG format;
-- exact `1086 × 1448 px` dimensions.
+- literal page text, prompt records, character declarations, and continuity references;
+- page order, PNG format, and exact `1086 × 1448 px` dimensions.
 
-Manual QA remains required for:
+Manual QA covers text accuracy, character and outfit continuity, anatomy, button details, plant morphology, comparison details, safety wording, seasonal plausibility, and narrative flow.
 
-- Chinese text accuracy and legibility;
-- Qiqi and Mom identity, outfits, accessories, anatomy, and typography continuity;
-- button count and placement when buttons are visible;
-- plant morphology, comparison details, safety wording, and seasonal plausibility;
-- page-role coverage, narrative flow, visual density, and overall series style.
-
-Use these commands only to recheck an existing package, debug a failed generation, validate bundled assets, or support CI/development work:
+Use these commands only for troubleshooting or development:
 
 ```bash
+cd ~/.codex/skills/family-plant-picturebook-generator-repo
 npm run check:assets
 npm run check:ratio -- output/<plant-slug>/final_pages
 npm run check:picturebook -- output/<plant-slug>/final_pages
 ```
 
-The final command writes `output/<plant-slug>/qa_report.md`. A package is deliverable only when automated QA and manual QA both pass.
+## Examples
+
+The bundled [Erqiao Yulan pages](family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/) demonstrate the intended warmth, typography, composition density, and parent-child storytelling rhythm. They are style references only, not factual sources for other plants.
+
+<table>
+  <tr>
+    <th>Cover</th>
+    <th>Botanical close-up</th>
+    <th>Comparison</th>
+  </tr>
+  <tr>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/01-cover.png" alt="Sample cover" width="180"></td>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/05-flower-closeup.png" alt="Sample botanical close-up" width="180"></td>
+    <td><img src="family-plant-picturebook-generator/assets/examples/erqiao-yulan/final_pages/06-comparison.png" alt="Sample comparison page" width="180"></td>
+  </tr>
+</table>
+
+The bundled [`gou-shu` example](family-plant-picturebook-generator/assets/examples/gou-shu/) is a complete generated-book package with source files, continuity sheets, story plan, page specifications, seven final pages, production log, and QA report.
+
+## Key contributions
+
+- Designed an end-to-end source-to-delivery workflow for AI-generated botanical picture books.
+- Built a reusable Codex skill with progressive-disclosure references, bundled assets, deterministic scripts, and structured outputs.
+- Implemented automated Node.js QA for source files, prompt references, continuity assets, PNG format, filename order, and exact delivery dimensions.
+- Established per-character visual continuity with separate Qiqi and Mom outfit-reference sheets.
+- Defined an imagegen-first text-and-image workflow with complete-page redraws for content repairs.
+- Added append-only production logging for actions, outputs, decisions, retries, risks, and automated checks.
 
 ## Repository layout
 
@@ -243,5 +194,3 @@ The final command writes `output/<plant-slug>/qa_report.md`. A package is delive
 │   └── scripts/
 └── .gitignore
 ```
-
-The bundled assets and sample packages make the skill portable across projects. The canonical sample manifest is [`asset-manifest.json`](family-plant-picturebook-generator/assets/examples/erqiao-yulan/asset-manifest.json), and the complete generated-book example is [`gou-shu/`](family-plant-picturebook-generator/assets/examples/gou-shu/).
