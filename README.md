@@ -88,6 +88,7 @@ The bundled examples show how the same workflow adapts to different plants, habi
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/01-cover.png" alt="Gou-shu reference cover" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/04-plant-secret.png" alt="Gou-shu plant-secret reference" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/05-closeup.png" alt="Gou-shu botanical close-up reference" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/06-compare.png" alt="Gou-shu comparison reference" width="180">
 </p>
 
 [View all seven 构树 pages](family-plant-picturebook-generator/assets/examples/series-reference/final_pages/)
@@ -98,6 +99,7 @@ The bundled examples show how the same workflow adapts to different plants, habi
   <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/01-cover.png" alt="Lotus picture-book cover" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/04-plant-secret.png" alt="Lotus plant-secret page" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/05-closeup.png" alt="Lotus botanical close-up" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/06-compare.png" alt="Lotus comparison reference" width="180">
 </p>
 
 [View all seven 荷花 pages and the complete production package](family-plant-picturebook-generator/assets/examples/hehua/)
