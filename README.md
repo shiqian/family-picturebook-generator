@@ -93,6 +93,19 @@ These pages demonstrate the visual style and story structure. They are visual re
 
 [View all seven reference pages](family-plant-picturebook-generator/assets/examples/series-reference/final_pages/)
 
+### Complete generated example: 荷花
+
+The repository also includes a complete source-backed generated book for 荷花. It is kept separately from `series-reference/`: the reference folder is style-only, while this folder demonstrates the full production package, including source handoff, story plan, prompts, continuity sheets, final pages, production log, and QA report.
+
+<p>
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/01-cover.png" alt="Hehua cover" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/04-plant-secret.png" alt="Hehua plant secret page" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/06-compare.png" alt="Hehua comparison page" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/07-ending.png" alt="Hehua ending page" width="180">
+</p>
+
+[Open the complete 荷花 example](family-plant-picturebook-generator/assets/examples/hehua/)
+
 ## Output
 
 Each run creates exactly one book under `output/<plant-slug>/` at the repository root—the directory containing `package.json` and `README.md`:
