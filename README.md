@@ -80,31 +80,29 @@ Source files are completed before story, character, visual, or image work. Every
 
 ## Visual example
 
-Selected pages from the bundled Gou-shu reference series:
+The bundled examples show how the same workflow adapts to different plants, habitats, and stories.
+
+### 构树
 
 <p>
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/01-cover.png" alt="Gou-shu reference cover" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/04-plant-secret.png" alt="Gou-shu plant-secret reference" width="180">
   <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/05-closeup.png" alt="Gou-shu botanical close-up reference" width="180">
-  <img src="family-plant-picturebook-generator/assets/examples/series-reference/final_pages/06-compare.png" alt="Gou-shu comparison reference" width="180">
 </p>
 
-These pages demonstrate the visual style and story structure. They are visual references only, not factual sources.
+[View all seven 构树 pages](family-plant-picturebook-generator/assets/examples/series-reference/final_pages/)
 
-[View all seven reference pages](family-plant-picturebook-generator/assets/examples/series-reference/final_pages/)
-
-### Complete generated example: 荷花
-
-The repository also includes a complete source-backed generated book for 荷花. It is kept separately from `series-reference/`: the reference folder is style-only, while this folder demonstrates the full production package, including source handoff, story plan, prompts, continuity sheets, final pages, production log, and QA report.
+### 荷花
 
 <p>
-  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/01-cover.png" alt="Hehua cover" width="180">
-  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/04-plant-secret.png" alt="Hehua plant secret page" width="180">
-  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/06-compare.png" alt="Hehua comparison page" width="180">
-  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/07-ending.png" alt="Hehua ending page" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/01-cover.png" alt="Lotus picture-book cover" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/04-plant-secret.png" alt="Lotus plant-secret page" width="180">
+  <img src="family-plant-picturebook-generator/assets/examples/hehua/final_pages/05-closeup.png" alt="Lotus botanical close-up" width="180">
 </p>
 
-[Open the complete 荷花 example](family-plant-picturebook-generator/assets/examples/hehua/)
+[View all seven 荷花 pages and the complete production package](family-plant-picturebook-generator/assets/examples/hehua/)
+
+These pages demonstrate the visual style and story structure. They are examples and visual references only, not factual sources.
 
 ## Output
 
